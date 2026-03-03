@@ -24,4 +24,3 @@ npm run start
 
 - This is **static UI** using mock data in `src/data/mock.ts`
 - No backend, no persistence
-# event-booking-wireframe
