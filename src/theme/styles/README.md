@@ -1,0 +1,54 @@
+/\*\*
+
+- GLOBAL STYLE STRUCTURE
+-
+- All component styles have been refactored out of components and organized in this folder.
+- This provides:
+- - Centralized style management
+- - Better maintainability
+- - Easy theme color changes using the global colors from '../colors.ts'
+-
+- STYLE FILES:
+- - BrandHeader.styles.ts
+- - DateRangeBar.styles.ts
+- - EventSourceSelector.styles.ts
+- - FormRow.styles.ts
+- - ListCard.styles.ts
+- - RoomSelector.styles.ts
+- - VenueDropdown.styles.ts
+-
+- GLOBAL COLOR THEME:
+- Located at: ../colors.ts
+-
+- Colors available:
+- - colors.bg: "#FFFFFF" (Background)
+- - colors.text: "#111827" (Main text)
+- - colors.muted: "#6B7280" (Secondary text)
+- - colors.border: "#E5E7EB" (Borders)
+- - colors.card: "#F9FAFB" (Card background)
+- - colors.primary: "#2563EB" (Primary/accent color)
+- - colors.danger: "#DC2626" (Error/danger color)
+- - colors.warning: "#D97706" (Warning color)
+- - colors.success: "#059669" (Success color)
+-
+- HOW TO USE:
+- 1.  Import the styles from the respective style file:
+- import { styles } from "../theme/styles/ComponentName.styles";
+-
+- 2.  Use styles in components:
+- <View style={styles.container}>
+-
+- 3.  Apply conditional styles (when needed):
+- <View style={[styles.button, isActive && styles.buttonActive]}>
+-
+- CHANGING THEME COLORS:
+- To change colors globally, simply update the values in ../colors.ts
+- All components will automatically reflect the changes since they use the imported colors object.
+-
+- ADDING NEW STYLES:
+- 1.  Create a new file: ComponentName.styles.ts in this folder
+- 2.  Import and export styles using StyleSheet.create()
+- 3.  Import colors from "../colors" for consistency
+- 4.  Use in your component:
+- import { styles } from "../theme/styles/ComponentName.styles";
+  \*/
