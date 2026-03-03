@@ -16,6 +16,7 @@ export type Event = {
   customerName: string;
   phone?: string;
   venue: string;
+  rooms: string[];
   start: string; // ISO
   end: string; // ISO
   status: EventStatus;
