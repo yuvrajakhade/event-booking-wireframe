@@ -11,7 +11,6 @@
     "build:netlify": "expo export -p web"
   },
   "dependencies": {
-    "@expo/webpack-config": "^19.0.0",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-navigation/bottom-tabs": "^7.0.0",
     "@react-navigation/native": "^7.0.0",
