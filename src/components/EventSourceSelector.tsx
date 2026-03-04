@@ -32,19 +32,40 @@ export default function EventSourceSelector({ value, onSelect }: Props) {
             },
           ]}
         >
-          <View style={[styles.thumbIcon, { backgroundColor: value === "enquiry" ? "#FF6B9D" : "#4CAF50" }]}>
+          <View
+            style={[
+              styles.thumbIcon,
+              { backgroundColor: value === "enquiry" ? "#FF6B9D" : "#4CAF50" },
+            ]}
+          >
             <Ionicons
-              name={value === "enquiry" ? "help-circle" : "checkmark-done-circle"}
+              name={
+                value === "enquiry" ? "help-circle" : "checkmark-done-circle"
+              }
               size={18}
               color="white"
             />
           </View>
         </Animated.View>
         <View style={styles.toggleLabel}>
-          <Text style={[styles.toggleText, togglePosition === 0 && styles.toggleTextActive]}>Enquiry</Text>
+          <Text
+            style={[
+              styles.toggleText,
+              togglePosition === 0 && styles.toggleTextActive,
+            ]}
+          >
+            Enquiry
+          </Text>
         </View>
         <View style={styles.toggleLabel}>
-          <Text style={[styles.toggleText, togglePosition === 1 && styles.toggleTextActive]}>Booking</Text>
+          <Text
+            style={[
+              styles.toggleText,
+              togglePosition === 1 && styles.toggleTextActive,
+            ]}
+          >
+            Booking
+          </Text>
         </View>
       </Pressable>
     </View>
