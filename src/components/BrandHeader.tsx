@@ -8,7 +8,7 @@ export default function BrandHeader() {
   return (
     <View style={styles.container}>
       <View style={styles.logoWrap}>
-        <Ionicons name="business" size={28} color={colors.primary} />
+        <Ionicons name="business" size={24} color={colors.primary} />
       </View>
       <Text style={styles.name}>Swaraj Palace</Text>
     </View>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import BrandHeader from "../components/BrandHeader";
+import AuthHeader from "../components/AuthHeader";
 import FormRow from "../components/FormRow";
 import { colors } from "../theme/colors";
 
@@ -18,7 +18,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <BrandHeader />
+        <AuthHeader />
         <View style={styles.card}>
           <Text style={styles.title}>Welcome Back</Text>
           <Text style={styles.sub}>Login to continue</Text>
@@ -47,7 +47,9 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
             onPress={() => navigation.navigate("Register")}
           >
             <Ionicons name="person-add" size={16} color={colors.text} />
-            <Text style={[styles.btnText, { color: colors.text }]}>Create Account</Text>
+            <Text style={[styles.btnText, { color: colors.text }]}>
+              Create Account
+            </Text>
           </Pressable>
         </View>
       </View>

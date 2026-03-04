@@ -1,13 +1,8 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-} from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import BrandHeader from "../components/BrandHeader";
+import AuthHeader from "../components/AuthHeader";
 import FormRow from "../components/FormRow";
 import { colors } from "../theme/colors";
 
@@ -23,7 +18,7 @@ export default function RegisterScreen({ onRegister }: RegisterScreenProps) {
 
   return (
     <View style={styles.container}>
-      <BrandHeader />
+      <AuthHeader />
       <View style={styles.card}>
         <Text style={styles.title}>Create Account</Text>
         <Text style={styles.sub}>Register before entering app</Text>
