@@ -3,15 +3,15 @@ import { colors } from "../colors";
 
 export const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 12,
-    marginTop: 12,
-    marginBottom: 14,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    marginHorizontal: 8,
+    marginTop: 8,
+    marginBottom: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
     borderRadius: 20,
     flexDirection: "row",
     alignItems: "center",
-    gap: 14,
+    gap: 8,
     justifyContent: "flex-start",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },

@@ -8,6 +8,18 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  minimalHeader: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: "rgba(0, 0, 0, 0.15)",
+    borderBottomWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.2)",
+  },
+  minimalTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "white",
+  },
   searchWrap: {
     paddingHorizontal: 12,
     paddingVertical: 14,

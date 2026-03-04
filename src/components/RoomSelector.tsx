@@ -92,7 +92,9 @@ export default function RoomSelector({
                   <Ionicons
                     name={sectionAllSelected ? "checkbox" : "checkbox-outline"}
                     size={20}
-                    color={sectionAllSelected ? "white" : "rgba(255, 255, 255, 0.5)"}
+                    color={
+                      sectionAllSelected ? "white" : "rgba(255, 255, 255, 0.5)"
+                    }
                   />
                   <Text
                     style={[
@@ -119,7 +121,9 @@ export default function RoomSelector({
                         <Ionicons
                           name={isSelected ? "checkbox" : "checkbox-outline"}
                           size={18}
-                          color={isSelected ? "white" : "rgba(255, 255, 255, 0.5)"}
+                          color={
+                            isSelected ? "white" : "rgba(255, 255, 255, 0.5)"
+                          }
                         />
                         <Text
                           style={[

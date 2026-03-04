@@ -1,11 +1,10 @@
 import React, { useMemo, useState } from "react";
-import { View, TextInput, FlatList, Alert } from "react-native";
+import { View, Text, TextInput, FlatList, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import DateRangeBar from "../components/DateRangeBar";
 import ListCard from "../components/ListCard";
-import BrandHeader from "../components/BrandHeader";
 import { mockEnquiries } from "../data/mock";
 import { colors } from "../theme/colors";
 import { styles } from "../theme/styles/EnquiryListScreen.styles";
@@ -80,7 +79,9 @@ export default function EnquiryListScreen() {
       end={{ x: 0, y: 1 }}
     >
       <View style={styles.container}>
-        <BrandHeader />
+        <View style={styles.minimalHeader}>
+          <Text style={styles.minimalTitle}>📞 Enquiries</Text>
+        </View>
         <DateRangeBar
           from={from}
           to={to}

@@ -6,13 +6,14 @@ import {
   StyleSheet,
   Pressable,
   TextInput,
+  ImageBackground,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import BrandHeader from "../components/BrandHeader";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../types";
 import { colors } from "../theme/colors";
 import { mockEvents } from "../data/mock";
-import BrandHeader from "../components/BrandHeader";
 
 export default function MissingInventoryScreen() {
   const route = useRoute<RouteProp<RootStackParamList, "MissingInventory">>();
@@ -44,7 +45,12 @@ export default function MissingInventoryScreen() {
       style={styles.gradient}
       blurRadius={80}
     >
-      <BlurView intensity={90} style={styles.blurContainer}>
+      <View
+        style={[
+          styles.blurContainer,
+          { backgroundColor: "rgba(255,255,255,0.05)" },
+        ]}
+      >
         <View style={styles.container}>
           <BrandHeader />
           <View style={styles.searchWrap}>
@@ -88,7 +94,7 @@ export default function MissingInventoryScreen() {
             }
           />
         </View>
-      </BlurView>
+      </View>
     </ImageBackground>
   );
 }

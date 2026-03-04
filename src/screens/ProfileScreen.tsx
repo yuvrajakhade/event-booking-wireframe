@@ -2,7 +2,6 @@ import React from "react";
 import { View, Text, StyleSheet, Pressable, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import BrandHeader from "../components/BrandHeader";
 import { colors } from "../theme/colors";
 
 type ProfileScreenProps = {
@@ -18,7 +17,9 @@ export default function ProfileScreen({ onLogout }: ProfileScreenProps) {
       end={{ x: 0, y: 1 }}
     >
       <View style={styles.container}>
-        <BrandHeader />
+        <View style={styles.minimalHeader}>
+          <Text style={styles.minimalTitle}>👤 Profile</Text>
+        </View>
         <View style={styles.card}>
           <View style={styles.headerRow}>
             <View style={styles.avatarWrap}>
@@ -78,6 +79,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 12,
+  },
+  minimalHeader: {
+    marginHorizontal: -12,
+    marginTop: -12,
+    marginBottom: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: "rgba(0, 0, 0, 0.15)",
+    borderBottomWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.2)",
+  },
+  minimalTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "white",
   },
   card: {
     backgroundColor: "rgba(255, 255, 255, 0.95)",

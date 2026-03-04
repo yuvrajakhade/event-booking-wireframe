@@ -11,7 +11,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import DateRangeBar from "../components/DateRangeBar";
 import ListCard from "../components/ListCard";
-import BrandHeader from "../components/BrandHeader";
 import { mockEvents } from "../data/mock";
 import { colors } from "../theme/colors";
 import { useNavigation } from "@react-navigation/native";
@@ -45,7 +44,9 @@ export default function BookedEventsScreen() {
       end={{ x: 0, y: 1 }}
     >
       <View style={styles.container}>
-        <BrandHeader />
+        <View style={styles.minimalHeader}>
+          <Text style={styles.minimalTitle}>📅 Booked Events</Text>
+        </View>
         <DateRangeBar
           from={from}
           to={to}
@@ -116,6 +117,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: { flex: 1 },
+  minimalHeader: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: "rgba(0, 0, 0, 0.15)",
+    borderBottomWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.2)",
+  },
+  minimalTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "white",
+  },
   searchWrap: {
     paddingHorizontal: 12,
     paddingVertical: 14,

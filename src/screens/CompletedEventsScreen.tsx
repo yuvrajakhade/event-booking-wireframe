@@ -17,7 +17,6 @@ import { styles } from "../theme/styles/CompletedEventsScreen.styles";
 import { mockEvents } from "../data/mock";
 import ListCard from "../components/ListCard";
 import DateRangeBar from "../components/DateRangeBar";
-import BrandHeader from "../components/BrandHeader";
 
 type SectionKey = "info" | "customer" | "schedule" | "inventory";
 type Event = Record<string, any>;
@@ -171,7 +170,9 @@ export default function CompletedEventsScreen({
       end={{ x: 0, y: 1 }}
     >
       <View style={styles.container}>
-        <BrandHeader />
+        <View style={styles.minimalHeader}>
+          <Text style={styles.minimalTitle}>✅ Completed Events</Text>
+        </View>
 
         <View style={styles.searchWrap}>
           <View style={styles.searchBar}>

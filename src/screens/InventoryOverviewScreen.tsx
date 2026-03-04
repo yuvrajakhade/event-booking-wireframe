@@ -8,12 +8,11 @@ import {
   TextInput,
   ImageBackground,
 } from "react-native";
-import { BlurView } from "expo-blur";
+// import { BlurView } from "expo-blur";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors } from "../theme/colors";
 import { mockEvents } from "../data/mock";
 import { useNavigation } from "@react-navigation/native";
-import BrandHeader from "../components/BrandHeader";
 
 interface MissingInventorySummary {
   eventId: string;
@@ -110,9 +109,16 @@ export default function InventoryOverviewScreen() {
       style={styles.gradient}
       blurRadius={80}
     >
-      <BlurView intensity={90} style={styles.blurContainer}>
+      <View
+        style={[
+          styles.blurContainer,
+          { backgroundColor: "rgba(255,255,255,0.05)" },
+        ]}
+      >
         <View style={styles.container}>
-          <BrandHeader />
+          <View style={styles.minimalHeader}>
+            <Text style={styles.minimalTitle}>📦 Inventory Overview</Text>
+          </View>
           <View style={styles.searchWrap}>
             <View style={styles.searchBar}>
               <Ionicons name="search" size={18} color="#0066CC" />
@@ -216,7 +222,7 @@ export default function InventoryOverviewScreen() {
             }
           />
         </View>
-      </BlurView>
+      </View>
     </ImageBackground>
   );
 }
@@ -229,6 +235,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: { flex: 1 },
+  minimalHeader: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: "rgba(0, 0, 0, 0.15)",
+    borderBottomWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.2)",
+  },
+  minimalTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "white",
+  },
   searchWrap: {
     paddingHorizontal: 12,
     paddingVertical: 14,

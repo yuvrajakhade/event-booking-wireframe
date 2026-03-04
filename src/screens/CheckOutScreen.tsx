@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
-import BrandHeader from "../components/BrandHeader";
 import { colors } from "../theme/colors";
 import { mockEvents } from "../data/mock";
 import { useNavigation } from "@react-navigation/native";
@@ -122,7 +121,9 @@ export default function CheckOutScreen() {
       end={{ x: 0, y: 1 }}
     >
       <View style={styles.container}>
-        <BrandHeader />
+        <View style={styles.minimalHeader}>
+          <Text style={styles.minimalTitle}>📋 Check-Out</Text>
+        </View>
         <View style={styles.header}>
           <Text style={styles.title}>
             {event.venue} • {event.end.slice(0, 10)}
@@ -245,6 +246,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: { flex: 1 },
+  minimalHeader: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: "rgba(0, 0, 0, 0.15)",
+    borderBottomWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.2)",
+  },
+  minimalTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "white",
+  },
   header: {
     padding: 12,
     borderBottomWidth: 2,

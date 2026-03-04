@@ -8,7 +8,6 @@ import FormRow from "../components/FormRow";
 import VenueDropdown from "../components/VenueDropdown";
 import RoomSelector from "../components/RoomSelector";
 import EventSourceSelector from "../components/EventSourceSelector";
-import BrandHeader from "../components/BrandHeader";
 import { mockEvents } from "../data/mock";
 
 export default function EventFormScreen() {
@@ -48,7 +47,11 @@ export default function EventFormScreen() {
       end={{ x: 0, y: 1 }}
     >
       <View style={styles.container}>
-        <BrandHeader />
+        <View style={styles.minimalHeader}>
+          <Text style={styles.minimalTitle}>
+            {mode === "edit" ? "📝 Edit Event" : "✨ Add Event"}
+          </Text>
+        </View>
         <ScrollView>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionIcon}>
@@ -139,6 +142,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: { flex: 1 },
+  minimalHeader: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: "rgba(0, 0, 0, 0.15)",
+    borderBottomWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.2)",
+  },
+  minimalTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "white",
+  },
   sectionHeader: {
     flexDirection: "row",
     alignItems: "center",
