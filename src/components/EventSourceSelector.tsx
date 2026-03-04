@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { View, Text, Pressable, Animated } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors } from "../theme/colors";
@@ -10,7 +10,15 @@ interface Props {
 }
 
 export default function EventSourceSelector({ value, onSelect }: Props) {
-  const togglePosition = value === "enquiry" ? 0 : 1;
+  const translateX = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(translateX, {
+      toValue: value === "enquiry" ? 0 : 94,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  }, [value]);
 
   return (
     <View style={styles.container}>
@@ -28,7 +36,7 @@ export default function EventSourceSelector({ value, onSelect }: Props) {
           style={[
             styles.toggleThumb,
             {
-              transform: [{ translateX: togglePosition === 0 ? 0 : 94 }],
+              transform: [{ translateX }],
             },
           ]}
         >
@@ -51,7 +59,7 @@ export default function EventSourceSelector({ value, onSelect }: Props) {
           <Text
             style={[
               styles.toggleText,
-              togglePosition === 0 && styles.toggleTextActive,
+              value === "enquiry" && styles.toggleTextActive,
             ]}
           >
             Enquiry
@@ -61,7 +69,7 @@ export default function EventSourceSelector({ value, onSelect }: Props) {
           <Text
             style={[
               styles.toggleText,
-              togglePosition === 1 && styles.toggleTextActive,
+              value === "booking" && styles.toggleTextActive,
             ]}
           >
             Booking

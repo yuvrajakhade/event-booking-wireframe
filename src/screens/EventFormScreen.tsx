@@ -114,7 +114,7 @@ export default function EventFormScreen() {
 
         <View style={styles.footer}>
           <Pressable style={[styles.btn, styles.btnCancel]} onPress={() => {}}>
-            <Text style={[styles.btnText, { color: "white" }]}>Cancel</Text>
+            <Text style={[styles.btnText, styles.btnCancelText]}>✕ Cancel</Text>
           </Pressable>
           <LinearGradient
             colors={colors.gradients.primary as any}
@@ -124,7 +124,7 @@ export default function EventFormScreen() {
           >
             <Pressable style={styles.btnInner} onPress={() => {}}>
               <Text style={[styles.btnText, { color: "white" }]}>
-                {mode === "edit" ? "💾 Save Changes" : "✨ Create Event"}
+                {mode === "edit" ? "💾 Save" : "✨ Create"}
               </Text>
             </Pressable>
           </LinearGradient>
@@ -175,31 +175,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 12,
     padding: 12,
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
-    borderTopWidth: 2,
-    borderColor: "rgba(255, 255, 255, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
+    borderTopWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.2)",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
     elevation: 10,
   },
   btn: {
     flex: 1,
-    paddingVertical: 14,
-    borderRadius: 16,
+    paddingVertical: 12,
+    borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 2,
-    shadowColor: "rgba(255, 255, 255, 0.3)",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 5,
+    overflow: "hidden",
   },
   btnCancel: {
-    borderColor: "rgba(255, 255, 255, 0.5)",
-    backgroundColor: "rgba(255, 255, 255, 0.15)",
+    backgroundColor: "rgba(255, 59, 48, 0.75)",
+    borderRadius: 12,
   },
   btnCreate: {
     borderWidth: 0,
@@ -209,8 +204,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  btnCancelText: {
+    color: "white",
+  },
   btnText: {
-    fontWeight: "800",
-    fontSize: 15,
+    fontWeight: "700",
+    fontSize: 14,
   },
 });
