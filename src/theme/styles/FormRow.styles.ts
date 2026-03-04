@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 16,
     backgroundColor: "rgba(255, 255, 255, 0.08)",
-    color: colors.text,
+    color: "white",
     fontSize: 15,
     fontWeight: "600",
     shadowColor: "rgba(255, 255, 255, 0.15)",
