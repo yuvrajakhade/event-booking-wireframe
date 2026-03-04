@@ -99,7 +99,9 @@ export default function EnquiryListScreen() {
             title={item.name}
             subtitle={`Event Date: ${item.eventDate} • Guests: ${item.guests ?? "-"}`}
             metaLeft={`Status: ${item.status}`}
+            metaLeftIcon="alert-circle"
             metaRight={item.source ? `Source: ${item.source}` : undefined}
+            metaRightIcon="link"
             actions={[
               { label: "View", onPress: () => handleViewEnquiry(item) },
               { label: "Convert", onPress: () => handleConvertEnquiry(item) },

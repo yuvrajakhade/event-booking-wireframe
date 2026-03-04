@@ -63,7 +63,9 @@ export default function BookedEventsScreen() {
             title={item.title}
             subtitle={`${isoDateOnly(item.start)} • ${item.venue} • ${item.customerName}`}
             metaLeft={`Status: ${item.status}`}
+            metaLeftIcon="checkmark-circle"
             metaRight={`Rooms: ${item.rooms.length}`}
+            metaRightIcon="home"
             actions={[
               {
                 label: "View/Edit",

@@ -194,7 +194,9 @@ export default function CompletedEventsScreen({
             title={item.title}
             subtitle={`${item.customerName} • ${item.venue}`}
             metaLeft={item.start.slice(0, 10)}
+            metaLeftIcon="calendar"
             metaRight={item.status}
+            metaRightIcon="checkmark-done"
             onPress={() => setSelectedEvent(item)}
           />
         )}

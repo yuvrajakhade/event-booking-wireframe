@@ -8,7 +8,9 @@ type Props = {
   title: string;
   subtitle?: string;
   metaLeft?: string;
+  metaLeftIcon?: string;
   metaRight?: string;
+  metaRightIcon?: string;
   onPress?: () => void;
   actions?: { label: string; onPress: () => void }[];
 };
@@ -17,7 +19,9 @@ export default function ListCard({
   title,
   subtitle,
   metaLeft,
+  metaLeftIcon,
   metaRight,
+  metaRightIcon,
   onPress,
   actions,
 }: Props) {
@@ -31,8 +35,30 @@ export default function ListCard({
       </View>
       {!!subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
       <View style={styles.metaRow}>
-        {!!metaLeft && <Text style={styles.meta}>{metaLeft}</Text>}
-        {!!metaRight && <Text style={styles.meta}>{metaRight}</Text>}
+        {!!metaLeft && (
+          <View style={styles.metaWrap}>
+            {metaLeftIcon && (
+              <Ionicons
+                name={metaLeftIcon as any}
+                size={12}
+                color={colors.muted}
+              />
+            )}
+            <Text style={styles.meta}>{metaLeft}</Text>
+          </View>
+        )}
+        {!!metaRight && (
+          <View style={styles.metaWrap}>
+            {metaRightIcon && (
+              <Ionicons
+                name={metaRightIcon as any}
+                size={12}
+                color={colors.muted}
+              />
+            )}
+            <Text style={styles.meta}>{metaRight}</Text>
+          </View>
+        )}
       </View>
       {!!actions?.length && (
         <View style={styles.actions}>

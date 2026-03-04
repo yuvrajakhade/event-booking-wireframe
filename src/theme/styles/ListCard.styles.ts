@@ -24,6 +24,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  metaWrap: { flexDirection: "row", alignItems: "center", gap: 4 },
   meta: { fontSize: 12, color: colors.muted },
   actions: { flexDirection: "row", gap: 10, marginTop: 10, flexWrap: "wrap" },
   actionBtn: {
