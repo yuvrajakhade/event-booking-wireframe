@@ -116,9 +116,6 @@ export default function InventoryOverviewScreen() {
         ]}
       >
         <View style={styles.container}>
-          <View style={styles.minimalHeader}>
-            <Text style={styles.minimalTitle}>📦 Inventory Overview</Text>
-          </View>
           <View style={styles.searchWrap}>
             <View style={styles.searchBar}>
               <Ionicons name="search" size={18} color="#0066CC" />

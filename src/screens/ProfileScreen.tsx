@@ -17,9 +17,6 @@ export default function ProfileScreen({ onLogout }: ProfileScreenProps) {
       end={{ x: 0, y: 1 }}
     >
       <View style={styles.container}>
-        <View style={styles.minimalHeader}>
-          <Text style={styles.minimalTitle}>👤 Profile</Text>
-        </View>
         <View style={styles.card}>
           <View style={styles.headerRow}>
             <View style={styles.avatarWrap}>

@@ -170,10 +170,6 @@ export default function CompletedEventsScreen({
       end={{ x: 0, y: 1 }}
     >
       <View style={styles.container}>
-        <View style={styles.minimalHeader}>
-          <Text style={styles.minimalTitle}>✅ Completed Events</Text>
-        </View>
-
         <View style={styles.searchWrap}>
           <View style={styles.searchBar}>
             <Ionicons name="search" size={20} color="#0066CC" />

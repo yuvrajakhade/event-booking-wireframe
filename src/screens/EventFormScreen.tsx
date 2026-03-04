@@ -47,11 +47,6 @@ export default function EventFormScreen() {
       end={{ x: 0, y: 1 }}
     >
       <View style={styles.container}>
-        <View style={styles.minimalHeader}>
-          <Text style={styles.minimalTitle}>
-            {mode === "edit" ? "📝 Edit Event" : "✨ Add Event"}
-          </Text>
-        </View>
         <ScrollView>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionIcon}>

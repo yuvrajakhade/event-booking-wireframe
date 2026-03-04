@@ -64,9 +64,6 @@ export default function CheckInScreen() {
       end={{ x: 0, y: 1 }}
     >
       <View style={styles.container}>
-        <View style={styles.minimalHeader}>
-          <Text style={styles.minimalTitle}>📋 Check-In</Text>
-        </View>
         <View style={styles.header}>
           <Text style={styles.title}>
             {event.venue} • {event.start.slice(0, 10)}

@@ -121,9 +121,6 @@ export default function CheckOutScreen() {
       end={{ x: 0, y: 1 }}
     >
       <View style={styles.container}>
-        <View style={styles.minimalHeader}>
-          <Text style={styles.minimalTitle}>📋 Check-Out</Text>
-        </View>
         <View style={styles.header}>
           <Text style={styles.title}>
             {event.venue} • {event.end.slice(0, 10)}

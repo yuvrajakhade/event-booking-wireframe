@@ -79,9 +79,6 @@ export default function EnquiryListScreen() {
       end={{ x: 0, y: 1 }}
     >
       <View style={styles.container}>
-        <View style={styles.minimalHeader}>
-          <Text style={styles.minimalTitle}>📞 Enquiries</Text>
-        </View>
         <DateRangeBar
           from={from}
           to={to}

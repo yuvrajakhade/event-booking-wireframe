@@ -44,9 +44,6 @@ export default function BookedEventsScreen() {
       end={{ x: 0, y: 1 }}
     >
       <View style={styles.container}>
-        <View style={styles.minimalHeader}>
-          <Text style={styles.minimalTitle}>📅 Booked Events</Text>
-        </View>
         <DateRangeBar
           from={from}
           to={to}

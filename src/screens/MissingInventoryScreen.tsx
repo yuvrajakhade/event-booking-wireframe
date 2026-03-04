@@ -9,7 +9,6 @@ import {
   ImageBackground,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import BrandHeader from "../components/BrandHeader";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../types";
 import { colors } from "../theme/colors";
@@ -52,7 +51,6 @@ export default function MissingInventoryScreen() {
         ]}
       >
         <View style={styles.container}>
-          <BrandHeader />
           <View style={styles.searchWrap}>
             <View style={styles.searchBar}>
               <Ionicons name="search" size={16} color="#0066CC" />
