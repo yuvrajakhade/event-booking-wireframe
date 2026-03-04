@@ -48,6 +48,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
                 value={email}
                 onChangeText={setEmail}
                 placeholder="yourname@example.com"
+                variant="light"
               />
               <FormRow
                 label="Password"
@@ -55,6 +56,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
                 onChangeText={setPassword}
                 placeholder="Enter your password"
                 secureTextEntry
+                variant="light"
               />
 
               <Pressable style={styles.forgotPassword}>

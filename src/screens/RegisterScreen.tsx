@@ -48,18 +48,21 @@ export default function RegisterScreen({ onRegister }: RegisterScreenProps) {
                 value={name}
                 onChangeText={setName}
                 placeholder="Enter your full name"
+                variant="light"
               />
               <FormRow
                 label="Email Address"
                 value={email}
                 onChangeText={setEmail}
                 placeholder="yourname@example.com"
+                variant="light"
               />
               <FormRow
                 label="Phone Number"
                 value={phone}
                 onChangeText={setPhone}
                 placeholder="+91 98765 43210"
+                variant="light"
               />
               <FormRow
                 label="Password"
@@ -67,6 +70,7 @@ export default function RegisterScreen({ onRegister }: RegisterScreenProps) {
                 onChangeText={setPassword}
                 placeholder="Create a strong password"
                 secureTextEntry
+                variant="light"
               />
               <FormRow
                 label="Confirm Password"
@@ -74,6 +78,7 @@ export default function RegisterScreen({ onRegister }: RegisterScreenProps) {
                 onChangeText={setConfirmPassword}
                 placeholder="Re-enter your password"
                 secureTextEntry
+                variant="light"
               />
 
               <View style={styles.termsSection}>
