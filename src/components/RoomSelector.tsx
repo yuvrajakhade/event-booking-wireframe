@@ -68,7 +68,7 @@ export default function RoomSelector({
         <Ionicons
           name={isOpen ? "chevron-up" : "chevron-down"}
           size={20}
-          color={colors.text}
+          color="white"
         />
       </Pressable>
 
@@ -92,7 +92,7 @@ export default function RoomSelector({
                   <Ionicons
                     name={sectionAllSelected ? "checkbox" : "checkbox-outline"}
                     size={20}
-                    color={sectionAllSelected ? colors.primary : colors.muted}
+                    color={sectionAllSelected ? "white" : "rgba(255, 255, 255, 0.5)"}
                   />
                   <Text
                     style={[
@@ -119,7 +119,7 @@ export default function RoomSelector({
                         <Ionicons
                           name={isSelected ? "checkbox" : "checkbox-outline"}
                           size={18}
-                          color={isSelected ? colors.primary : colors.muted}
+                          color={isSelected ? "white" : "rgba(255, 255, 255, 0.5)"}
                         />
                         <Text
                           style={[
