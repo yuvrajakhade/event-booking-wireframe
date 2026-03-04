@@ -27,7 +27,7 @@ export default function FormRow({
         onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}
         style={styles.input}
-        placeholderTextColor="rgba(255, 255, 255, 0.5)"
+        placeholderTextColor="rgba(255, 255, 255, 0.35)"
       />
     </View>
   );
