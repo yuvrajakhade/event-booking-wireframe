@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { View, ScrollView, StyleSheet, Text, Pressable } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
 import { RootStackParamList } from "../types";
 import { colors } from "../theme/colors";
 import FormRow from "../components/FormRow";
@@ -40,100 +41,173 @@ export default function EventFormScreen() {
   const [endTime, setEndTime] = useState("14:00");
 
   return (
-    <View style={styles.container}>
-      <BrandHeader />
-      <ScrollView>
-        <Text style={styles.section}>Basic</Text>
-        <FormRow
-          label="Title *"
-          value={title}
-          onChangeText={setTitle}
-          placeholder="Event title"
-        />
-        <FormRow
-          label="Customer *"
-          value={customerName}
-          onChangeText={setCustomerName}
-          placeholder="Customer name"
-        />
-        <FormRow
-          label="Phone"
-          value={phone}
-          onChangeText={setPhone}
-          placeholder="+91..."
-        />
-        <VenueDropdown label="Venue *" value={venue} onSelect={setVenue} />
-        <RoomSelector
-          label="Select Rooms"
-          selectedRooms={selectedRooms}
-          onSelect={setSelectedRooms}
-        />
-        <EventSourceSelector value={eventSource} onSelect={setEventSource} />
+    <LinearGradient
+      colors={colors.gradients.purple as any}
+      style={styles.gradient}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+    >
+      <View style={styles.container}>
+        <BrandHeader />
+        <ScrollView>
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionIcon}>
+              <Text style={styles.sectionEmoji}>📝</Text>
+            </View>
+            <Text style={styles.section}>Basic Information</Text>
+          </View>
+          <FormRow
+            label="Title *"
+            value={title}
+            onChangeText={setTitle}
+            placeholder="Event title"
+          />
+          <FormRow
+            label="Customer *"
+            value={customerName}
+            onChangeText={setCustomerName}
+            placeholder="Customer name"
+          />
+          <FormRow
+            label="Phone"
+            value={phone}
+            onChangeText={setPhone}
+            placeholder="+91..."
+          />
+          <VenueDropdown label="Venue *" value={venue} onSelect={setVenue} />
+          <RoomSelector
+            label="Select Rooms"
+            selectedRooms={selectedRooms}
+            onSelect={setSelectedRooms}
+          />
+          <EventSourceSelector value={eventSource} onSelect={setEventSource} />
 
-        <Text style={styles.section}>Schedule</Text>
-        <FormRow
-          label="Start Date (YYYY-MM-DD)"
-          value={startDate}
-          onChangeText={setStartDate}
-        />
-        <FormRow
-          label="Start Time (HH:MM)"
-          value={startTime}
-          onChangeText={setStartTime}
-        />
-        <FormRow
-          label="End Date (YYYY-MM-DD)"
-          value={endDate}
-          onChangeText={setEndDate}
-        />
-        <FormRow
-          label="End Time (HH:MM)"
-          value={endTime}
-          onChangeText={setEndTime}
-        />
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionIcon}>
+              <Text style={styles.sectionEmoji}>📅</Text>
+            </View>
+            <Text style={styles.section}>Event Schedule</Text>
+          </View>
+          <FormRow
+            label="Start Date (YYYY-MM-DD)"
+            value={startDate}
+            onChangeText={setStartDate}
+          />
+          <FormRow
+            label="Start Time (HH:MM)"
+            value={startTime}
+            onChangeText={setStartTime}
+          />
+          <FormRow
+            label="End Date (YYYY-MM-DD)"
+            value={endDate}
+            onChangeText={setEndDate}
+          />
+          <FormRow
+            label="End Time (HH:MM)"
+            value={endTime}
+            onChangeText={setEndTime}
+          />
 
-        <View style={{ height: 24 }} />
-      </ScrollView>
+          <View style={{ height: 24 }} />
+        </ScrollView>
 
-      <View style={styles.footer}>
-        <Pressable style={[styles.btn, styles.btnGhost]} onPress={() => {}}>
-          <Text style={[styles.btnText, { color: colors.text }]}>Cancel</Text>
-        </Pressable>
-        <Pressable style={[styles.btn, styles.btnPrimary]} onPress={() => {}}>
-          <Text style={[styles.btnText, { color: "white" }]}>
-            {mode === "edit" ? "Save" : "Create"}
-          </Text>
-        </Pressable>
+        <View style={styles.footer}>
+          <Pressable style={[styles.btn, styles.btnGhost]} onPress={() => {}}>
+            <Text style={[styles.btnText, { color: colors.text }]}>Cancel</Text>
+          </Pressable>
+          <LinearGradient
+            colors={colors.gradients.primary as any}
+            style={[styles.btn]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+          >
+            <Pressable style={styles.btnInner} onPress={() => {}}>
+              <Text style={[styles.btnText, { color: "white" }]}>
+                {mode === "edit" ? "💾 Save Changes" : "✨ Create Event"}
+              </Text>
+            </Pressable>
+          </LinearGradient>
+        </View>
       </View>
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
-  section: {
+  gradient: {
+    flex: 1,
+  },
+  container: { flex: 1 },
+  sectionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 12,
-    paddingTop: 18,
+    paddingTop: 20,
+    paddingBottom: 8,
+    gap: 12,
+  },
+  sectionIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  sectionEmoji: {
+    fontSize: 20,
+  },
+  section: {
+    fontSize: 18,
     fontWeight: "800",
-    color: colors.text,
+    color: "white",
+    textShadowColor: "rgba(0, 0, 0, 0.3)",
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   footer: {
     flexDirection: "row",
     gap: 12,
     padding: 12,
-    borderTopWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.bg,
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    borderTopWidth: 2,
+    borderColor: "rgba(255, 255, 255, 0.5)",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 10,
   },
   btn: {
     flex: 1,
-    paddingVertical: 12,
-    borderRadius: 12,
+    paddingVertical: 14,
+    borderRadius: 14,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
+    borderWidth: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 5,
   },
-  btnGhost: { borderColor: colors.border, backgroundColor: colors.bg },
-  btnPrimary: { borderColor: colors.primary, backgroundColor: colors.primary },
-  btnText: { fontWeight: "800" },
+  btnGhost: {
+    borderColor: colors.muted,
+    backgroundColor: "white",
+  },
+  btnInner: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  btnText: {
+    fontWeight: "800",
+    fontSize: 15,
+  },
 });

@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { View, TextInput, FlatList, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
 import DateRangeBar from "../components/DateRangeBar";
 import ListCard from "../components/ListCard";
 import BrandHeader from "../components/BrandHeader";
@@ -72,43 +73,52 @@ export default function EnquiryListScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <BrandHeader />
-      <DateRangeBar
-        from={from}
-        to={to}
-        onChangeFrom={setFrom}
-        onChangeTo={setTo}
-      />
-      <View style={styles.searchWrap}>
-        <Ionicons name="search" size={16} color={colors.muted} />
-        <TextInput
-          value={q}
-          onChangeText={setQ}
-          placeholder="Search name/phone/source"
-          style={styles.search}
-          placeholderTextColor={colors.muted}
+    <LinearGradient
+      colors={colors.gradients.soft as any}
+      style={styles.gradient}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+    >
+      <View style={styles.container}>
+        <BrandHeader />
+        <DateRangeBar
+          from={from}
+          to={to}
+          onChangeFrom={setFrom}
+          onChangeTo={setTo}
+        />
+        <View style={styles.searchWrap}>
+          <View style={styles.searchBar}>
+            <Ionicons name="search" size={16} color="#0066CC" />
+            <TextInput
+              value={q}
+              onChangeText={setQ}
+              placeholder="Search name/phone/source"
+              style={styles.search}
+              placeholderTextColor="#999"
+            />
+          </View>
+        </View>
+
+        <FlatList
+          data={filtered}
+          keyExtractor={(i) => i.id}
+          renderItem={({ item }) => (
+            <ListCard
+              title={item.name}
+              subtitle={`Event Date: ${item.eventDate} • Guests: ${item.guests ?? "-"}`}
+              metaLeft={`Status: ${item.status}`}
+              metaLeftIcon="alert-circle"
+              metaRight={item.source ? `Source: ${item.source}` : undefined}
+              metaRightIcon="link"
+              actions={[
+                { label: "View", onPress: () => handleViewEnquiry(item) },
+                { label: "Convert", onPress: () => handleConvertEnquiry(item) },
+              ]}
+            />
+          )}
         />
       </View>
-
-      <FlatList
-        data={filtered}
-        keyExtractor={(i) => i.id}
-        renderItem={({ item }) => (
-          <ListCard
-            title={item.name}
-            subtitle={`Event Date: ${item.eventDate} • Guests: ${item.guests ?? "-"}`}
-            metaLeft={`Status: ${item.status}`}
-            metaLeftIcon="alert-circle"
-            metaRight={item.source ? `Source: ${item.source}` : undefined}
-            metaRightIcon="link"
-            actions={[
-              { label: "View", onPress: () => handleViewEnquiry(item) },
-              { label: "Convert", onPress: () => handleConvertEnquiry(item) },
-            ]}
-          />
-        )}
-      />
-    </View>
+    </LinearGradient>
   );
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Pressable, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import BrandHeader from "../components/BrandHeader";
 import { colors } from "../theme/colors";
 
@@ -10,89 +11,176 @@ type ProfileScreenProps = {
 
 export default function ProfileScreen({ onLogout }: ProfileScreenProps) {
   return (
-    <View style={styles.container}>
-      <BrandHeader />
-      <View style={styles.card}>
-        <View style={styles.headerRow}>
-          <Image
-            source={{ uri: "https://picsum.photos/120" }}
-            style={styles.avatar}
-          />
-          <View>
-            <Text style={styles.title}>Event Manager</Text>
-            <Text style={styles.rolePill}>Admin</Text>
+    <LinearGradient
+      colors={colors.gradients.nightfall as any}
+      style={styles.gradient}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+    >
+      <View style={styles.container}>
+        <BrandHeader />
+        <View style={styles.card}>
+          <View style={styles.headerRow}>
+            <View style={styles.avatarWrap}>
+              <Image
+                source={{ uri: "https://picsum.photos/120" }}
+                style={styles.avatar}
+              />
+            </View>
+            <View style={styles.userInfo}>
+              <Text style={styles.title}>Event Manager</Text>
+              <View style={styles.rolePill}>
+                <Text style={styles.rolePillText}>Admin</Text>
+              </View>
+            </View>
           </View>
-        </View>
 
-        <View style={styles.infoRow}>
-          <Ionicons name="mail" size={16} color={colors.primary} />
-          <Text style={styles.rowValue}>manager@example.com</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Ionicons name="call" size={16} color={colors.primary} />
-          <Text style={styles.rowValue}>+91 99999 99999</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Ionicons name="business" size={16} color={colors.primary} />
-          <Text style={styles.rowValue}>Event Operations</Text>
-        </View>
+          <View style={styles.infoRow}>
+            <View style={styles.iconCircle}>
+              <Ionicons name="mail" size={18} color="white" />
+            </View>
+            <Text style={styles.rowValue}>manager@example.com</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <View style={styles.iconCircle}>
+              <Ionicons name="call" size={18} color="white" />
+            </View>
+            <Text style={styles.rowValue}>+91 99999 99999</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <View style={styles.iconCircle}>
+              <Ionicons name="business" size={18} color="white" />
+            </View>
+            <Text style={styles.rowValue}>Event Operations</Text>
+          </View>
 
-        <Pressable style={styles.btn} onPress={onLogout}>
-          <Ionicons name="log-out" size={16} color="white" />
-          <Text style={styles.btnText}>Logout</Text>
-        </Pressable>
+          <LinearGradient
+            colors={[colors.danger, colors.dangerLight] as any}
+            style={styles.btn}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+          >
+            <Pressable style={styles.btnInner} onPress={onLogout}>
+              <Ionicons name="log-out" size={18} color="white" />
+              <Text style={styles.btnText}>Logout</Text>
+            </Pressable>
+          </LinearGradient>
+        </View>
       </View>
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg, padding: 12 },
+  gradient: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+    padding: 12,
+  },
   card: {
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 14,
-    padding: 14,
-    gap: 10,
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    borderRadius: 24,
+    padding: 20,
+    gap: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 10,
   },
   headerRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
-    marginBottom: 8,
+    gap: 16,
+    marginBottom: 12,
+  },
+  avatarWrap: {
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 6,
   },
   avatar: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    borderWidth: 1,
-    borderColor: colors.border,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 4,
+    borderColor: "white",
   },
-  title: { fontSize: 22, fontWeight: "800", color: colors.text },
+  userInfo: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "800",
+    color: colors.text,
+    marginBottom: 8,
+  },
   rolePill: {
-    marginTop: 4,
     alignSelf: "flex-start",
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 999,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    color: colors.muted,
+    borderRadius: 20,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    backgroundColor: colors.primary,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  infoRow: { flexDirection: "row", alignItems: "center", gap: 8 },
-  rowValue: { fontSize: 16, color: colors.text },
+  rolePillText: {
+    color: "white",
+    fontWeight: "700",
+    fontSize: 13,
+  },
+  infoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    paddingVertical: 4,
+  },
+  iconCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.accent,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: colors.accent,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  rowValue: {
+    fontSize: 16,
+    color: colors.text,
+    fontWeight: "600",
+    flex: 1,
+  },
   btn: {
-    marginTop: 12,
-    borderWidth: 1,
-    borderColor: colors.danger,
-    backgroundColor: colors.danger,
-    borderRadius: 12,
-    paddingVertical: 12,
+    marginTop: 16,
+    borderRadius: 16,
+    overflow: "hidden",
+    shadowColor: colors.danger,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  btnInner: {
+    paddingVertical: 16,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    gap: 6,
+    gap: 8,
   },
-  btnText: { color: "white", fontWeight: "800" },
+  btnText: {
+    color: "white",
+    fontWeight: "800",
+    fontSize: 16,
+  },
 });

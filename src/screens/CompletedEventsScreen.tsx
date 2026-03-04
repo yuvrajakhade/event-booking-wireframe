@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../theme/colors";
 import { styles } from "../theme/styles/CompletedEventsScreen.styles";
 import { mockEvents } from "../data/mock";
@@ -163,176 +164,200 @@ export default function CompletedEventsScreen({
   );
 
   return (
-    <View style={styles.container}>
-      <BrandHeader />
+    <LinearGradient
+      colors={colors.gradients.green as any}
+      style={styles.gradient}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+    >
+      <View style={styles.container}>
+        <BrandHeader />
 
-      <View style={styles.searchWrap}>
-        <View style={styles.searchBar}>
-          <Ionicons name="search" size={20} color={colors.muted} />
-          <TextInput
-            value={searchText}
-            onChangeText={setSearchText}
-            placeholder="Search completed events..."
-            style={styles.searchInput}
-          />
-        </View>
-      </View>
-
-      <DateRangeBar
-        from={fromDate}
-        to={toDate}
-        onChangeFrom={setFromDate}
-        onChangeTo={setToDate}
-        onApply={() => {}}
-      />
-
-      <FlatList
-        data={completedEvents}
-        keyExtractor={(e) => e.id}
-        renderItem={({ item }: { item: Event }) => (
-          <ListCard
-            title={item.title}
-            subtitle={`${item.customerName} • ${item.venue}`}
-            metaLeft={item.start.slice(0, 10)}
-            metaLeftIcon="calendar"
-            metaRight={item.status}
-            metaRightIcon="checkmark-done"
-            onPress={() => setSelectedEvent(item)}
-          />
-        )}
-        ListEmptyComponent={
-          <View style={styles.emptyState}>
-            <Ionicons
-              name="checkmark-done-circle"
-              size={64}
-              color={colors.muted}
+        <View style={styles.searchWrap}>
+          <View style={styles.searchBar}>
+            <Ionicons name="search" size={20} color="#0066CC" />
+            <TextInput
+              value={searchText}
+              onChangeText={setSearchText}
+              placeholder="Search completed events..."
+              style={styles.searchInput}
+              placeholderTextColor="#999"
             />
-            <Text style={styles.emptyText}>No completed events yet</Text>
-            <Text style={styles.emptySubtext}>
-              Completed events will appear here
-            </Text>
           </View>
-        }
-      />
-
-      <Modal
-        visible={selectedEvent !== null}
-        animationType="slide"
-        transparent={false}
-        onRequestClose={closeModal}
-      >
-        <View style={styles.modalContainer}>
-          {(isEditMode ? editedEvent : selectedEvent) && (
-            <ScrollView style={styles.modalContent}>
-              <View style={styles.modalHeader}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setSelectedEvent(null);
-                    setIsEditMode(false);
-                    setEditedEvent(null);
-                  }}
-                  activeOpacity={0.7}
-                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                >
-                  <Ionicons name="chevron-back" size={28} color={colors.text} />
-                </TouchableOpacity>
-                <Text style={styles.modalTitle}>Event Details</Text>
-                <View style={{ width: 28 }} />
-              </View>
-
-              <AccordionSection title="📋 Event Information" section="info">
-                {renderDetailField("Event Name", selectedEvent?.title, "title")}
-                <View style={styles.detailRow}>
-                  <Text style={styles.label}>Status</Text>
-                  <Text style={[styles.value, styles.statusBadge]}>
-                    {selectedEvent?.status}
-                  </Text>
-                </View>
-                {renderDetailField("Venue", selectedEvent?.venue, "venue")}
-              </AccordionSection>
-
-              <AccordionSection
-                title="👤 Customer Information"
-                section="customer"
-              >
-                {renderDetailField(
-                  "Customer Name",
-                  selectedEvent?.customerName,
-                  "customerName",
-                )}
-                {renderDetailField("Phone", selectedEvent?.phone, "phone")}
-              </AccordionSection>
-
-              <AccordionSection title="📅 Event Schedule" section="schedule">
-                <View style={styles.detailRow}>
-                  <Text style={styles.label}>Start Date & Time</Text>
-                  <Text style={styles.value}>
-                    {new Date(selectedEvent?.start).toLocaleString()}
-                  </Text>
-                </View>
-                <View style={styles.detailRow}>
-                  <Text style={styles.label}>End Date & Time</Text>
-                  <Text style={styles.value}>
-                    {new Date(selectedEvent?.end).toLocaleString()}
-                  </Text>
-                </View>
-              </AccordionSection>
-
-              {selectedEvent?.inventory &&
-                selectedEvent.inventory.length > 0 && (
-                  <AccordionSection title="📦 Inventory" section="inventory">
-                    {selectedEvent.inventory.map((item: Event) => (
-                      <View key={item.id} style={styles.inventoryItem}>
-                        <View style={styles.inventoryHeader}>
-                          <Text style={styles.inventoryName}>{item.name}</Text>
-                          <Text style={styles.inventoryUnit}>{item.unit}</Text>
-                        </View>
-                        <View style={styles.inventoryDetails}>
-                          <View style={styles.inventoryRow}>
-                            <Text style={styles.inventoryLabel}>Planned:</Text>
-                            <Text style={styles.inventoryValue}>
-                              {item.plannedQty}
-                            </Text>
-                          </View>
-                          <View style={styles.inventoryRow}>
-                            <Text style={styles.inventoryLabel}>Issued:</Text>
-                            <Text style={styles.inventoryValue}>
-                              {item.issuedQty}
-                            </Text>
-                          </View>
-                          <View style={styles.inventoryRow}>
-                            <Text style={styles.inventoryLabel}>Returned:</Text>
-                            <Text style={styles.inventoryValue}>
-                              {item.returnedQty}
-                            </Text>
-                          </View>
-                          <View style={styles.inventoryRow}>
-                            <Text style={styles.inventoryLabel}>Rate:</Text>
-                            <Text style={styles.inventoryValue}>
-                              ₹{item.rate}
-                            </Text>
-                          </View>
-                        </View>
-                      </View>
-                    ))}
-                  </AccordionSection>
-                )}
-
-              {isEditMode && (
-                <TouchableOpacity
-                  style={styles.saveButton}
-                  onPress={handleSaveEdit}
-                >
-                  <Ionicons name="checkmark" size={20} color="#fff" />
-                  <Text style={styles.saveButtonText}>Save Changes</Text>
-                </TouchableOpacity>
-              )}
-            </ScrollView>
-          )}
-
-          {/* Remove the entire !isEditMode section below */}
         </View>
-      </Modal>
-    </View>
+
+        <DateRangeBar
+          from={fromDate}
+          to={toDate}
+          onChangeFrom={setFromDate}
+          onChangeTo={setToDate}
+          onApply={() => {}}
+        />
+
+        <FlatList
+          data={completedEvents}
+          keyExtractor={(e) => e.id}
+          renderItem={({ item }: { item: Event }) => (
+            <ListCard
+              title={item.title}
+              subtitle={`${item.customerName} • ${item.venue}`}
+              metaLeft={item.start.slice(0, 10)}
+              metaLeftIcon="calendar"
+              metaRight={item.status}
+              metaRightIcon="checkmark-done"
+              onPress={() => setSelectedEvent(item)}
+            />
+          )}
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <Ionicons
+                name="checkmark-done-circle"
+                size={64}
+                color={colors.muted}
+              />
+              <Text style={styles.emptyText}>No completed events yet</Text>
+              <Text style={styles.emptySubtext}>
+                Completed events will appear here
+              </Text>
+            </View>
+          }
+        />
+
+        <Modal
+          visible={selectedEvent !== null}
+          animationType="slide"
+          transparent={false}
+          onRequestClose={closeModal}
+        >
+          <View style={styles.modalContainer}>
+            {(isEditMode ? editedEvent : selectedEvent) && (
+              <ScrollView style={styles.modalContent}>
+                <View style={styles.modalHeader}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setSelectedEvent(null);
+                      setIsEditMode(false);
+                      setEditedEvent(null);
+                    }}
+                    activeOpacity={0.7}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                  >
+                    <Ionicons
+                      name="chevron-back"
+                      size={28}
+                      color={colors.text}
+                    />
+                  </TouchableOpacity>
+                  <Text style={styles.modalTitle}>Event Details</Text>
+                  <View style={{ width: 28 }} />
+                </View>
+
+                <AccordionSection title="📋 Event Information" section="info">
+                  {renderDetailField(
+                    "Event Name",
+                    selectedEvent?.title,
+                    "title",
+                  )}
+                  <View style={styles.detailRow}>
+                    <Text style={styles.label}>Status</Text>
+                    <Text style={[styles.value, styles.statusBadge]}>
+                      {selectedEvent?.status}
+                    </Text>
+                  </View>
+                  {renderDetailField("Venue", selectedEvent?.venue, "venue")}
+                </AccordionSection>
+
+                <AccordionSection
+                  title="👤 Customer Information"
+                  section="customer"
+                >
+                  {renderDetailField(
+                    "Customer Name",
+                    selectedEvent?.customerName,
+                    "customerName",
+                  )}
+                  {renderDetailField("Phone", selectedEvent?.phone, "phone")}
+                </AccordionSection>
+
+                <AccordionSection title="📅 Event Schedule" section="schedule">
+                  <View style={styles.detailRow}>
+                    <Text style={styles.label}>Start Date & Time</Text>
+                    <Text style={styles.value}>
+                      {new Date(selectedEvent?.start).toLocaleString()}
+                    </Text>
+                  </View>
+                  <View style={styles.detailRow}>
+                    <Text style={styles.label}>End Date & Time</Text>
+                    <Text style={styles.value}>
+                      {new Date(selectedEvent?.end).toLocaleString()}
+                    </Text>
+                  </View>
+                </AccordionSection>
+
+                {selectedEvent?.inventory &&
+                  selectedEvent.inventory.length > 0 && (
+                    <AccordionSection title="📦 Inventory" section="inventory">
+                      {selectedEvent.inventory.map((item: Event) => (
+                        <View key={item.id} style={styles.inventoryItem}>
+                          <View style={styles.inventoryHeader}>
+                            <Text style={styles.inventoryName}>
+                              {item.name}
+                            </Text>
+                            <Text style={styles.inventoryUnit}>
+                              {item.unit}
+                            </Text>
+                          </View>
+                          <View style={styles.inventoryDetails}>
+                            <View style={styles.inventoryRow}>
+                              <Text style={styles.inventoryLabel}>
+                                Planned:
+                              </Text>
+                              <Text style={styles.inventoryValue}>
+                                {item.plannedQty}
+                              </Text>
+                            </View>
+                            <View style={styles.inventoryRow}>
+                              <Text style={styles.inventoryLabel}>Issued:</Text>
+                              <Text style={styles.inventoryValue}>
+                                {item.issuedQty}
+                              </Text>
+                            </View>
+                            <View style={styles.inventoryRow}>
+                              <Text style={styles.inventoryLabel}>
+                                Returned:
+                              </Text>
+                              <Text style={styles.inventoryValue}>
+                                {item.returnedQty}
+                              </Text>
+                            </View>
+                            <View style={styles.inventoryRow}>
+                              <Text style={styles.inventoryLabel}>Rate:</Text>
+                              <Text style={styles.inventoryValue}>
+                                ₹{item.rate}
+                              </Text>
+                            </View>
+                          </View>
+                        </View>
+                      ))}
+                    </AccordionSection>
+                  )}
+
+                {isEditMode && (
+                  <TouchableOpacity
+                    style={styles.saveButton}
+                    onPress={handleSaveEdit}
+                  >
+                    <Ionicons name="checkmark" size={20} color="#fff" />
+                    <Text style={styles.saveButtonText}>Save Changes</Text>
+                  </TouchableOpacity>
+                )}
+              </ScrollView>
+            )}
+
+            {/* Remove the entire !isEditMode section below */}
+          </View>
+        </Modal>
+      </View>
+    </LinearGradient>
   );
 }

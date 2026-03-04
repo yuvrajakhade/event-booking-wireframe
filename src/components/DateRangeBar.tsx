@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TextInput, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../theme/colors";
 import { styles } from "../theme/styles/DateRangeBar.styles";
 
@@ -24,31 +25,40 @@ export default function DateRangeBar({
       <View style={styles.col}>
         <Text style={styles.label}>From</Text>
         <View style={styles.inputWrap}>
-          <Ionicons name="calendar" size={14} color={colors.muted} />
+          <Ionicons name="calendar" size={16} color={colors.primary} />
           <TextInput
             value={from}
             onChangeText={onChangeFrom}
             placeholder="YYYY-MM-DD"
             style={styles.input}
+            placeholderTextColor={colors.muted}
           />
         </View>
       </View>
       <View style={styles.col}>
         <Text style={styles.label}>To</Text>
         <View style={styles.inputWrap}>
-          <Ionicons name="calendar-clear" size={14} color={colors.muted} />
+          <Ionicons name="calendar-clear" size={16} color={colors.accent} />
           <TextInput
             value={to}
             onChangeText={onChangeTo}
             placeholder="YYYY-MM-DD"
             style={styles.input}
+            placeholderTextColor={colors.muted}
           />
         </View>
       </View>
-      <Pressable style={styles.btn} onPress={onApply}>
-        <Ionicons name="filter" size={14} color="white" />
-        <Text style={styles.btnText}>Apply</Text>
-      </Pressable>
+      <LinearGradient
+        colors={colors.gradients.fire as any}
+        style={styles.btn}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+      >
+        <Pressable style={styles.btnInner} onPress={onApply}>
+          <Ionicons name="filter" size={16} color="white" />
+          <Text style={styles.btnText}>Apply</Text>
+        </Pressable>
+      </LinearGradient>
     </View>
   );
 }

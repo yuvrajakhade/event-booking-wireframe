@@ -8,6 +8,7 @@ import {
   Text,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import DateRangeBar from "../components/DateRangeBar";
 import ListCard from "../components/ListCard";
 import BrandHeader from "../components/BrandHeader";
@@ -37,91 +38,128 @@ export default function BookedEventsScreen() {
   }, [from, to, q]);
 
   return (
-    <View style={styles.container}>
-      <BrandHeader />
-      <DateRangeBar
-        from={from}
-        to={to}
-        onChangeFrom={setFrom}
-        onChangeTo={setTo}
-      />
-      <View style={styles.searchWrap}>
-        <Ionicons name="search" size={16} color={colors.muted} />
-        <TextInput
-          value={q}
-          onChangeText={setQ}
-          placeholder="Search event/customer/venue"
-          style={styles.search}
+    <LinearGradient
+      colors={colors.gradients.ocean as any}
+      style={styles.gradient}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+    >
+      <View style={styles.container}>
+        <BrandHeader />
+        <DateRangeBar
+          from={from}
+          to={to}
+          onChangeFrom={setFrom}
+          onChangeTo={setTo}
         />
+        <View style={styles.searchWrap}>
+          <View style={styles.searchBar}>
+            <Ionicons name="search" size={18} color="#0066CC" />
+            <TextInput
+              value={q}
+              onChangeText={setQ}
+              placeholder="Search event/customer/venue"
+              style={styles.search}
+              placeholderTextColor="#999"
+            />
+          </View>
+        </View>
+
+        <FlatList
+          data={filtered}
+          keyExtractor={(i) => i.id}
+          renderItem={({ item }) => (
+            <ListCard
+              title={item.title}
+              subtitle={`${isoDateOnly(item.start)} • ${item.venue} • ${item.customerName}`}
+              metaLeft={`Status: ${item.status}`}
+              metaLeftIcon="checkmark-circle"
+              metaRight={`Rooms: ${item.rooms.length}`}
+              metaRightIcon="home"
+              actions={[
+                {
+                  label: "View/Edit",
+                  onPress: () =>
+                    nav.navigate("EventForm", {
+                      mode: "edit",
+                      eventId: item.id,
+                    }),
+                },
+                { label: "Check-In", onPress: () => nav.navigate("CheckIn") },
+                { label: "Check-Out", onPress: () => nav.navigate("CheckOut") },
+              ]}
+            />
+          )}
+        />
+
+        <LinearGradient
+          colors={[colors.secondary, colors.secondaryDark] as any}
+          style={styles.fab}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <Pressable
+            style={styles.fabInner}
+            onPress={() => nav.navigate("EventForm", { mode: "add" })}
+          >
+            <Ionicons name="add" size={20} color="white" />
+            <Text style={styles.fabText}>Add</Text>
+          </Pressable>
+        </LinearGradient>
       </View>
-
-      <FlatList
-        data={filtered}
-        keyExtractor={(i) => i.id}
-        renderItem={({ item }) => (
-          <ListCard
-            title={item.title}
-            subtitle={`${isoDateOnly(item.start)} • ${item.venue} • ${item.customerName}`}
-            metaLeft={`Status: ${item.status}`}
-            metaLeftIcon="checkmark-circle"
-            metaRight={`Rooms: ${item.rooms.length}`}
-            metaRightIcon="home"
-            actions={[
-              {
-                label: "View/Edit",
-                onPress: () =>
-                  nav.navigate("EventForm", { mode: "edit", eventId: item.id }),
-              },
-              { label: "Check-In", onPress: () => nav.navigate("CheckIn") },
-              { label: "Check-Out", onPress: () => nav.navigate("CheckOut") },
-            ]}
-          />
-        )}
-      />
-
-      <Pressable
-        style={styles.fab}
-        onPress={() => nav.navigate("EventForm", { mode: "add" })}
-      >
-        <Ionicons name="add" size={16} color="white" />
-        <Text style={styles.fabText}>Add</Text>
-      </Pressable>
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
+  gradient: {
+    flex: 1,
+  },
+  container: { flex: 1 },
   searchWrap: {
     paddingHorizontal: 12,
-    paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderColor: colors.border,
+    paddingVertical: 14,
+    borderBottomWidth: 2,
+    borderColor: "rgba(255, 255, 255, 0.3)",
+  },
+  searchBar: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: 10,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderWidth: 0,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
   },
   search: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    backgroundColor: colors.bg,
     color: colors.text,
+    fontSize: 16,
+    fontWeight: "500",
   },
   fab: {
     position: "absolute",
     right: 16,
     bottom: 16,
-    backgroundColor: colors.primary,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
     borderRadius: 999,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  fabInner: {
+    paddingHorizontal: 20,
+    paddingVertical: 14,
     flexDirection: "row",
     alignItems: "center",
-    gap: 5,
+    gap: 8,
   },
-  fabText: { color: "white", fontWeight: "700" },
+  fabText: { color: "white", fontWeight: "800", fontSize: 16 },
 });

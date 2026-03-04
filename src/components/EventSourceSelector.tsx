@@ -21,7 +21,7 @@ export default function EventSourceSelector({ value, onSelect }: Props) {
           <Ionicons
             name="help-circle"
             size={20}
-            color={value === "enquiry" ? colors.primary : colors.muted}
+            color={value === "enquiry" ? "white" : colors.muted}
           />
           <Text
             style={[
@@ -42,7 +42,7 @@ export default function EventSourceSelector({ value, onSelect }: Props) {
           <Ionicons
             name="checkmark-done-circle"
             size={20}
-            color={value === "booking" ? colors.primary : colors.muted}
+            color={value === "booking" ? "white" : colors.muted}
           />
           <Text
             style={[

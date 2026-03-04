@@ -2,30 +2,38 @@ import { StyleSheet } from "react-native";
 import { colors } from "../colors";
 
 export const styles = StyleSheet.create({
+  gradient: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: colors.bg,
   },
   searchWrap: {
-    padding: 12,
-    borderBottomWidth: 1,
-    borderColor: colors.border,
+    paddingHorizontal: 12,
+    paddingVertical: 14,
+    borderBottomWidth: 2,
+    borderColor: "rgba(255, 255, 255, 0.3)",
   },
   searchBar: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    backgroundColor: colors.card,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderWidth: 1,
-    borderColor: colors.border,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderWidth: 0,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
   },
   searchInput: {
     flex: 1,
     fontSize: 16,
     color: colors.text,
+    fontWeight: "500",
   },
   emptyState: {
     alignItems: "center",
