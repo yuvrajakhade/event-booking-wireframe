@@ -33,7 +33,7 @@ export default function VenueDropdown({ label, value, onSelect }: Props) {
         <Ionicons
           name={isOpen ? "chevron-up" : "chevron-down"}
           size={20}
-          color={colors.text}
+          color="white"
         />
       </Pressable>
 
@@ -54,7 +54,7 @@ export default function VenueDropdown({ label, value, onSelect }: Props) {
                 {option}
               </Text>
               {value === option && (
-                <Ionicons name="checkmark" size={18} color={colors.primary} />
+                <Ionicons name="checkmark" size={18} color="white" />
               )}
             </Pressable>
           ))}
