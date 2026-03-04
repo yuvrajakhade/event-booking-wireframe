@@ -113,12 +113,12 @@ export default function EventFormScreen() {
         </ScrollView>
 
         <View style={styles.footer}>
-          <Pressable style={[styles.btn, styles.btnGhost]} onPress={() => {}}>
-            <Text style={[styles.btnText, { color: colors.text }]}>Cancel</Text>
+          <Pressable style={[styles.btn, styles.btnCancel]} onPress={() => {}}>
+            <Text style={[styles.btnText, { color: "white" }]}>Cancel</Text>
           </Pressable>
           <LinearGradient
             colors={colors.gradients.primary as any}
-            style={[styles.btn]}
+            style={[styles.btn, styles.btnCreate]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
           >
@@ -187,19 +187,22 @@ const styles = StyleSheet.create({
   btn: {
     flex: 1,
     paddingVertical: 14,
-    borderRadius: 14,
+    borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 2,
-    shadowColor: "#000",
+    shadowColor: "rgba(255, 255, 255, 0.3)",
     shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
     elevation: 5,
   },
-  btnGhost: {
-    borderColor: colors.muted,
-    backgroundColor: "white",
+  btnCancel: {
+    borderColor: "rgba(255, 255, 255, 0.5)",
+    backgroundColor: "rgba(255, 255, 255, 0.15)",
+  },
+  btnCreate: {
+    borderWidth: 0,
   },
   btnInner: {
     width: "100%",
