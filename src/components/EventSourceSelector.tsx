@@ -1,5 +1,11 @@
 import React, { useRef, useEffect, useState } from "react";
-import { View, Text, Pressable, Animated, LayoutChangeEvent } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  Animated,
+  LayoutChangeEvent,
+} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors } from "../theme/colors";
 import { styles } from "../theme/styles/EventSourceSelector.styles";
@@ -19,7 +25,8 @@ export default function EventSourceSelector({ value, onSelect }: Props) {
   };
 
   useEffect(() => {
-    const targetValue = value === "enquiry" ? 0 : Math.max(toggleWidth / 2 - 8, 100);
+    const targetValue =
+      value === "enquiry" ? 0 : Math.max(toggleWidth / 2 - 8, 100);
     Animated.timing(translateX, {
       toValue: targetValue,
       duration: 300,
