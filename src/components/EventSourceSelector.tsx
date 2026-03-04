@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, Animated } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors } from "../theme/colors";
 import { styles } from "../theme/styles/EventSourceSelector.styles";
@@ -10,50 +10,43 @@ interface Props {
 }
 
 export default function EventSourceSelector({ value, onSelect }: Props) {
+  const togglePosition = value === "enquiry" ? 0 : 1;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Event Source *</Text>
-      <View style={styles.toggleContainer}>
-        <Pressable
-          style={[styles.option, value === "enquiry" && styles.optionActive]}
-          onPress={() => onSelect("enquiry")}
-        >
-          <Ionicons
-            name="help-circle"
-            size={20}
-            color={value === "enquiry" ? "white" : colors.muted}
-          />
-          <Text
-            style={[
-              styles.optionText,
-              value === "enquiry" && styles.optionTextActive,
-            ]}
-          >
-            Enquiry
-          </Text>
-        </Pressable>
-
-        <View style={styles.divider} />
-
-        <Pressable
-          style={[styles.option, value === "booking" && styles.optionActive]}
-          onPress={() => onSelect("booking")}
-        >
-          <Ionicons
-            name="checkmark-done-circle"
-            size={20}
-            color={value === "booking" ? "white" : colors.muted}
-          />
-          <Text
-            style={[
-              styles.optionText,
-              value === "booking" && styles.optionTextActive,
-            ]}
-          >
-            Confirmed Booking
-          </Text>
-        </Pressable>
+      <View style={styles.labelRow}>
+        <Text style={styles.label}>Event Source *</Text>
+        <Text style={styles.valueLabel}>
+          {value === "enquiry" ? "📞 Enquiry" : "✅ Confirmed Booking"}
+        </Text>
       </View>
+      <Pressable
+        style={styles.toggleSwitch}
+        onPress={() => onSelect(value === "enquiry" ? "booking" : "enquiry")}
+      >
+        <Animated.View
+          style={[
+            styles.toggleThumb,
+            {
+              transform: [{ translateX: togglePosition === 0 ? 0 : 94 }],
+            },
+          ]}
+        >
+          <View style={[styles.thumbIcon, { backgroundColor: value === "enquiry" ? "#FF6B9D" : "#4CAF50" }]}>
+            <Ionicons
+              name={value === "enquiry" ? "help-circle" : "checkmark-done-circle"}
+              size={18}
+              color="white"
+            />
+          </View>
+        </Animated.View>
+        <View style={styles.toggleLabel}>
+          <Text style={[styles.toggleText, togglePosition === 0 && styles.toggleTextActive]}>Enquiry</Text>
+        </View>
+        <View style={styles.toggleLabel}>
+          <Text style={[styles.toggleText, togglePosition === 1 && styles.toggleTextActive]}>Booking</Text>
+        </View>
+      </Pressable>
     </View>
   );
 }
