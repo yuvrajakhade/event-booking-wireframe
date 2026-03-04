@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from "react";
-import { View, Text, Pressable, Animated } from "react-native";
+import React, { useRef, useEffect, useState } from "react";
+import { View, Text, Pressable, Animated, LayoutChangeEvent } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors } from "../theme/colors";
 import { styles } from "../theme/styles/EventSourceSelector.styles";
@@ -11,14 +11,21 @@ interface Props {
 
 export default function EventSourceSelector({ value, onSelect }: Props) {
   const translateX = useRef(new Animated.Value(0)).current;
+  const [toggleWidth, setToggleWidth] = useState(0);
+
+  const handleLayout = (event: LayoutChangeEvent) => {
+    const { width } = event.nativeEvent.layout;
+    setToggleWidth(width);
+  };
 
   useEffect(() => {
+    const targetValue = value === "enquiry" ? 0 : Math.max(toggleWidth / 2 - 8, 100);
     Animated.timing(translateX, {
-      toValue: value === "enquiry" ? 0 : 94,
+      toValue: targetValue,
       duration: 300,
       useNativeDriver: false,
     }).start();
-  }, [value]);
+  }, [value, toggleWidth]);
 
   return (
     <View style={styles.container}>
@@ -31,6 +38,7 @@ export default function EventSourceSelector({ value, onSelect }: Props) {
       <Pressable
         style={styles.toggleSwitch}
         onPress={() => onSelect(value === "enquiry" ? "booking" : "enquiry")}
+        onLayout={handleLayout}
       >
         <Animated.View
           style={[
