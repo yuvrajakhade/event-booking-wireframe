@@ -17,11 +17,12 @@ export default function EnquiryListScreen() {
 
   const filtered = useMemo(() => {
     return mockEnquiries.filter((e) => {
+      const isActiveEnquiry = e.status !== "Converted";
       const inRange = e.eventDate >= from && e.eventDate <= to;
       const matches = (e.name + (e.phone ?? "") + (e.source ?? ""))
         .toLowerCase()
         .includes(q.toLowerCase());
-      return inRange && matches;
+      return isActiveEnquiry && inRange && matches;
     });
   }, [from, to, q]);
 

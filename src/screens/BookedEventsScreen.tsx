@@ -27,12 +27,13 @@ export default function BookedEventsScreen() {
 
   const filtered = useMemo(() => {
     return mockEvents.filter((e) => {
+      const isNotCompleted = e.status !== "Completed";
       const d = isoDateOnly(e.start);
       const inRange = d >= from && d <= to;
       const matches = (e.title + e.customerName + e.venue)
         .toLowerCase()
         .includes(q.toLowerCase());
-      return inRange && matches;
+      return isNotCompleted && inRange && matches;
     });
   }, [from, to, q]);
 

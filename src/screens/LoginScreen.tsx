@@ -92,7 +92,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
           </View>
 
           <View style={styles.footer}>
-            <Text style={styles.footerText}>Powered by Swaraj Palace</Text>
+            <Text style={styles.footerText}>Powered by SWOJUS PALACE</Text>
           </View>
         </View>
       </ScrollView>

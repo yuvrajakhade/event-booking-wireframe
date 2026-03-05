@@ -121,7 +121,7 @@ export default function RegisterScreen({ onRegister }: RegisterScreenProps) {
           </View>
 
           <View style={styles.footer}>
-            <Text style={styles.footerText}>Powered by Swaraj Palace</Text>
+            <Text style={styles.footerText}>Powered by SWOJUS PALACE</Text>
           </View>
         </View>
       </ScrollView>

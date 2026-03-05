@@ -86,7 +86,7 @@ export default function AuthHeader() {
           </LinearGradient>
         </View>
       </View>
-      <Text style={styles.name}>Swaraj Palace</Text>
+      <Text style={styles.name}>SWOJUS PALACE</Text>
       <Text style={styles.subtitle}>Event Management</Text>
     </View>
   );

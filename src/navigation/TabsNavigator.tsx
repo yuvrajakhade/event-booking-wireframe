@@ -21,7 +21,7 @@ export default function TabsNavigator({ onLogout }: TabsNavigatorProps) {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        headerTitle: "Swaraj Palace",
+        headerTitle: "SWOJUS PALACE",
         headerTitleAlign: "center",
         headerTitleStyle: {
           fontSize: 24,

@@ -16,7 +16,7 @@ export default function BrandHeader() {
       <View style={styles.logoWrap}>
         <Ionicons name="business" size={28} color="white" />
       </View>
-      <Text style={styles.name}>Swaraj Palace</Text>
+      <Text style={styles.name}>SWOJUS PALACE</Text>
     </LinearGradient>
   );
 }
