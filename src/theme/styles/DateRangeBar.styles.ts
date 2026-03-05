@@ -48,11 +48,10 @@ export const styles = StyleSheet.create({
     elevation: 5,
   },
   btnInner: {
-    paddingHorizontal: 14,
-    paddingVertical: 12,
+    width: 42,
+    height: 42,
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
+    justifyContent: "center",
   },
-  btnText: { color: "white", fontWeight: "700", fontSize: 14 },
 });

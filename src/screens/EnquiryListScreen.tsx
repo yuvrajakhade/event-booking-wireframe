@@ -19,7 +19,7 @@ export default function EnquiryListScreen() {
     return mockEnquiries.filter((e) => {
       const isActiveEnquiry = e.status !== "Converted";
       const inRange = e.eventDate >= from && e.eventDate <= to;
-      const matches = (e.name + (e.phone ?? "") + (e.source ?? ""))
+      const matches = (e.name + (e.phone ?? ""))
         .toLowerCase()
         .includes(q.toLowerCase());
       return isActiveEnquiry && inRange && matches;
@@ -29,7 +29,7 @@ export default function EnquiryListScreen() {
   const handleViewEnquiry = (enquiry: (typeof mockEnquiries)[0]) => {
     Alert.alert(
       "Enquiry Details",
-      `Name: ${enquiry.name}\nPhone: ${enquiry.phone}\nEvent Date: ${enquiry.eventDate}\nGuests: ${enquiry.guests ?? "N/A"}\nStatus: ${enquiry.status}\nSource: ${enquiry.source ?? "N/A"}`,
+      `Name: ${enquiry.name}\nMobile: ${enquiry.phone}\nEvent Date: ${enquiry.eventDate}\nStatus: ${enquiry.status}`,
       [{ text: "Close" }],
     );
   };
@@ -92,7 +92,7 @@ export default function EnquiryListScreen() {
             <TextInput
               value={q}
               onChangeText={setQ}
-              placeholder="Search name/phone/source"
+              placeholder="Search name/phone"
               style={styles.search}
               placeholderTextColor="#999"
             />
@@ -105,11 +105,11 @@ export default function EnquiryListScreen() {
           renderItem={({ item }) => (
             <ListCard
               title={item.name}
-              subtitle={`Event Date: ${item.eventDate} • Guests: ${item.guests ?? "-"}`}
-              metaLeft={`Status: ${item.status}`}
-              metaLeftIcon="alert-circle"
-              metaRight={item.source ? `Source: ${item.source}` : undefined}
-              metaRightIcon="link"
+              subtitle={`Event Date: ${item.eventDate}`}
+              metaLeft={`Mobile: ${item.phone ?? "-"}`}
+              metaLeftIcon="call"
+              metaRight={`Status: ${item.status}`}
+              metaRightIcon="alert-circle"
               actions={[
                 { label: "View", onPress: () => handleViewEnquiry(item) },
                 { label: "Convert", onPress: () => handleConvertEnquiry(item) },

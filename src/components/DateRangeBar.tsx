@@ -55,8 +55,7 @@ export default function DateRangeBar({
         end={{ x: 1, y: 0 }}
       >
         <Pressable style={styles.btnInner} onPress={onApply}>
-          <Ionicons name="filter" size={16} color="white" />
-          <Text style={styles.btnText}>Apply</Text>
+          <Ionicons name="filter" size={18} color="white" />
         </Pressable>
       </LinearGradient>
     </View>
