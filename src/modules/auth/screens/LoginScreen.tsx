@@ -1,8 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, Pressable, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  ScrollView,
+  LinearGradient,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import AuthHeader from "../../../components/AuthHeader";
+import { colors } from "../../../theme/colors";
 import FormRow from "../../../components/FormRow";
 import { styles } from "../styles/LoginScreen.styles";
 
@@ -16,23 +22,32 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
   const [password, setPassword] = useState("");
 
   return (
-    <View style={styles.gradient}>
+    <View style={[styles.gradient, { backgroundColor: colors.bg }]}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.container}>
-          <View style={styles.headerSection}>
-            <AuthHeader />
+          {/* Modern Hero Section */}
+          <View style={styles.heroSection}>
+            <View style={styles.iconContainer}>
+              <View
+                style={[styles.iconCircle, { backgroundColor: colors.primary }]}
+              >
+                <Ionicons name="calendar" size={40} color="white" />
+              </View>
+            </View>
+            <Text style={[styles.heroTitle, { color: colors.title }]}>
+              Welcome Back
+            </Text>
+            <Text style={[styles.heroSubtitle, { color: colors.subtitle }]}>
+              Sign in to manage your events
+            </Text>
           </View>
 
-          <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <Text style={styles.title}>Login</Text>
-              <Text style={styles.sub}>Enter your credentials below</Text>
-            </View>
-
+          {/* Glass Morphism Card */}
+          <View style={[styles.card, { backgroundColor: colors.bgLight }]}>
             <View style={styles.formSection}>
               <FormRow
                 label="Email Address"
@@ -51,32 +66,59 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
               />
 
               <Pressable style={styles.forgotPassword}>
-                <Text style={styles.forgotText}>Forgot Password?</Text>
+                <Text style={[styles.forgotText, { color: colors.primary }]}>
+                  Forgot Password?
+                </Text>
               </Pressable>
 
-              <Pressable onPress={onLogin} style={styles.primaryBtn}>
-                <Ionicons name="log-in" size={20} color="white" />
+              <Pressable
+                onPress={onLogin}
+                style={[styles.primaryBtn, { backgroundColor: colors.primary }]}
+              >
                 <Text style={styles.primaryBtnText}>Sign In</Text>
+                <Ionicons name="arrow-forward" size={20} color="white" />
               </Pressable>
 
               <View style={styles.divider}>
-                <View style={styles.dividerLine} />
+                <View
+                  style={[
+                    styles.dividerLine,
+                    { backgroundColor: colors.border },
+                  ]}
+                />
+                <Text style={[styles.dividerText, { color: colors.textLight }]}>
+                  or
+                </Text>
+                <View
+                  style={[
+                    styles.dividerLine,
+                    { backgroundColor: colors.border },
+                  ]}
+                />
               </View>
 
               <Pressable
                 style={styles.registerLink}
                 onPress={() => navigation.navigate("Register")}
               >
-                <Text style={styles.registerLinkText}>
+                <Text
+                  style={[styles.registerLinkText, { color: colors.textLight }]}
+                >
                   Don't have an account?{" "}
-                  <Text style={styles.registerLinkBold}>Sign Up</Text>
+                  <Text
+                    style={[styles.registerLinkBold, { color: colors.primary }]}
+                  >
+                    Sign Up
+                  </Text>
                 </Text>
               </Pressable>
             </View>
           </View>
 
           <View style={styles.footer}>
-            <Text style={styles.footerText}>Powered by SWOJUS PALACE</Text>
+            <Text style={[styles.footerText, { color: colors.muted }]}>
+              Powered by SWOJUS PALACE
+            </Text>
           </View>
         </View>
       </ScrollView>

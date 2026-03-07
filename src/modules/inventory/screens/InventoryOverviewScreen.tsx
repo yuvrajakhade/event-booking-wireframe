@@ -95,12 +95,45 @@ export default function InventoryOverviewScreen() {
   }, [missingInventorySummary, searchQ]);
 
   return (
-    <View style={styles.gradient}>
+    <View style={[styles.gradient, { backgroundColor: colors.bg }]}>
       <View style={styles.blurContainer}>
         <View style={styles.container}>
+          <View
+            style={[styles.headerCard, { backgroundColor: colors.bgLight }]}
+          >
+            <Text style={[styles.headerTitle, { color: colors.title }]}>
+              Inventory Overview
+            </Text>
+            <View style={styles.statsGrid}>
+              <View
+                style={[styles.statCard, { backgroundColor: colors.dangerBg }]}
+              >
+                <Ionicons name="alert-circle" size={24} color={colors.danger} />
+                <Text style={[styles.statValue, { color: colors.danger }]}>
+                  {totalMissingAcrossAllEvents}
+                </Text>
+                <Text style={[styles.statLabel, { color: colors.danger }]}>
+                  Missing Items
+                </Text>
+              </View>
+              <View
+                style={[styles.statCard, { backgroundColor: colors.warningBg }]}
+              >
+                <Ionicons name="cash" size={24} color={colors.warning} />
+                <Text style={[styles.statValue, { color: colors.warning }]}>
+                  ₹{totalAmountAcrossAllEvents}
+                </Text>
+                <Text style={[styles.statLabel, { color: colors.warning }]}>
+                  Total Value
+                </Text>
+              </View>
+            </View>
+          </View>
           <View style={styles.searchWrap}>
-            <View style={styles.searchBar}>
-              <Ionicons name="search" size={18} color={colors.subtitle} />
+            <View
+              style={[styles.searchBar, { backgroundColor: colors.bgLight }]}
+            >
+              <Ionicons name="search" size={20} color={colors.subtitle} />
               <TextInput
                 value={searchQ}
                 onChangeText={setSearchQ}

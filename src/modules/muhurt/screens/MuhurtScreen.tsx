@@ -66,11 +66,15 @@ export default function MuhurtScreen() {
   const filteredDates = muhurtDates;
 
   return (
-    <View style={styles.gradient}>
+    <View style={[styles.gradient, { backgroundColor: colors.bg }]}>
       <View style={styles.container}>
         <View style={styles.addSection}>
-          <View style={styles.card}>
-            <Text style={styles.sectionTitle}>Add New Muhurt Date</Text>
+          <View style={[styles.card, { backgroundColor: colors.bgLight }]}>
+            <View style={styles.cardHeader}>
+              <Text style={[styles.sectionTitle, { color: colors.title }]}>
+                Add New Muhurt Date
+              </Text>
+            </View>
             <FormRow
               label="Date (YYYY-MM-DD)"
               value={newDate}
@@ -85,11 +89,14 @@ export default function MuhurtScreen() {
               placeholder="Enter occasion name"
               variant="light"
             />
-            <Pressable style={styles.addButton} onPress={handleAddMuhurt}>
+            <Pressable
+              style={[styles.addButton, { backgroundColor: colors.accent }]}
+              onPress={handleAddMuhurt}
+            >
               <Ionicons
-                name="add-circle-outline"
-                size={18}
-                color={colors.bgLight}
+                name="add-circle"
+                size={20}
+                color="white"
                 style={styles.addButtonIcon}
               />
               <Text style={styles.addButtonText}>Add Muhurt Date</Text>

@@ -162,8 +162,30 @@ export default function CompletedEventsScreen({
   );
 
   return (
-    <View style={styles.gradient}>
+    <View style={[styles.gradient, { backgroundColor: colors.bg }]}>
       <View style={styles.container}>
+        <View style={[styles.headerCard, { backgroundColor: colors.bgLight }]}>
+          <Text style={[styles.headerTitle, { color: colors.title }]}>
+            Completed Events
+          </Text>
+          <View style={styles.statsRow}>
+            <View
+              style={[styles.statBadge, { backgroundColor: colors.successBg }]}
+            >
+              <Ionicons
+                name="checkmark-circle"
+                size={16}
+                color={colors.success}
+              />
+              <Text style={[styles.statNumber, { color: colors.success }]}>
+                {completedEvents.length}
+              </Text>
+              <Text style={[styles.statLabel, { color: colors.success }]}>
+                Done
+              </Text>
+            </View>
+          </View>
+        </View>
         <View style={styles.searchWrap}>
           <View style={styles.searchBar}>
             <Ionicons name="search" size={20} color={colors.subtitle} />

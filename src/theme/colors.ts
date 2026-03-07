@@ -1,41 +1,60 @@
 export const colors = {
-  // Base palette
-  bg: "#F5F2E8",
+  // Base palette - Modern neutral grays with slight warmth
+  bg: "#F8F9FD",
+  bgDark: "#1A1D2E",
   bgLight: "#FFFFFF",
-  text: "#5C614E",
-  muted: "#9BA894",
-  border: "#B4A385",
+  text: "#2D3142",
+  textLight: "#6B7280",
+  muted: "#9CA3AF",
+  border: "#E5E7EB",
   card: "#FFFFFF",
-  cardAlt: "#F5F2E8",
+  cardAlt: "#F9FAFB",
+  overlay: "rgba(0, 0, 0, 0.5)",
 
   // Semantic tokens
-  title: "#C9A75B",
-  subtitle: "#9BA894",
-  placeholder: "#9BA894",
-  button: "#6B7A3A",
+  title: "#1F2937",
+  subtitle: "#6B7280",
+  placeholder: "#9CA3AF",
+  button: "#6366F1",
 
-  // Primary palette
-  primary: "#5C614E",
-  primaryDark: "#4F5442",
-  primaryLight: "#9BA894",
+  // Primary palette - Modern indigo/purple
+  primary: "#6366F1",
+  primaryDark: "#4F46E5",
+  primaryLight: "#818CF8",
+  primaryBg: "#EEF2FF",
 
-  // Secondary palette
-  secondary: "#C9A75B",
-  secondaryDark: "#B08F47",
-  secondaryLight: "#E2C98F",
+  // Secondary palette - Coral/Pink accent
+  secondary: "#EC4899",
+  secondaryDark: "#DB2777",
+  secondaryLight: "#F472B6",
+  secondaryBg: "#FDF2F8",
 
-  // Accent colors
-  accent: "#B4A385",
-  accentDark: "#9B8A6E",
-  accentLight: "#D0C4AE",
+  // Accent colors - Vibrant teal
+  accent: "#14B8A6",
+  accentDark: "#0F766E",
+  accentLight: "#5EEAD4",
+  accentBg: "#F0FDFA",
 
-  // Status colors
-  danger: "#C85A54",
-  dangerLight: "#E89B96",
-  warning: "#C9A75B",
-  warningLight: "#E2C98F",
-  success: "#5C614E",
-  successLight: "#9BA894",
-  info: "#5C614E",
-  infoLight: "#9BA894",
+  // Status colors - Modern semantic colors
+  danger: "#EF4444",
+  dangerLight: "#FCA5A5",
+  dangerBg: "#FEF2F2",
+  warning: "#F59E0B",
+  warningLight: "#FCD34D",
+  warningBg: "#FFFBEB",
+  success: "#10B981",
+  successLight: "#6EE7B7",
+  successBg: "#ECFDF5",
+  info: "#3B82F6",
+  infoLight: "#93C5FD",
+  infoBg: "#EFF6FF",
+
+  // Gradient colors for modern backgrounds
+  gradientStart: "#6366F1",
+  gradientMiddle: "#8B5CF6",
+  gradientEnd: "#EC4899",
+
+  // Glass morphism
+  glass: "rgba(255, 255, 255, 0.1)",
+  glassBorder: "rgba(255, 255, 255, 0.2)",
 };

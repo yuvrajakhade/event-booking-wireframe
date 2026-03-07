@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { View, TextInput, FlatList, Pressable } from "react-native";
+import { View, TextInput, FlatList, Pressable, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import DateRangeBar from "../../../components/DateRangeBar";
 import ListCard from "../../../components/ListCard";
@@ -31,22 +31,43 @@ export default function BookedEventsScreen() {
   }, [from, to, q]);
 
   return (
-    <View style={styles.gradient}>
+    <View style={[styles.gradient, { backgroundColor: colors.bg }]}>
       <View style={styles.container}>
+        {/* Modern Header with Stats */}
+        <View style={[styles.headerCard, { backgroundColor: colors.bgLight }]}>
+          <Text style={[styles.headerTitle, { color: colors.title }]}>
+            Booked Events
+          </Text>
+          <View style={styles.statsRow}>
+            <View
+              style={[styles.statBadge, { backgroundColor: colors.primaryBg }]}
+            >
+              <Ionicons name="calendar" size={16} color={colors.primary} />
+              <Text style={[styles.statNumber, { color: colors.primary }]}>
+                {filtered.length}
+              </Text>
+              <Text style={[styles.statLabel, { color: colors.primary }]}>
+                Events
+              </Text>
+            </View>
+          </View>
+        </View>
+
         <DateRangeBar
           from={from}
           to={to}
           onChangeFrom={setFrom}
           onChangeTo={setTo}
         />
+
         <View style={styles.searchWrap}>
-          <View style={styles.searchBar}>
-            <Ionicons name="search" size={18} color={colors.subtitle} />
+          <View style={[styles.searchBar, { backgroundColor: colors.bgLight }]}>
+            <Ionicons name="search" size={20} color={colors.subtitle} />
             <TextInput
               value={q}
               onChangeText={setQ}
               placeholder="Search event/customer/venue"
-              style={styles.search}
+              style={[styles.search, { color: colors.text }]}
               placeholderTextColor={colors.placeholder}
             />
           </View>
@@ -78,10 +99,12 @@ export default function BookedEventsScreen() {
               ]}
             />
           )}
+          contentContainerStyle={styles.listContent}
         />
 
+        {/* Modern FAB */}
         <Pressable
-          style={styles.fab}
+          style={[styles.fab, { backgroundColor: colors.primary }]}
           onPress={() => nav.navigate("EventForm", { mode: "add" })}
         >
           <Ionicons name="add" size={28} color="white" />

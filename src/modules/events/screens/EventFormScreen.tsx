@@ -3,6 +3,7 @@ import { View, ScrollView, Text, Pressable } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { RootStackParamList } from "../../../types";
+import { colors } from "../../../theme/colors";
 import FormRow from "../../../components/FormRow";
 import VenueDropdown from "../../../components/VenueDropdown";
 import RoomSelector from "../../../components/RoomSelector";
@@ -43,14 +44,21 @@ export default function EventFormScreen() {
   const [endTime, setEndTime] = useState("14:00");
 
   return (
-    <View style={styles.gradient}>
+    <View style={[styles.gradient, { backgroundColor: colors.bg }]}>
       <View style={styles.container}>
-        <ScrollView>
-          <View style={styles.sectionHeader}>
-            <View style={styles.sectionIcon}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/* Modern Section Header */}
+          <View
+            style={[styles.sectionHeader, { backgroundColor: colors.bgLight }]}
+          >
+            <View
+              style={[styles.sectionIcon, { backgroundColor: colors.primary }]}
+            >
               <Ionicons name="document-text" size={20} color="white" />
             </View>
-            <Text style={styles.section}>Basic Information</Text>
+            <Text style={[styles.section, { color: colors.title }]}>
+              Basic Information
+            </Text>
           </View>
           <FormRow
             label="Title *"
@@ -89,11 +97,18 @@ export default function EventFormScreen() {
           />
           <EventSourceSelector value={eventSource} onSelect={setEventSource} />
 
-          <View style={styles.sectionHeader}>
-            <View style={styles.sectionIcon}>
+          {/* Modern Section Header */}
+          <View
+            style={[styles.sectionHeader, { backgroundColor: colors.bgLight }]}
+          >
+            <View
+              style={[styles.sectionIcon, { backgroundColor: colors.accent }]}
+            >
               <Ionicons name="calendar" size={20} color="white" />
             </View>
-            <Text style={styles.section}>Event Schedule</Text>
+            <Text style={[styles.section, { color: colors.title }]}>
+              Event Schedule
+            </Text>
           </View>
           <FormRow
             label="Start Date (YYYY-MM-DD)"
@@ -119,13 +134,42 @@ export default function EventFormScreen() {
           <View style={styles.spacer} />
         </ScrollView>
 
+        {/* Modern Footer Actions */}
         <View style={styles.footer}>
-          <Pressable style={[styles.btn, styles.btnCancel]} onPress={() => {}}>
-            <Text style={[styles.btnText, styles.btnCancelText]}>✕ Cancel</Text>
+          <Pressable
+            style={[
+              styles.btn,
+              styles.btnCancel,
+              { backgroundColor: colors.bgLight, borderColor: colors.border },
+            ]}
+            onPress={() => {}}
+          >
+            <Ionicons name="close" size={20} color={colors.danger} />
+            <Text
+              style={[
+                styles.btnText,
+                styles.btnCancelText,
+                { color: colors.danger },
+              ]}
+            >
+              Cancel
+            </Text>
           </Pressable>
-          <Pressable style={[styles.btn, styles.btnCreate]} onPress={() => {}}>
+          <Pressable
+            style={[
+              styles.btn,
+              styles.btnCreate,
+              { backgroundColor: colors.primary },
+            ]}
+            onPress={() => {}}
+          >
+            <Ionicons
+              name={mode === "edit" ? "checkmark-circle" : "add-circle"}
+              size={20}
+              color="white"
+            />
             <Text style={[styles.btnText, styles.btnCreateText]}>
-              {mode === "edit" ? "💾 Save" : "✨ Create"}
+              {mode === "edit" ? "Save" : "Create"}
             </Text>
           </Pressable>
         </View>

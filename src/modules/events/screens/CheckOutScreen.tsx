@@ -107,13 +107,20 @@ export default function CheckOutScreen() {
   ];
 
   return (
-    <View style={styles.gradient}>
+    <View style={[styles.gradient, { backgroundColor: colors.bg }]}>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>
-            {event.venue} • {event.end.slice(0, 10)}
+        <View style={[styles.header, { backgroundColor: colors.bgLight }]}>
+          <View
+            style={[styles.headerIcon, { backgroundColor: colors.warning }]}
+          >
+            <Ionicons name="log-out" size={24} color="white" />
+          </View>
+          <Text style={[styles.title, { color: colors.title }]}>
+            {event.venue}
           </Text>
-          <Text style={styles.subtitle}>Count returned items</Text>
+          <Text style={[styles.subtitle, { color: colors.subtitle }]}>
+            {event.end.slice(0, 10)} • Count returned items
+          </Text>
         </View>
 
         <ScrollView style={styles.scrollView}>

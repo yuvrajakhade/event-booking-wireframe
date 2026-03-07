@@ -72,8 +72,26 @@ export default function EnquiryListScreen() {
   };
 
   return (
-    <View style={styles.gradient}>
+    <View style={[styles.gradient, { backgroundColor: colors.bg }]}>
       <View style={styles.container}>
+        <View style={[styles.headerCard, { backgroundColor: colors.bgLight }]}>
+          <Text style={[styles.headerTitle, { color: colors.title }]}>
+            Enquiries
+          </Text>
+          <View style={styles.statsRow}>
+            <View
+              style={[styles.statBadge, { backgroundColor: colors.infoBg }]}
+            >
+              <Ionicons name="people" size={16} color={colors.info} />
+              <Text style={[styles.statNumber, { color: colors.info }]}>
+                {filtered.length}
+              </Text>
+              <Text style={[styles.statLabel, { color: colors.info }]}>
+                Active
+              </Text>
+            </View>
+          </View>
+        </View>
         <DateRangeBar
           from={from}
           to={to}
@@ -81,8 +99,8 @@ export default function EnquiryListScreen() {
           onChangeTo={setTo}
         />
         <View style={styles.searchWrap}>
-          <View style={styles.searchBar}>
-            <Ionicons name="search" size={16} color={colors.subtitle} />
+          <View style={[styles.searchBar, { backgroundColor: colors.bgLight }]}>
+            <Ionicons name="search" size={20} color={colors.subtitle} />
             <TextInput
               value={q}
               onChangeText={setQ}

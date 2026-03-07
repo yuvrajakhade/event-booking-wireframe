@@ -57,17 +57,31 @@ export default function CheckInScreen() {
   ];
 
   return (
-    <View style={styles.gradient}>
+    <View style={[styles.gradient, { backgroundColor: colors.bg }]}>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>
-            {event.venue} • {event.start.slice(0, 10)}
+        <View style={[styles.header, { backgroundColor: colors.bgLight }]}>
+          <View
+            style={[styles.headerIcon, { backgroundColor: colors.success }]}
+          >
+            <Ionicons name="log-in" size={24} color="white" />
+          </View>
+          <Text style={[styles.title, { color: colors.title }]}>
+            {event.venue}
+          </Text>
+          <Text style={[styles.subtitle, { color: colors.subtitle }]}>
+            {event.start.slice(0, 10)}
           </Text>
         </View>
 
-        <ScrollView style={styles.scrollView}>
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+        >
           {inventoryItems.map((item) => (
-            <View key={item.key} style={styles.row}>
+            <View
+              key={item.key}
+              style={[styles.row, { backgroundColor: colors.bgLight }]}
+            >
               <View style={styles.rowLeft}>
                 <Ionicons name={item.icon} size={20} color={colors.primary} />
                 <Text style={styles.rowLabel}>{item.label}</Text>
@@ -100,8 +114,8 @@ export default function CheckInScreen() {
         </ScrollView>
 
         <View style={styles.footer}>
-          <Pressable style={styles.btn}>
-            <Ionicons name="checkmark-done" size={18} color="white" />
+          <Pressable style={[styles.btn, { backgroundColor: colors.success }]}>
+            <Ionicons name="checkmark-done" size={20} color="white" />
             <Text style={styles.btnText}>Complete Check-In</Text>
           </Pressable>
         </View>

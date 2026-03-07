@@ -23,11 +23,11 @@ const tabMeta: Record<
   MainTabName,
   { label: string; icon: keyof typeof Ionicons.glyphMap }
 > = {
-  BookedEvents: { label: "Events", icon: "calendar" },
-  Enquiries: { label: "Enquiries", icon: "chatbubbles" },
-  CompletedEvents: { label: "Completed", icon: "checkmark-done-circle" },
-  Inventory: { label: "Inventory", icon: "cube" },
-  Muhurt: { label: "Muhurt", icon: "star" },
+  BookedEvents: { label: "Events", icon: "calendar-number" },
+  Enquiries: { label: "Enquiries", icon: "chatbubble-ellipses" },
+  CompletedEvents: { label: "Completed", icon: "trophy" },
+  Inventory: { label: "Inventory", icon: "grid" },
+  Muhurt: { label: "Muhurt", icon: "sparkles" },
 };
 
 type TabsNavigatorProps = {
@@ -37,6 +37,7 @@ type TabsNavigatorProps = {
 function HeaderTitle() {
   return (
     <View style={styles.headerTitleWrap}>
+      <Ionicons name="business" size={20} color={colors.primary} />
       <Text style={styles.headerBrandText}>SWOJUS PALACE</Text>
     </View>
   );
@@ -87,7 +88,7 @@ export default function TabsNavigator({ onLogout }: TabsNavigatorProps = {}) {
         style={styles.profileButton}
       >
         <View style={styles.profileIconShell}>
-          <Ionicons name="person" size={18} color={colors.button} />
+          <Ionicons name="person-circle" size={24} color={colors.button} />
         </View>
       </Pressable>
     );
@@ -152,19 +153,21 @@ const styles = StyleSheet.create({
   headerTitleWrap: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 4,
-    paddingVertical: 2,
-    gap: 9,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: colors.primaryBg,
+    borderRadius: 12,
+    gap: 8,
   },
   headerBrandText: {
-    color: colors.secondary,
-    fontSize: 20,
-    fontWeight: "800",
-    letterSpacing: 0.8,
-    fontStyle: "italic",
-    textShadowColor: "rgba(0, 0, 0, 0.12)",
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 1,
+    color: colors.primary,
+    fontSize: 18,
+    fontWeight: "700",
+    letterSpacing: 1.5,
+    textTransform: "uppercase",
+    textShadowColor: "rgba(99, 102, 241, 0.2)",
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   profileButton: {
     marginRight: 12,
