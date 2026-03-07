@@ -35,12 +35,11 @@ type TabsNavigatorProps = {
   onLogout?: () => void;
 };
 
-function HeaderActions() {
+function ProfileButton() {
   const navigation = useNavigation<any>();
-  const { todayMuhurtDates } = useMuhurt();
 
   return (
-    <View style={styles.headerActionsWrap}>
+    <View style={styles.profileButtonWrap}>
       <Pressable
         onPress={() => navigation.navigate("Profile")}
         style={styles.profileButton}
@@ -49,7 +48,16 @@ function HeaderActions() {
           <Ionicons name="person-circle" size={24} color={colors.button} />
         </View>
       </Pressable>
+    </View>
+  );
+}
 
+function NotificationButton() {
+  const navigation = useNavigation<any>();
+  const { todayMuhurtDates } = useMuhurt();
+
+  return (
+    <View style={styles.notificationButtonWrap}>
       <Pressable
         onPress={() => navigation.navigate("Notifications")}
         style={styles.notificationButton}
@@ -75,7 +83,13 @@ function HeaderTitle() {
   return (
     <View style={styles.headerTitleWrap}>
       <Ionicons name="business" size={20} color={colors.primary} />
-      <Text style={styles.headerBrandText}>SWOJUS PALACE</Text>
+      <Text
+        style={styles.headerBrandText}
+        numberOfLines={1}
+        adjustsFontSizeToFit
+      >
+        SWOJUS PALACE
+      </Text>
     </View>
   );
 }
@@ -121,7 +135,8 @@ export default function TabsNavigator({ onLogout }: TabsNavigatorProps = {}) {
       screenOptions={({ route }) => ({
         headerTitle: () => <HeaderTitle />,
         headerTitleAlign: "center",
-        headerRight: () => <HeaderActions />,
+        headerLeft: () => <ProfileButton />,
+        headerRight: () => <NotificationButton />,
         headerStyle: {
           backgroundColor: colors.bgLight,
         },
@@ -180,7 +195,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryBg,
     borderRadius: 12,
     gap: 8,
-    maxWidth: "65%",
+    flex: 1,
+    marginHorizontal: 8,
   },
   headerBrandText: {
     color: colors.primary,
@@ -211,11 +227,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  headerActionsWrap: {
+  profileButtonWrap: {
+    marginLeft: 12,
+  },
+  notificationButtonWrap: {
     marginRight: 12,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
   },
   notificationButton: {
     width: 36,
