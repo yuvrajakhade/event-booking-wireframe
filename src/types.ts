@@ -43,6 +43,8 @@ export type RootStackParamList = {
   CheckIn: { eventId: string };
   CheckOut: { eventId: string };
   MissingInventory: { eventId: string };
+  Profile: undefined;
+  Notifications: undefined;
 };
 
 export type TabsParamList = {

@@ -3,27 +3,11 @@ import { View, Text, Pressable, FlatList, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../../theme/colors";
 import FormRow from "../../../components/FormRow";
+import { useMuhurt } from "../../../context/MuhurtContext";
 import { styles } from "../styles/MuhurtScreen.styles";
 
-interface MuhurtDate {
-  id: string;
-  date: string;
-  description: string;
-}
-
 export default function MuhurtScreen() {
-  const [muhurtDates, setMuhurtDates] = useState<MuhurtDate[]>([
-    {
-      id: "1",
-      date: "2026-03-15",
-      description: "Holi Celebration",
-    },
-    {
-      id: "2",
-      date: "2026-04-14",
-      description: "New Year (Hindi Calendar)",
-    },
-  ]);
+  const { muhurtDates, addMuhurtDate, removeMuhurtDate } = useMuhurt();
 
   const [newDate, setNewDate] = useState("");
   const [newDescription, setNewDescription] = useState("");
@@ -34,13 +18,10 @@ export default function MuhurtScreen() {
       return;
     }
 
-    const newMuhurt: MuhurtDate = {
-      id: Date.now().toString(),
+    addMuhurtDate({
       date: newDate,
       description: newDescription || "Special Muhurt Date",
-    };
-
-    setMuhurtDates([...muhurtDates, newMuhurt]);
+    });
     setNewDate("");
     setNewDescription("");
     Alert.alert("Success", "Muhurt date added successfully");
@@ -56,7 +37,7 @@ export default function MuhurtScreen() {
           text: "Delete",
           style: "destructive",
           onPress: () => {
-            setMuhurtDates(muhurtDates.filter((m) => m.id !== id));
+            removeMuhurtDate(id);
           },
         },
       ],

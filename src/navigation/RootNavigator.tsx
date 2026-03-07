@@ -11,6 +11,7 @@ import {
 import { MissingInventoryScreen } from "../modules/inventory/screens";
 import { LoginScreen, RegisterScreen } from "../modules/auth/screens";
 import { ProfileScreen } from "../modules/profile/screens";
+import { NotificationsScreen } from "../modules/notifications/screens";
 import { RootStackParamList } from "../types";
 import { colors } from "../theme/colors";
 
@@ -97,6 +98,11 @@ export default function RootNavigator() {
           <Stack.Screen name="Profile" options={{ title: "Profile" }}>
             {() => <ProfileScreen onLogout={handleLogout} />}
           </Stack.Screen>
+          <Stack.Screen
+            name="Notifications"
+            component={NotificationsScreen}
+            options={{ title: "Notifications" }}
+          />
         </>
       )}
     </Stack.Navigator>

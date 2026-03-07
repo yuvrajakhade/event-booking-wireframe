@@ -13,6 +13,7 @@ import {
 } from "../modules/events/screens";
 import { InventoryOverviewScreen } from "../modules/inventory/screens";
 import { MuhurtScreen } from "../modules/muhurt/screens";
+import { useMuhurt } from "../context/MuhurtContext";
 import { TabsParamList } from "../types";
 import { colors } from "../theme/colors";
 
@@ -33,6 +34,42 @@ const tabMeta: Record<
 type TabsNavigatorProps = {
   onLogout?: () => void;
 };
+
+function HeaderActions() {
+  const navigation = useNavigation<any>();
+  const { todayMuhurtDates } = useMuhurt();
+
+  return (
+    <View style={styles.headerActionsWrap}>
+      <Pressable
+        onPress={() => navigation.navigate("Profile")}
+        style={styles.profileButton}
+      >
+        <View style={styles.profileIconShell}>
+          <Ionicons name="person-circle" size={24} color={colors.button} />
+        </View>
+      </Pressable>
+
+      <Pressable
+        onPress={() => navigation.navigate("Notifications")}
+        style={styles.notificationButton}
+      >
+        <Ionicons
+          name="notifications-outline"
+          size={20}
+          color={colors.button}
+        />
+        {todayMuhurtDates.length > 0 ? (
+          <View style={styles.notificationBadge}>
+            <Text style={styles.notificationBadgeText}>
+              {todayMuhurtDates.length > 9 ? "9+" : todayMuhurtDates.length}
+            </Text>
+          </View>
+        ) : null}
+      </Pressable>
+    </View>
+  );
+}
 
 function HeaderTitle() {
   return (
@@ -79,27 +116,12 @@ function TabButton({
 }
 
 export default function TabsNavigator({ onLogout }: TabsNavigatorProps = {}) {
-  const ProfileButton = () => {
-    const navigation = useNavigation<any>();
-
-    return (
-      <Pressable
-        onPress={() => navigation.navigate("Profile")}
-        style={styles.profileButton}
-      >
-        <View style={styles.profileIconShell}>
-          <Ionicons name="person-circle" size={24} color={colors.button} />
-        </View>
-      </Pressable>
-    );
-  };
-
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerTitle: () => <HeaderTitle />,
         headerTitleAlign: "center",
-        headerRight: () => <ProfileButton />,
+        headerRight: () => <HeaderActions />,
         headerStyle: {
           backgroundColor: colors.bgLight,
         },
@@ -170,7 +192,6 @@ const styles = StyleSheet.create({
     textShadowRadius: 4,
   },
   profileButton: {
-    marginRight: 12,
     width: 36,
     height: 36,
     borderRadius: 18,
@@ -187,6 +208,40 @@ const styles = StyleSheet.create({
     backgroundColor: colors.card,
     alignItems: "center",
     justifyContent: "center",
+  },
+  headerActionsWrap: {
+    marginRight: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  notificationButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.bg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  notificationBadge: {
+    position: "absolute",
+    top: -4,
+    right: -4,
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: "#dc2626",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 3,
+  },
+  notificationBadgeText: {
+    color: "white",
+    fontSize: 10,
+    fontWeight: "700",
+    lineHeight: 12,
   },
   tabPressable: {
     flex: 1,
