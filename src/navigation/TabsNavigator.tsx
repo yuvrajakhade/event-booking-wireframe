@@ -180,6 +180,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryBg,
     borderRadius: 12,
     gap: 8,
+    maxWidth: "65%",
   },
   headerBrandText: {
     color: colors.primary,
@@ -190,6 +191,7 @@ const styles = StyleSheet.create({
     textShadowColor: "rgba(99, 102, 241, 0.2)",
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
+    flexShrink: 1,
   },
   profileButton: {
     width: 36,
