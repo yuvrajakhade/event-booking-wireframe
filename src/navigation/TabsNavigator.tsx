@@ -1,17 +1,20 @@
 import React from "react";
-import { Text, View, Pressable } from "react-native";
+import { Text, View, Pressable, StyleSheet } from "react-native";
 import {
   createBottomTabNavigator,
   BottomTabBarButtonProps,
 } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import BookedEventsScreen from "../screens/BookedEventsScreen";
-import EnquiryListScreen from "../screens/EnquiryListScreen";
-import CompletedEventsScreen from "../screens/CompletedEventsScreen";
-import InventoryOverviewScreen from "../screens/InventoryOverviewScreen";
-import MuhurtScreen from "../screens/MuhurtScreen";
+import {
+  BookedEventsScreen,
+  EnquiryListScreen,
+  CompletedEventsScreen,
+} from "../modules/events/screens";
+import { InventoryOverviewScreen } from "../modules/inventory/screens";
+import { MuhurtScreen } from "../modules/muhurt/screens";
 import { TabsParamList } from "../types";
+import { colors } from "../theme/colors";
 
 const Tab = createBottomTabNavigator<TabsParamList>();
 type MainTabName = Exclude<keyof TabsParamList, "Profile">;
@@ -33,10 +36,8 @@ type TabsNavigatorProps = {
 
 function HeaderTitle() {
   return (
-    <View className="rounded-xl bg-slate-100 px-3 py-1">
-      <Text className="text-lg font-extrabold tracking-wide text-slate-900">
-        SWOJUS PALACE
-      </Text>
+    <View style={styles.headerTitleWrap}>
+      <Text style={styles.headerBrandText}>SWOJUS PALACE</Text>
     </View>
   );
 }
@@ -56,26 +57,19 @@ function TabButton({
     <Pressable
       onLongPress={onLongPress}
       onPress={onPress}
-      className="flex-1 items-center justify-center"
+      style={styles.tabPressable}
       accessibilityRole="button"
       accessibilityState={accessibilityState}
       accessibilityLabel={meta.label}
     >
       <View
-        className={`w-full items-center rounded-lg py-2 ${
-          isFocused ? "bg-blue-50" : "bg-transparent"
-        }`}
+        style={[
+          styles.tabInner,
+          isFocused ? styles.tabInnerFocused : styles.tabInnerDefault,
+        ]}
       >
-        <Ionicons
-          name={meta.icon}
-          size={22}
-          color={isFocused ? "#1d4ed8" : "#64748b"}
-        />
-        <Text
-          className={`mt-0.5 text-[10px] font-semibold ${
-            isFocused ? "text-blue-700" : "text-slate-500"
-          }`}
-        >
+        <Ionicons name={meta.icon} size={22} color={colors.button} />
+        <Text style={[styles.tabLabel, isFocused && styles.tabLabelFocused]}>
           {meta.label}
         </Text>
       </View>
@@ -90,9 +84,11 @@ export default function TabsNavigator({ onLogout }: TabsNavigatorProps = {}) {
     return (
       <Pressable
         onPress={() => navigation.navigate("Profile")}
-        className="mr-3 rounded-full bg-blue-50 p-2"
+        style={styles.profileButton}
       >
-        <Ionicons name="person-circle" size={24} color="#1d4ed8" />
+        <View style={styles.profileIconShell}>
+          <Ionicons name="person" size={18} color={colors.button} />
+        </View>
       </Pressable>
     );
   };
@@ -104,18 +100,18 @@ export default function TabsNavigator({ onLogout }: TabsNavigatorProps = {}) {
         headerTitleAlign: "center",
         headerRight: () => <ProfileButton />,
         headerStyle: {
-          backgroundColor: "#ffffff",
+          backgroundColor: colors.bgLight,
         },
-        headerTintColor: "#0f172a",
+        headerTintColor: colors.title,
         headerShadowVisible: false,
         tabBarShowLabel: false,
         tabBarStyle: {
-          borderTopColor: "#e2e8f0",
-          backgroundColor: "#ffffff",
+          borderTopColor: colors.border,
+          backgroundColor: colors.bgLight,
           borderTopWidth: 1,
-          height: 74,
+          height: 78,
           paddingBottom: 8,
-          paddingTop: 6,
+          paddingTop: 8,
           width: "100%",
         },
         tabBarButton: (props) => (
@@ -151,3 +147,73 @@ export default function TabsNavigator({ onLogout }: TabsNavigatorProps = {}) {
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  headerTitleWrap: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+    gap: 9,
+  },
+  headerBrandText: {
+    color: colors.secondary,
+    fontSize: 20,
+    fontWeight: "800",
+    letterSpacing: 0.8,
+    fontStyle: "italic",
+    textShadowColor: "rgba(0, 0, 0, 0.12)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 1,
+  },
+  profileButton: {
+    marginRight: 12,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.bg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  profileIconShell: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: colors.card,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  tabPressable: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  tabInner: {
+    width: "92%",
+    alignItems: "center",
+    borderRadius: 12,
+    paddingVertical: 8,
+  },
+  tabInnerFocused: {
+    backgroundColor: colors.bg,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  tabInnerDefault: {
+    backgroundColor: "transparent",
+  },
+  tabLabel: {
+    marginTop: 3,
+    fontSize: 11,
+    fontWeight: "600",
+    color: colors.secondaryDark,
+    letterSpacing: 0.2,
+  },
+  tabLabelFocused: {
+    color: colors.secondary,
+    fontWeight: "800",
+    letterSpacing: 0.3,
+  },
+});

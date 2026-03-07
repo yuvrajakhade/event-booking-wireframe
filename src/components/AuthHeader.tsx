@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../theme/colors";
 import { StyleSheet } from "react-native";
 
@@ -46,13 +45,14 @@ export default function AuthHeader() {
       width: 72,
       height: 72,
       borderRadius: 36,
+      backgroundColor: colors.button,
       alignItems: "center",
       justifyContent: "center",
     },
     name: {
       fontSize: 28,
       fontWeight: "900",
-      color: "white",
+      color: colors.title,
       letterSpacing: 1,
       textShadowColor: "rgba(0, 0, 0, 0.3)",
       textShadowOffset: { width: 0, height: 2 },
@@ -61,7 +61,7 @@ export default function AuthHeader() {
     subtitle: {
       fontSize: 13,
       fontWeight: "600",
-      color: "rgba(255, 255, 255, 0.85)",
+      color: colors.subtitle,
       marginTop: 4,
       letterSpacing: 2,
       textTransform: "uppercase",
@@ -76,14 +76,9 @@ export default function AuthHeader() {
       <View style={styles.logoContainer}>
         <View style={styles.logoGlow} />
         <View style={styles.logoWrap}>
-          <LinearGradient
-            colors={["#667eea", "#764ba2"] as any}
-            style={styles.iconGradient}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-          >
+          <View style={styles.iconGradient}>
             <Ionicons name="business" size={36} color="white" />
-          </LinearGradient>
+          </View>
         </View>
       </View>
       <Text style={styles.name}>SWOJUS PALACE</Text>

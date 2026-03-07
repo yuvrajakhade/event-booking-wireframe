@@ -1,47 +1,41 @@
 export const colors = {
-  // Base colors
-  bg: "#F0F4FF",
-  text: "#1A202C",
-  muted: "#718096",
-  border: "#E2E8F0",
+  // Base palette
+  bg: "#F5F2E8",
+  bgLight: "#FFFFFF",
+  text: "#5C614E",
+  muted: "#9BA894",
+  border: "#B4A385",
   card: "#FFFFFF",
+  cardAlt: "#F5F2E8",
 
-  // Primary palette - Purple/Blue gradient
-  primary: "#6366F1",
-  primaryDark: "#4F46E5",
-  primaryLight: "#818CF8",
+  // Semantic tokens
+  title: "#C9A75B",
+  subtitle: "#9BA894",
+  placeholder: "#9BA894",
+  button: "#6B7A3A",
 
-  // Secondary palette - Pink/Purple
-  secondary: "#EC4899",
-  secondaryDark: "#DB2777",
-  secondaryLight: "#F472B6",
+  // Primary palette
+  primary: "#5C614E",
+  primaryDark: "#4F5442",
+  primaryLight: "#9BA894",
+
+  // Secondary palette
+  secondary: "#C9A75B",
+  secondaryDark: "#B08F47",
+  secondaryLight: "#E2C98F",
 
   // Accent colors
-  accent: "#06B6D4",
-  accentDark: "#0891B2",
-  accentLight: "#22D3EE",
+  accent: "#B4A385",
+  accentDark: "#9B8A6E",
+  accentLight: "#D0C4AE",
 
   // Status colors
-  danger: "#EF4444",
-  dangerLight: "#FCA5A5",
-  warning: "#F59E0B",
-  warningLight: "#FCD34D",
-  success: "#10B981",
-  successLight: "#6EE7B7",
-  info: "#3B82F6",
-  infoLight: "#93C5FD",
-
-  // Gradient colors
-  gradients: {
-    primary: ["#667eea", "#764ba2"] as const,
-    sunset: ["#FF6B6B", "#FFE66D"] as const,
-    ocean: ["#00D4FF", "#0051FF"] as const,
-    purple: ["#A855F7", "#EC4899"] as const,
-    green: ["#10B981", "#06B6D4"] as const,
-    fire: ["#FF512F", "#DD2476"] as const,
-    royal: ["#6366F1", "#8B5CF6", "#EC4899"] as const,
-    soft: ["#E0C3FC", "#8EC5FC"] as const,
-    vibrant: ["#FF6B9D", "#FFA06B", "#FFE66D"] as const,
-    nightfall: ["#1E3A8A", "#7C3AED", "#DB2777"] as const,
-  },
+  danger: "#C85A54",
+  dangerLight: "#E89B96",
+  warning: "#C9A75B",
+  warningLight: "#E2C98F",
+  success: "#5C614E",
+  successLight: "#9BA894",
+  info: "#5C614E",
+  infoLight: "#9BA894",
 };

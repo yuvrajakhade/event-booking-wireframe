@@ -2,12 +2,11 @@ import React, { useMemo, useState } from "react";
 import { View, Text, TextInput, FlatList, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { LinearGradient } from "expo-linear-gradient";
-import DateRangeBar from "../components/DateRangeBar";
-import ListCard from "../components/ListCard";
-import { mockEnquiries } from "../data/mock";
-import { colors } from "../theme/colors";
-import { styles } from "../theme/styles/EnquiryListScreen.styles";
+import DateRangeBar from "../../../components/DateRangeBar";
+import ListCard from "../../../components/ListCard";
+import { mockEnquiries } from "../../../data/mock";
+import { colors } from "../../../theme/colors";
+import { styles } from "../styles/EnquiryListScreen.styles";
 
 export default function EnquiryListScreen() {
   const navigation = useNavigation<any>();
@@ -73,12 +72,7 @@ export default function EnquiryListScreen() {
   };
 
   return (
-    <LinearGradient
-      colors={colors.gradients.soft as any}
-      style={styles.gradient}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 0, y: 1 }}
-    >
+    <View style={styles.gradient}>
       <View style={styles.container}>
         <DateRangeBar
           from={from}
@@ -88,13 +82,13 @@ export default function EnquiryListScreen() {
         />
         <View style={styles.searchWrap}>
           <View style={styles.searchBar}>
-            <Ionicons name="search" size={16} color="#0066CC" />
+            <Ionicons name="search" size={16} color={colors.subtitle} />
             <TextInput
               value={q}
               onChangeText={setQ}
               placeholder="Search name/phone"
               style={styles.search}
-              placeholderTextColor="#999"
+              placeholderTextColor={colors.placeholder}
             />
           </View>
         </View>
@@ -118,6 +112,6 @@ export default function EnquiryListScreen() {
           )}
         />
       </View>
-    </LinearGradient>
+    </View>
   );
 }

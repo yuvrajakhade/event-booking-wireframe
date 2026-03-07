@@ -1,17 +1,10 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-  Pressable,
-  Alert,
-} from "react-native";
+import { View, Text, ScrollView, Pressable, Alert } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { LinearGradient } from "expo-linear-gradient";
-import { colors } from "../theme/colors";
-import { mockEvents } from "../data/mock";
+import { colors } from "../../../theme/colors";
+import { mockEvents } from "../../../data/mock";
 import { useNavigation } from "@react-navigation/native";
+import { styles } from "../styles/CheckOutScreen.styles";
 
 interface InventoryCount {
   bedsheet: number;
@@ -114,12 +107,7 @@ export default function CheckOutScreen() {
   ];
 
   return (
-    <LinearGradient
-      colors={colors.gradients.ocean as any}
-      style={styles.gradient}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 0, y: 1 }}
-    >
+    <View style={styles.gradient}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>
@@ -221,164 +209,12 @@ export default function CheckOutScreen() {
         </ScrollView>
 
         <View style={styles.footer}>
-          <LinearGradient
-            colors={colors.gradients.primary as any}
-            style={styles.btn}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-          >
-            <Pressable style={styles.btnInner} onPress={handleSubmit}>
-              <Ionicons name="checkmark-done" size={18} color="white" />
-              <Text style={styles.btnText}>Complete Check-Out</Text>
-            </Pressable>
-          </LinearGradient>
+          <Pressable style={styles.btn} onPress={handleSubmit}>
+            <Ionicons name="checkmark-done" size={18} color="white" />
+            <Text style={styles.btnText}>Complete Check-Out</Text>
+          </Pressable>
         </View>
       </View>
-    </LinearGradient>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  gradient: {
-    flex: 1,
-  },
-  container: { flex: 1 },
-  minimalHeader: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    backgroundColor: "rgba(0, 0, 0, 0.15)",
-    borderBottomWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.2)",
-  },
-  minimalTitle: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: "white",
-  },
-  header: {
-    padding: 12,
-    borderBottomWidth: 2,
-    borderColor: "rgba(255, 255, 255, 0.5)",
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: "800",
-    color: "white",
-    textShadowColor: "rgba(0, 0, 0, 0.2)",
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
-  },
-  subtitle: {
-    fontSize: 13,
-    color: "rgba(255, 255, 255, 0.9)",
-    marginTop: 4,
-    fontWeight: "600",
-  },
-  scrollView: { flex: 1 },
-  row: {
-    margin: 12,
-    padding: 16,
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: "rgba(255, 255, 255, 0.7)",
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
-    gap: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  rowTop: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  rowLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    flex: 1,
-  },
-  rowLabel: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: colors.text,
-  },
-  expectedBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 8,
-    backgroundColor: "rgba(37, 99, 235, 0.15)",
-  },
-  expectedText: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: colors.primary,
-  },
-  counterRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  counter: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
-  },
-  counterBtn: {
-    padding: 4,
-  },
-  counterValue: {
-    fontSize: 22,
-    fontWeight: "800",
-    color: colors.text,
-    minWidth: 40,
-    textAlign: "center",
-  },
-  statusBadge: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 8,
-    backgroundColor: "rgba(220, 38, 38, 0.15)",
-  },
-  statusText: {
-    fontSize: 12,
-    fontWeight: "800",
-  },
-  footer: {
-    padding: 12,
-    borderTopWidth: 2,
-    borderColor: "rgba(255, 255, 255, 0.5)",
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 10,
-  },
-  btn: {
-    borderRadius: 14,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  btnInner: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-    paddingVertical: 16,
-  },
-  btnText: {
-    color: "white",
-    fontWeight: "800",
-    fontSize: 16,
-  },
-});

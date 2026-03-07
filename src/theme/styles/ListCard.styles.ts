@@ -6,7 +6,9 @@ export const styles = StyleSheet.create({
     marginHorizontal: 12,
     marginTop: 12,
     borderRadius: 20,
-    shadowColor: "#000",
+    borderWidth: 2,
+    borderColor: colors.border,
+    shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 12,
@@ -15,6 +17,7 @@ export const styles = StyleSheet.create({
   },
   gradient: {
     borderRadius: 20,
+    backgroundColor: colors.card,
   },
   card: {
     padding: 16,
@@ -38,14 +41,26 @@ export const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  title: { fontSize: 17, fontWeight: "800", color: colors.text, flex: 1 },
+  title: {
+    fontSize: 17,
+    fontWeight: "600",
+    color: colors.title,
+    flex: 1,
+    letterSpacing: 0.3,
+  },
   titleDetailed: {
     fontSize: 16,
-    fontWeight: "800",
-    color: colors.text,
+    fontWeight: "600",
+    letterSpacing: 0.3,
+    color: colors.title,
     marginBottom: 10,
   },
-  subtitle: { marginTop: 8, color: colors.muted, fontSize: 14, lineHeight: 20 },
+  subtitle: {
+    marginTop: 8,
+    color: colors.subtitle,
+    fontSize: 14,
+    lineHeight: 20,
+  },
   detailedFieldsContainer: {
     gap: 6,
   },
@@ -59,12 +74,12 @@ export const styles = StyleSheet.create({
   detailedLabel: {
     fontSize: 13,
     fontWeight: "600",
-    color: colors.primary,
+    color: colors.secondary,
     minWidth: 75,
   },
   detailedValue: {
     fontSize: 13,
-    color: colors.text,
+    color: "#8C9F8E",
     flex: 1,
   },
   metaRow: {
@@ -84,9 +99,25 @@ export const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
+  actionBtnIconOnly: {
+    borderRadius: 10,
+  },
   actionBtnGradient: {
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
-  actionText: { color: "white", fontWeight: "700", fontSize: 14 },
+  actionBtnGradientIconOnly: {
+    width: 42,
+    height: 42,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  actionText: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: 14,
+    letterSpacing: 0.3,
+  },
 });

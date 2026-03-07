@@ -11,12 +11,11 @@ import {
 } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { LinearGradient } from "expo-linear-gradient";
-import { colors } from "../theme/colors";
-import { styles } from "../theme/styles/CompletedEventsScreen.styles";
-import { mockEvents } from "../data/mock";
-import ListCard from "../components/ListCard";
-import DateRangeBar from "../components/DateRangeBar";
+import { colors } from "../../../theme/colors";
+import { styles } from "../styles/CompletedEventsScreen.styles";
+import { mockEvents } from "../../../data/mock";
+import ListCard from "../../../components/ListCard";
+import DateRangeBar from "../../../components/DateRangeBar";
 
 type SectionKey = "info" | "customer" | "schedule" | "inventory";
 type Event = Record<string, any>;
@@ -163,22 +162,17 @@ export default function CompletedEventsScreen({
   );
 
   return (
-    <LinearGradient
-      colors={colors.gradients.green as any}
-      style={styles.gradient}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 0, y: 1 }}
-    >
+    <View style={styles.gradient}>
       <View style={styles.container}>
         <View style={styles.searchWrap}>
           <View style={styles.searchBar}>
-            <Ionicons name="search" size={20} color="#0066CC" />
+            <Ionicons name="search" size={20} color={colors.subtitle} />
             <TextInput
               value={searchText}
               onChangeText={setSearchText}
               placeholder="Search completed events..."
               style={styles.searchInput}
-              placeholderTextColor="#999"
+              placeholderTextColor={colors.placeholder}
             />
           </View>
         </View>
@@ -361,6 +355,6 @@ export default function CompletedEventsScreen({
           </View>
         </Modal>
       </View>
-    </LinearGradient>
+    </View>
   );
 }

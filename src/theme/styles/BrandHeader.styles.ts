@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderRadius: 20,
+    backgroundColor: colors.button,
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
@@ -33,7 +34,7 @@ export const styles = StyleSheet.create({
   name: {
     fontSize: 22,
     fontWeight: "900",
-    color: "white",
+    color: colors.title,
     textShadowColor: "rgba(0, 0, 0, 0.2)",
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,

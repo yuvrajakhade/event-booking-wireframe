@@ -1,9 +1,10 @@
 import { StyleSheet } from "react-native";
-import { colors } from "../colors";
+import { colors } from "../../../theme/colors";
 
 export const styles = StyleSheet.create({
   gradient: {
     flex: 1,
+    backgroundColor: colors.bg,
   },
   container: {
     flex: 1,
@@ -17,8 +18,9 @@ export const styles = StyleSheet.create({
   },
   minimalTitle: {
     fontSize: 16,
-    fontWeight: "700",
-    color: "white",
+    fontWeight: "600",
+    color: colors.title,
+    letterSpacing: 0.3,
   },
   searchWrap: {
     paddingHorizontal: 12,
@@ -30,14 +32,15 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.card,
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 14,
-    borderWidth: 0,
+    borderWidth: 2,
+    borderColor: colors.border,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
   },
@@ -55,13 +58,14 @@ export const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 18,
-    fontWeight: "700",
-    color: colors.text,
+    fontWeight: "600",
+    color: colors.title,
     marginTop: 16,
+    letterSpacing: 0.3,
   },
   emptySubtext: {
     fontSize: 14,
-    color: colors.muted,
+    color: colors.subtitle,
     marginTop: 8,
     textAlign: "center",
   },
@@ -81,8 +85,9 @@ export const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: "700",
-    color: colors.text,
+    fontWeight: "600",
+    color: colors.title,
+    letterSpacing: 0.3,
   },
   modalContent: {
     flex: 1,
@@ -124,15 +129,16 @@ export const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: "700",
-    color: colors.text,
+    fontWeight: "600",
+    color: colors.title,
+    letterSpacing: 0.3,
   },
   detailRow: {
     marginBottom: 12,
   },
   label: {
     fontSize: 12,
-    color: colors.muted,
+    color: colors.subtitle,
     fontWeight: "600",
     marginBottom: 4,
   },
@@ -181,7 +187,7 @@ export const styles = StyleSheet.create({
   },
   inventoryUnit: {
     fontSize: 12,
-    color: colors.muted,
+    color: colors.subtitle,
     backgroundColor: colors.bg,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -196,7 +202,7 @@ export const styles = StyleSheet.create({
   },
   inventoryLabel: {
     fontSize: 12,
-    color: colors.muted,
+    color: colors.subtitle,
     fontWeight: "500",
   },
   inventoryValue: {
@@ -206,7 +212,7 @@ export const styles = StyleSheet.create({
   },
   saveButton: {
     flexDirection: "row",
-    backgroundColor: colors.success || "#4CAF50",
+    backgroundColor: colors.button,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 8,
@@ -238,7 +244,7 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
   },
   primaryBtn: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.button,
   },
   secondaryBtn: {
     backgroundColor: colors.card,
@@ -246,7 +252,7 @@ export const styles = StyleSheet.create({
     borderColor: colors.border,
   },
   dangerBtn: {
-    backgroundColor: "#dc3545",
+    backgroundColor: colors.button,
   },
   actionBtnText: {
     color: "#fff",

@@ -3,13 +3,14 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabsNavigator from "./TabsNavigator";
-import CheckInScreen from "../screens/CheckInScreen";
-import CheckOutScreen from "../screens/CheckOutScreen";
-import MissingInventoryScreen from "../screens/MissingInventoryScreen";
-import EventFormScreen from "../screens/EventFormScreen";
-import LoginScreen from "../screens/LoginScreen";
-import RegisterScreen from "../screens/RegisterScreen";
-import ProfileScreen from "../screens/ProfileScreen";
+import {
+  CheckInScreen,
+  CheckOutScreen,
+  EventFormScreen,
+} from "../modules/events/screens";
+import { MissingInventoryScreen } from "../modules/inventory/screens";
+import { LoginScreen, RegisterScreen } from "../modules/auth/screens";
+import { ProfileScreen } from "../modules/profile/screens";
 import { RootStackParamList } from "../types";
 import { colors } from "../theme/colors";
 
@@ -52,7 +53,13 @@ export default function RootNavigator() {
   }
 
   return (
-    <Stack.Navigator screenOptions={{ headerTitleAlign: "center" }}>
+    <Stack.Navigator
+      screenOptions={{
+        headerTitleAlign: "center",
+        headerStyle: { backgroundColor: colors.bgLight },
+        headerTintColor: colors.title,
+      }}
+    >
       {!isAuthenticated ? (
         <>
           <Stack.Screen name="Login" options={{ headerShown: false }}>

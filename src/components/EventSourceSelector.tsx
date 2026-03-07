@@ -6,7 +6,6 @@ import {
   Animated,
   LayoutChangeEvent,
 } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors } from "../theme/colors";
 import { styles } from "../theme/styles/EventSourceSelector.styles";
 
@@ -54,22 +53,7 @@ export default function EventSourceSelector({ value, onSelect }: Props) {
               transform: [{ translateX }],
             },
           ]}
-        >
-          <View
-            style={[
-              styles.thumbIcon,
-              { backgroundColor: value === "enquiry" ? "#FF6B9D" : "#4CAF50" },
-            ]}
-          >
-            <Ionicons
-              name={
-                value === "enquiry" ? "help-circle" : "checkmark-done-circle"
-              }
-              size={18}
-              color="white"
-            />
-          </View>
-        </Animated.View>
+        />
         <View style={styles.toggleLabel}>
           <Text
             style={[

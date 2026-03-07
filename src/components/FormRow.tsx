@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TextInput } from "react-native";
-import { colors } from "../theme/colors";
 import { styles } from "../theme/styles/FormRow.styles";
+import { colors } from "../theme/colors";
 
 type Props = {
   label: string;
@@ -23,9 +23,7 @@ export default function FormRow({
   const isLight = variant === "light";
   const labelStyle = isLight ? styles.labelLight : styles.label;
   const inputStyle = isLight ? styles.inputLight : styles.input;
-  const placeholderColor = isLight
-    ? "rgba(51, 51, 51, 0.5)"
-    : "rgba(255, 255, 255, 0.6)";
+  const placeholderColor = colors.placeholder;
 
   return (
     <View style={styles.row}>

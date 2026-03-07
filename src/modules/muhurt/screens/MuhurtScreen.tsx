@@ -1,16 +1,9 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  FlatList,
-  Alert,
-} from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import { View, Text, Pressable, FlatList, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { colors } from "../theme/colors";
-import FormRow from "../components/FormRow";
+import { colors } from "../../../theme/colors";
+import FormRow from "../../../components/FormRow";
+import { styles } from "../styles/MuhurtScreen.styles";
 
 interface MuhurtDate {
   id: string;
@@ -73,12 +66,7 @@ export default function MuhurtScreen() {
   const filteredDates = muhurtDates;
 
   return (
-    <LinearGradient
-      colors={colors.gradients.soft as any}
-      style={styles.gradient}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 0, y: 1 }}
-    >
+    <View style={styles.gradient}>
       <View style={styles.container}>
         <View style={styles.addSection}>
           <View style={styles.card}>
@@ -97,16 +85,14 @@ export default function MuhurtScreen() {
               placeholder="Enter occasion name"
               variant="light"
             />
-            <Pressable onPress={handleAddMuhurt}>
-              <LinearGradient
-                colors={colors.gradients.primary as any}
-                style={styles.addButton}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-              >
-                <Ionicons name="add-circle" size={20} color="white" />
-                <Text style={styles.addButtonText}>Add Muhurt Date</Text>
-              </LinearGradient>
+            <Pressable style={styles.addButton} onPress={handleAddMuhurt}>
+              <Ionicons
+                name="add-circle-outline"
+                size={18}
+                color={colors.bgLight}
+                style={styles.addButtonIcon}
+              />
+              <Text style={styles.addButtonText}>Add Muhurt Date</Text>
             </Pressable>
           </View>
         </View>
@@ -157,124 +143,6 @@ export default function MuhurtScreen() {
           />
         </View>
       </View>
-    </LinearGradient>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  gradient: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 16,
-  },
-  addSection: {
-    marginBottom: 16,
-  },
-  card: {
-    backgroundColor: "rgba(255, 255, 255, 0.98)",
-    borderRadius: 20,
-    padding: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 5,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "800",
-    color: colors.text,
-    marginBottom: 16,
-  },
-  addButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 14,
-    borderRadius: 14,
-    marginTop: 12,
-    gap: 8,
-    shadowColor: "#667eea",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  addButtonText: {
-    color: "white",
-    fontWeight: "800",
-    fontSize: 16,
-  },
-  listSection: {
-    flex: 1,
-    minHeight: 300,
-  },
-  listTitle: {
-    fontSize: 16,
-    fontWeight: "800",
-    color: colors.text,
-    marginBottom: 12,
-    paddingHorizontal: 4,
-  },
-  muhurtCard: {
-    backgroundColor: "rgba(255, 255, 255, 0.98)",
-    borderRadius: 16,
-    marginBottom: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  muhurtContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 16,
-  },
-  dateIconCircle: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: "rgba(102, 126, 234, 0.1)",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 12,
-  },
-  muhurtDetails: {
-    flex: 1,
-  },
-  muhurtDate: {
-    fontSize: 16,
-    fontWeight: "800",
-    color: colors.text,
-    marginBottom: 4,
-  },
-  muhurtDescription: {
-    fontSize: 14,
-    color: colors.muted,
-    fontWeight: "500",
-  },
-  deleteButton: {
-    padding: 8,
-  },
-  emptyState: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 48,
-  },
-  emptyText: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: colors.text,
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  emptySubtext: {
-    fontSize: 14,
-    color: colors.muted,
-    textAlign: "center",
-  },
-});

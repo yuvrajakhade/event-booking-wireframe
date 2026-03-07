@@ -1,18 +1,11 @@
 import React, { useMemo, useState } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  Pressable,
-  TextInput,
-  ImageBackground,
-} from "react-native";
+import { View, Text, FlatList, Pressable, TextInput } from "react-native";
 // import { BlurView } from "expo-blur";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { colors } from "../theme/colors";
-import { mockEvents } from "../data/mock";
+import { colors } from "../../../theme/colors";
+import { mockEvents } from "../../../data/mock";
 import { useNavigation } from "@react-navigation/native";
+import { styles } from "../styles/InventoryOverviewScreen.styles";
 
 interface MissingInventorySummary {
   eventId: string;
@@ -102,29 +95,18 @@ export default function InventoryOverviewScreen() {
   }, [missingInventorySummary, searchQ]);
 
   return (
-    <ImageBackground
-      source={{
-        uri: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop&blur=50",
-      }}
-      style={styles.gradient}
-      blurRadius={80}
-    >
-      <View
-        style={[
-          styles.blurContainer,
-          { backgroundColor: "rgba(255,255,255,0.05)" },
-        ]}
-      >
+    <View style={styles.gradient}>
+      <View style={styles.blurContainer}>
         <View style={styles.container}>
           <View style={styles.searchWrap}>
             <View style={styles.searchBar}>
-              <Ionicons name="search" size={18} color="#0066CC" />
+              <Ionicons name="search" size={18} color={colors.subtitle} />
               <TextInput
                 value={searchQ}
                 onChangeText={setSearchQ}
                 placeholder="Search event/customer/venue"
                 style={styles.search}
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.placeholder}
               />
             </View>
           </View>
@@ -220,225 +202,6 @@ export default function InventoryOverviewScreen() {
           />
         </View>
       </View>
-    </ImageBackground>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  gradient: {
-    flex: 1,
-  },
-  blurContainer: {
-    flex: 1,
-  },
-  container: { flex: 1 },
-  minimalHeader: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    backgroundColor: "rgba(0, 0, 0, 0.15)",
-    borderBottomWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.2)",
-  },
-  minimalTitle: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: "white",
-  },
-  searchWrap: {
-    paddingHorizontal: 12,
-    paddingVertical: 14,
-    borderBottomWidth: 2,
-    borderColor: "rgba(255, 255, 255, 0.3)",
-  },
-  searchBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderWidth: 0,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  search: {
-    flex: 1,
-    color: colors.text,
-    fontSize: 16,
-    fontWeight: "500",
-  },
-  summaryCard: {
-    margin: 12,
-    padding: 16,
-    borderRadius: 16,
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
-    borderWidth: 2,
-    borderColor: "rgba(255, 255, 255, 0.7)",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  summaryRow: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-  },
-  summaryItem: {
-    flex: 1,
-    alignItems: "center",
-    gap: 6,
-  },
-  summaryValue: {
-    fontSize: 20,
-    fontWeight: "800",
-    color: colors.text,
-  },
-  summaryLabel: {
-    fontSize: 11,
-    color: colors.muted,
-    textAlign: "center",
-  },
-  divider: {
-    width: 1,
-    height: 50,
-    backgroundColor: colors.border,
-  },
-  eventCard: {
-    margin: 12,
-    marginTop: 0,
-    padding: 16,
-    borderRadius: 16,
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
-    borderWidth: 2,
-    borderColor: "rgba(255, 255, 255, 0.7)",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 5,
-    gap: 12,
-  },
-  eventHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-  },
-  eventLeft: {
-    flex: 1,
-    gap: 4,
-  },
-  eventTitle: {
-    fontSize: 16,
-    fontWeight: "800",
-    color: colors.text,
-  },
-  eventMeta: {
-    fontSize: 13,
-    color: colors.muted,
-  },
-  eventDate: {
-    fontSize: 12,
-    color: colors.muted,
-  },
-  eventBadge: {
-    backgroundColor: colors.danger,
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    minWidth: 40,
-    alignItems: "center",
-  },
-  eventBadgeText: {
-    color: "white",
-    fontWeight: "800",
-    fontSize: 14,
-  },
-  itemsList: {
-    gap: 8,
-    paddingTop: 8,
-    borderTopWidth: 2,
-    borderColor: "rgba(0, 0, 0, 0.1)",
-  },
-  itemRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  itemText: {
-    flex: 1,
-    fontSize: 13,
-    color: colors.text,
-    fontWeight: "500",
-  },
-  itemAmount: {
-    fontSize: 13,
-    fontWeight: "700",
-    color: colors.danger,
-  },
-  moreText: {
-    fontSize: 12,
-    color: colors.primary,
-    fontStyle: "italic",
-    marginTop: 4,
-  },
-  totalRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderColor: colors.border,
-  },
-  totalLabel: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: colors.text,
-  },
-  totalValue: {
-    fontSize: 16,
-    fontWeight: "800",
-    color: colors.danger,
-  },
-  actionHint: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    gap: 4,
-    marginTop: 4,
-  },
-  actionText: {
-    fontSize: 12,
-    fontWeight: "600",
-    color: colors.primary,
-  },
-  emptyState: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 60,
-    paddingHorizontal: 32,
-  },
-  emptyText: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: "white",
-    marginTop: 16,
-    textShadowColor: "rgba(0, 0, 0, 0.2)",
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
-  },
-  emptySubtext: {
-    fontSize: 14,
-    color: "rgba(255, 255, 255, 0.8)",
-    marginTop: 8,
-    textAlign: "center",
-    textShadowColor: "rgba(0, 0, 0, 0.2)",
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
-  },
-});

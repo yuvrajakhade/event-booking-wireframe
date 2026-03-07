@@ -1,9 +1,16 @@
 import React from "react";
 import { View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../theme/colors";
 import { styles } from "../theme/styles/ListCard.styles";
+
+const actionIconByLabel: Record<string, keyof typeof Ionicons.glyphMap> = {
+  View: "eye-outline",
+  Book: "add-outline",
+  Edit: "create-outline",
+  "Check-In": "log-in-outline",
+  "Check-Out": "log-out-outline",
+};
 
 type Props = {
   title: string;
@@ -41,10 +48,7 @@ export default function ListCard({
   if (detailedFormat) {
     return (
       <View style={styles.cardContainer}>
-        <LinearGradient
-          colors={["rgba(255, 255, 255, 0.95)", "rgba(255, 255, 255, 0.85)"]}
-          style={styles.gradient}
-        >
+        <View style={styles.gradient}>
           <Pressable onPress={onPress} style={styles.card}>
             <View style={styles.headerRow}>
               <Text style={styles.titleDetailed}>
@@ -58,7 +62,7 @@ export default function ListCard({
                   <Ionicons
                     name="call"
                     size={14}
-                    color={colors.primary}
+                    color={colors.button}
                     style={styles.fieldIcon}
                   />
                   <Text style={styles.detailedLabel}>Mobile: </Text>
@@ -70,7 +74,7 @@ export default function ListCard({
                   <Ionicons
                     name="home"
                     size={14}
-                    color={colors.primary}
+                    color={colors.button}
                     style={styles.fieldIcon}
                   />
                   <Text style={styles.detailedLabel}>Venue: </Text>
@@ -82,7 +86,7 @@ export default function ListCard({
                   <Ionicons
                     name="bookmark"
                     size={14}
-                    color={colors.primary}
+                    color={colors.button}
                     style={styles.fieldIcon}
                   />
                   <Text style={styles.detailedLabel}>Event Name: </Text>
@@ -94,7 +98,7 @@ export default function ListCard({
                   <Ionicons
                     name="layers"
                     size={14}
-                    color={colors.primary}
+                    color={colors.button}
                     style={styles.fieldIcon}
                   />
                   <Text style={styles.detailedLabel}>Rooms: </Text>
@@ -104,40 +108,48 @@ export default function ListCard({
             </View>
             {!!actions?.length && (
               <View style={styles.actions}>
-                {actions.map((a, idx) => (
-                  <Pressable
-                    key={a.label}
-                    onPress={a.onPress}
-                    style={styles.actionBtn}
-                  >
-                    <LinearGradient
-                      colors={
-                        (idx === 0
-                          ? colors.gradients.primary
-                          : colors.gradients.green) as any
-                      }
-                      style={styles.actionBtnGradient}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 0 }}
+                {actions.map((a) => {
+                  const iconName = actionIconByLabel[a.label];
+
+                  return (
+                    <Pressable
+                      key={a.label}
+                      onPress={a.onPress}
+                      style={[
+                        styles.actionBtn,
+                        iconName ? styles.actionBtnIconOnly : undefined,
+                      ]}
+                      accessibilityLabel={a.label}
                     >
-                      <Text style={styles.actionText}>{a.label}</Text>
-                    </LinearGradient>
-                  </Pressable>
-                ))}
+                      <View
+                        style={[
+                          styles.actionBtnGradient,
+                          { backgroundColor: colors.button },
+                          iconName
+                            ? styles.actionBtnGradientIconOnly
+                            : undefined,
+                        ]}
+                      >
+                        {iconName ? (
+                          <Ionicons name={iconName} size={19} color="white" />
+                        ) : (
+                          <Text style={styles.actionText}>{a.label}</Text>
+                        )}
+                      </View>
+                    </Pressable>
+                  );
+                })}
               </View>
             )}
           </Pressable>
-        </LinearGradient>
+        </View>
       </View>
     );
   }
 
   return (
     <View style={styles.cardContainer}>
-      <LinearGradient
-        colors={["rgba(255, 255, 255, 0.95)", "rgba(255, 255, 255, 0.85)"]}
-        style={styles.gradient}
-      >
+      <View style={styles.gradient}>
         <Pressable onPress={onPress} style={styles.card}>
           <View style={styles.headerRow}>
             <View style={styles.titleWrap}>
@@ -176,30 +188,39 @@ export default function ListCard({
           </View>
           {!!actions?.length && (
             <View style={styles.actions}>
-              {actions.map((a, idx) => (
-                <Pressable
-                  key={a.label}
-                  onPress={a.onPress}
-                  style={styles.actionBtn}
-                >
-                  <LinearGradient
-                    colors={
-                      (idx === 0
-                        ? colors.gradients.primary
-                        : colors.gradients.green) as any
-                    }
-                    style={styles.actionBtnGradient}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}
+              {actions.map((a) => {
+                const iconName = actionIconByLabel[a.label];
+
+                return (
+                  <Pressable
+                    key={a.label}
+                    onPress={a.onPress}
+                    style={[
+                      styles.actionBtn,
+                      iconName ? styles.actionBtnIconOnly : undefined,
+                    ]}
+                    accessibilityLabel={a.label}
                   >
-                    <Text style={styles.actionText}>{a.label}</Text>
-                  </LinearGradient>
-                </Pressable>
-              ))}
+                    <View
+                      style={[
+                        styles.actionBtnGradient,
+                        { backgroundColor: colors.button },
+                        iconName ? styles.actionBtnGradientIconOnly : undefined,
+                      ]}
+                    >
+                      {iconName ? (
+                        <Ionicons name={iconName} size={19} color="white" />
+                      ) : (
+                        <Text style={styles.actionText}>{a.label}</Text>
+                      )}
+                    </View>
+                  </Pressable>
+                );
+              })}
             </View>
           )}
         </Pressable>
-      </LinearGradient>
+      </View>
     </View>
   );
 }

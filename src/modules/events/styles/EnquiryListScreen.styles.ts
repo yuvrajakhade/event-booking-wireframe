@@ -1,9 +1,10 @@
 import { StyleSheet } from "react-native";
-import { colors } from "../colors";
+import { colors } from "../../../theme/colors";
 
 export const styles = StyleSheet.create({
   gradient: {
     flex: 1,
+    backgroundColor: colors.bg,
   },
   container: {
     flex: 1,
@@ -17,8 +18,8 @@ export const styles = StyleSheet.create({
   },
   minimalTitle: {
     fontSize: 16,
-    fontWeight: "700",
-    color: "white",
+    fontWeight: "600",
+    color: colors.title,
   },
   searchWrap: {
     paddingHorizontal: 12,
@@ -30,14 +31,15 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.card,
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 14,
-    borderWidth: 0,
+    borderWidth: 2,
+    borderColor: colors.border,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
   },
