@@ -39,7 +39,34 @@ export const styles = StyleSheet.create({
     elevation: 3,
   },
   title: { fontSize: 17, fontWeight: "800", color: colors.text, flex: 1 },
+  titleDetailed: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: colors.text,
+    marginBottom: 10,
+  },
   subtitle: { marginTop: 8, color: colors.muted, fontSize: 14, lineHeight: 20 },
+  detailedFieldsContainer: {
+    gap: 6,
+  },
+  detailedField: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  fieldIcon: {
+    marginRight: 8,
+  },
+  detailedLabel: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: colors.primary,
+    minWidth: 75,
+  },
+  detailedValue: {
+    fontSize: 13,
+    color: colors.text,
+    flex: 1,
+  },
   metaRow: {
     marginTop: 10,
     flexDirection: "row",

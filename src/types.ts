@@ -50,5 +50,6 @@ export type TabsParamList = {
   Enquiries: undefined;
   CompletedEvents: undefined;
   Inventory: undefined;
+  Muhurt: undefined;
   Profile: undefined;
 };

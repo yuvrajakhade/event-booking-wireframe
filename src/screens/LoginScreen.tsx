@@ -35,9 +35,6 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
 
           <View style={styles.card}>
             <View style={styles.cardHeader}>
-              <View style={styles.iconCircle}>
-                <Ionicons name="lock-closed" size={24} color="#667eea" />
-              </View>
               <Text style={styles.title}>Login</Text>
               <Text style={styles.sub}>Enter your credentials below</Text>
             </View>
@@ -109,11 +106,13 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
+    paddingHorizontal: 0,
   },
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 16,
     paddingTop: 40,
+    paddingBottom: 20,
   },
   headerSection: {
     marginBottom: 20,
@@ -133,17 +132,6 @@ const styles = StyleSheet.create({
   cardHeader: {
     alignItems: "center",
     marginBottom: 24,
-  },
-  iconCircle: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: "rgba(102, 126, 234, 0.1)",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 16,
-    borderWidth: 3,
-    borderColor: "rgba(102, 126, 234, 0.2)",
   },
   title: {
     fontSize: 30,
@@ -214,15 +202,17 @@ const styles = StyleSheet.create({
     color: "#667eea",
   },
   footer: {
-    marginTop: 32,
+    marginTop: 16,
     alignItems: "center",
+    paddingVertical: 12,
   },
   footerText: {
-    color: "rgba(255, 255, 255, 0.8)",
-    fontSize: 13,
+    color: "rgba(255, 255, 255, 0.9)",
+    fontSize: 12,
     fontWeight: "600",
-    textShadowColor: "rgba(0, 0, 0, 0.2)",
+    textShadowColor: "rgba(0, 0, 0, 0.3)",
     textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
+    textShadowRadius: 3,
+    letterSpacing: 0.3,
   },
 });

@@ -9,6 +9,7 @@ import MissingInventoryScreen from "../screens/MissingInventoryScreen";
 import EventFormScreen from "../screens/EventFormScreen";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 import { RootStackParamList } from "../types";
 import { colors } from "../theme/colors";
 
@@ -86,6 +87,9 @@ export default function RootNavigator() {
             component={MissingInventoryScreen}
             options={{ title: "Missing Inventory" }}
           />
+          <Stack.Screen name="Profile" options={{ title: "Profile" }}>
+            {() => <ProfileScreen onLogout={handleLogout} />}
+          </Stack.Screen>
         </>
       )}
     </Stack.Navigator>

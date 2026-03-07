@@ -69,12 +69,13 @@ export default function BookedEventsScreen() {
           keyExtractor={(i) => i.id}
           renderItem={({ item }) => (
             <ListCard
-              title={item.title}
-              subtitle={`${isoDateOnly(item.start)} • ${item.venue} • ${item.customerName}`}
-              metaLeft={`Status: ${item.status}`}
-              metaLeftIcon="checkmark-circle"
-              metaRight={`Rooms: ${item.rooms.length}`}
-              metaRightIcon="home"
+              title={item.customerName}
+              date={isoDateOnly(item.start)}
+              mobile={item.phone ?? "-"}
+              venue={item.venue}
+              eventName={item.title}
+              rooms={item.rooms.length}
+              detailedFormat={true}
               actions={[
                 {
                   label: "View/Edit",

@@ -11,9 +11,14 @@ interface Props {
 }
 
 const ROOM_SECTIONS = {
-  Front: Array.from({ length: 6 }, (_, i) => `Front ${i + 1}`),
-  Behind: Array.from({ length: 9 }, (_, i) => `Behind ${i + 1}`),
-  "Other side": Array.from({ length: 40 }, (_, i) => `Other ${i + 1}`),
+  "Phase 1": Array.from({ length: 9 }, (_, i) => `${101 + i}`),
+  "Phase 2": Array.from({ length: 6 }, (_, i) => `${101 + i}`),
+  Others: [
+    ...Array.from({ length: 10 }, (_, i) => `${101 + i}`),
+    ...Array.from({ length: 10 }, (_, i) => `${201 + i}`),
+    ...Array.from({ length: 10 }, (_, i) => `${301 + i}`),
+    ...Array.from({ length: 10 }, (_, i) => `${401 + i}`),
+  ],
 };
 
 export default function RoomSelector({

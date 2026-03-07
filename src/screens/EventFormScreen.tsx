@@ -8,6 +8,7 @@ import FormRow from "../components/FormRow";
 import VenueDropdown from "../components/VenueDropdown";
 import RoomSelector from "../components/RoomSelector";
 import EventSourceSelector from "../components/EventSourceSelector";
+import EventTypeDropdown from "../components/EventTypeDropdown";
 import { mockEvents } from "../data/mock";
 
 export default function EventFormScreen() {
@@ -25,6 +26,8 @@ export default function EventFormScreen() {
     existing?.customerName ?? "",
   );
   const [phone, setPhone] = useState(existing?.phone ?? "");
+  const [alternativeNumber, setAlternativeNumber] = useState("");
+  const [eventType, setEventType] = useState("");
   const [eventSource, setEventSource] = useState<"enquiry" | "booking">(
     "booking",
   );
@@ -71,6 +74,17 @@ export default function EventFormScreen() {
             value={phone}
             onChangeText={setPhone}
             placeholder="+91..."
+          />
+          <FormRow
+            label="Alternative Number"
+            value={alternativeNumber}
+            onChangeText={setAlternativeNumber}
+            placeholder="+91..."
+          />
+          <EventTypeDropdown
+            label="Event Type *"
+            value={eventType}
+            onSelect={setEventType}
           />
           <VenueDropdown label="Venue *" value={venue} onSelect={setVenue} />
           <RoomSelector

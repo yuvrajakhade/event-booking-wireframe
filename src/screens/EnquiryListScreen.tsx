@@ -104,15 +104,15 @@ export default function EnquiryListScreen() {
           keyExtractor={(i) => i.id}
           renderItem={({ item }) => (
             <ListCard
-              title={item.name}
-              subtitle={`Event Date: ${item.eventDate}`}
-              metaLeft={`Mobile: ${item.phone ?? "-"}`}
-              metaLeftIcon="call"
-              metaRight={`Status: ${item.status}`}
-              metaRightIcon="alert-circle"
+              title={`Status: ${item.status}`}
+              date={item.eventDate}
+              mobile={item.phone ?? "-"}
+              venue={item.source ?? "-"}
+              eventName={item.name}
+              detailedFormat={true}
               actions={[
                 { label: "View", onPress: () => handleViewEnquiry(item) },
-                { label: "Convert", onPress: () => handleConvertEnquiry(item) },
+                { label: "Book", onPress: () => handleConvertEnquiry(item) },
               ]}
             />
           )}

@@ -138,19 +138,21 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
+    paddingHorizontal: 0,
   },
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 16,
     paddingTop: 40,
+    paddingBottom: 20,
   },
   headerSection: {
-    marginBottom: 20,
+    marginBottom: 12,
   },
   card: {
     backgroundColor: "rgba(255, 255, 255, 0.98)",
     borderRadius: 32,
-    padding: 24,
+    padding: 18,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 20 },
     shadowOpacity: 0.4,
@@ -161,13 +163,13 @@ const styles = StyleSheet.create({
   },
   cardHeader: {
     alignItems: "center",
-    marginBottom: 24,
+    marginBottom: 16,
   },
   title: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: "900",
     color: colors.text,
-    marginBottom: 6,
+    marginBottom: 4,
     letterSpacing: 0.5,
   },
   sub: {
@@ -176,7 +178,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   formSection: {
-    gap: 4,
+    gap: 2,
   },
   termsSection: {
     flexDirection: "row",
@@ -235,16 +237,18 @@ const styles = StyleSheet.create({
     color: "#f5576c",
   },
   footer: {
-    marginTop: 32,
-    marginBottom: 20,
+    marginTop: 16,
+    marginBottom: 12,
     alignItems: "center",
+    paddingVertical: 12,
   },
   footerText: {
-    color: "rgba(255, 255, 255, 0.8)",
-    fontSize: 13,
+    color: "rgba(255, 255, 255, 0.9)",
+    fontSize: 12,
     fontWeight: "600",
-    textShadowColor: "rgba(0, 0, 0, 0.2)",
+    textShadowColor: "rgba(0, 0, 0, 0.3)",
     textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
+    textShadowRadius: 3,
+    letterSpacing: 0.3,
   },
 });

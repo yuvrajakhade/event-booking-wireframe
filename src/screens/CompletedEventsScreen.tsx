@@ -196,13 +196,19 @@ export default function CompletedEventsScreen({
           keyExtractor={(e) => e.id}
           renderItem={({ item }: { item: Event }) => (
             <ListCard
-              title={item.title}
-              subtitle={`${item.customerName} • ${item.venue}`}
-              metaLeft={item.start.slice(0, 10)}
-              metaLeftIcon="calendar"
-              metaRight={item.status}
-              metaRightIcon="checkmark-done"
-              onPress={() => setSelectedEvent(item)}
+              title={item.customerName}
+              date={item.start.slice(0, 10)}
+              mobile={item.phone ?? "-"}
+              venue={item.venue}
+              eventName={item.title}
+              rooms={item.rooms.length}
+              detailedFormat={true}
+              actions={[
+                {
+                  label: "View",
+                  onPress: () => setSelectedEvent(item),
+                },
+              ]}
             />
           )}
           ListEmptyComponent={
