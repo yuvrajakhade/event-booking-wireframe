@@ -1,0 +1,22 @@
+:root {
+  color-scheme: light;
+  --bg: #eceef6;
+  --surface: #f8f9ff;
+  --surface-soft: #eef1ff;
+  --line: #daddf0;
+  --line-strong: #c8cde9;
+  --text: #273042;
+  --muted: #6f7686;
+  --brand: #6366f1;
+  --brand-deep: #5458de;
+  --teal: #14b8a6;
+  --pink: #ec4899;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --success: #10b981;
+  --icon-xs: 11px;
+  --icon-sm: 13px;
+  --icon-md: 14px;
+  --icon-lg: 16px;
+  --icon-xl: 18px;
+}

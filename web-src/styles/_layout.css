@@ -1,0 +1,98 @@
+body {
+  font-family: "Manrope", "Segoe UI", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 12% 8%, #e5e9ff 0%, transparent 42%),
+    radial-gradient(circle at 88% 12%, #f0e6ff 0%, transparent 38%), var(--bg);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+html {
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+.app-container {
+  width: min(760px, 100vw);
+  min-height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+}
+
+.stack {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.card {
+  border: 1px solid var(--line);
+  border-radius: 1.08rem;
+  background: var(--surface);
+  padding: 1.05rem;
+  box-shadow: 0 7px 20px rgba(39, 48, 66, 0.06);
+}
+
+/* Responsive styles for mobile screens */
+@media (max-width: 600px) {
+  .app-container {
+    width: 100vw;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0 0.5rem;
+  }
+  .stack {
+    gap: 0.5rem;
+  }
+  .card {
+    padding: 0.65rem;
+    border-radius: 0.7rem;
+    box-shadow: 0 3px 10px rgba(39, 48, 66, 0.08);
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: 1rem;
+  }
+  .check-complete-btn {
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+  }
+  .check-item-card,
+  .checkout-item-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .check-item-head,
+  .checkout-item-head {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+  .check-counter-row,
+  .checkout-counter-row {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+  .expected-pill,
+  .missing-pill {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+  }
+}

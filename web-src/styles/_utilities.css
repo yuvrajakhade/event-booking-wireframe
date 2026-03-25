@@ -1,0 +1,19 @@
+.text-danger {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.text-muted {
+  color: var(--muted);
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid-center {
+  display: grid;
+  place-items: center;
+}

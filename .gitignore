@@ -17,6 +17,11 @@ web-build/
 *.key
 *.mobileprovision
 
+# Capacitor
+android/
+ios/
+.capacitor/
+
 # Metro
 .metro-health-check*
 

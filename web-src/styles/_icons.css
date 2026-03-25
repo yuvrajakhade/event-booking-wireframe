@@ -1,0 +1,53 @@
+.topbar-icon svg,
+.search-row svg,
+.input-icon-wrap svg,
+.meta-list svg,
+.hero-chip svg,
+.notification-message svg,
+.missing-line svg,
+.terms-row svg,
+.inline-link-btn svg,
+.stat-icon-wrap svg {
+  width: var(--icon-md);
+  height: var(--icon-md);
+}
+
+.tab-icon svg,
+.profile-line-icon svg,
+.detail-info-card svg,
+.tile-icon svg,
+.btn-outline svg,
+.btn-solid svg,
+.btn-add-wide svg {
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+}
+
+.date-pill svg,
+.count-pill svg,
+.missing-pill svg,
+.expected-pill svg,
+.chip-item svg {
+  width: var(--icon-xs);
+  height: var(--icon-xs);
+}
+
+.icon-btn-ghost svg,
+.check-main-icon svg,
+.circle-btn svg,
+.event-actions .btn-icon svg,
+.filter-btn svg,
+.detail-edit-btn svg,
+.logout-btn svg,
+.register-create-btn svg {
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+}
+
+.floating-add svg,
+.avatar-tile svg,
+.register-badge svg,
+.notifications-empty svg {
+  width: var(--icon-xl);
+  height: var(--icon-xl);
+}
