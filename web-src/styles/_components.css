@@ -20,9 +20,11 @@
 .inventory-hero-header {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   gap: 0.7rem;
+  width: 100%;
+  /* Removed centering for full-width look */
 }
 .inventory-overview-label {
   display: flex;
@@ -173,10 +175,9 @@
 .hero-header-row {
   display: flex;
   align-items: center;
-  padding: 0.5rem 0.8rem;
-  border-radius: 0.7rem;
-  background: var(--surface);
+  width: 100%;
   margin-bottom: 0.5rem;
+  /* Removed border-radius, background, and padding for full-width look */
 }
 .hero-header-inline {
   display: flex;
