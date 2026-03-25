@@ -1,3 +1,5 @@
+import type { Event, Enquiry } from "../types";
+
 const fixedInventory = [
   {
     id: "bedsheet",

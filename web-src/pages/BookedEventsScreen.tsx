@@ -1,16 +1,23 @@
 import React from "react";
 import { mockEvents } from "../../src/data/mock";
-import { EventCard } from "../components/EventCard";
+import { EventCard, DateRangeFilter } from "../components";
 import { CalendarDays, Plus, Search, SlidersHorizontal } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export function BookedEventsScreen() {
   const navigate = useNavigate();
-  const upcomingEvents = mockEvents.filter(
-    (event) => event.status !== "Completed",
-  );
-  const [fromDate] = React.useState("2026-03-01");
-  const [toDate] = React.useState("2026-03-31");
+
+  const [fromDate, setFromDate] = React.useState<Date | null>(null);
+  const [toDate, setToDate] = React.useState<Date | null>(null);
+
+  // Filter events by status and date range
+  const filteredEvents = mockEvents.filter((event) => {
+    if (event.status === "Completed") return false;
+    const eventDate = new Date(event.start);
+    if (fromDate && eventDate < fromDate) return false;
+    if (toDate && eventDate > toDate) return false;
+    return true;
+  });
 
   return (
     <section className="stack">
@@ -19,32 +26,19 @@ export function BookedEventsScreen() {
           <h1 className="hero-header-small">Booked Events</h1>
           <span className="hero-header-chip">
             <CalendarDays size={12} />
-            {upcomingEvents.length} Events
+            {filteredEvents.length} Events
           </span>
         </span>
       </header>
 
       <div className="date-filter-card compact-date-filter">
         <div className="date-filter-header">Date Range</div>
-        <div className="date-filter-fields compact-date-fields">
-          <div className="date-field">
-            <CalendarDays size={18} />
-            <input value={fromDate} readOnly />
-          </div>
-          <span className="date-separator">to</span>
-          <div className="date-field">
-            <CalendarDays size={18} />
-            <input value={toDate} readOnly />
-          </div>
-          <button
-            type="button"
-            className="btn-icon btn-edit filter-btn"
-            aria-label="Filter"
-            style={{ minWidth: 44, minHeight: 44, marginLeft: 8 }}
-          >
-            <SlidersHorizontal size={18} />
-          </button>
-        </div>
+        <DateRangeFilter
+          onFilter={(from, to) => {
+            setFromDate(from);
+            setToDate(to);
+          }}
+        />
       </div>
 
       <div className="search-row card">
@@ -52,12 +46,12 @@ export function BookedEventsScreen() {
         <span>Search event/customer/venue</span>
       </div>
 
-      {upcomingEvents.length === 0 ? (
+      {filteredEvents.length === 0 ? (
         <div className="card empty-state">
           No active booked events right now.
         </div>
       ) : (
-        upcomingEvents.map((event) => (
+        filteredEvents.map((event) => (
           <EventCard
             key={event.id}
             event={event}
