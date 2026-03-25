@@ -1,19 +1,25 @@
 .muhurt-form h3 {
-  margin: 0;
-  font-size: 0.75rem;
+  margin: 0 0 0.7rem 0;
+  font-size: 1.25rem !important;
+  font-weight: 900;
+  color: #273042;
+  letter-spacing: -0.5px;
 }
 
 .muhurt-form label {
-  display: grid;
-  gap: 0.4rem;
-  color: var(--text);
-  font-size: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: #273042;
+  font-size: 1.05rem !important;
   font-weight: 700;
+  margin-bottom: 0.7rem;
+  letter-spacing: -0.2px;
 }
 
 .muhurt-form input[type="date"] {
-  font-size: 1.05rem;
-  font-weight: 700;
+  font-size: 0.97rem;
+  font-weight: 600;
   color: #323849;
   background: #f3f4fa;
   border-radius: 0.85rem;
@@ -24,15 +30,16 @@
 }
 
 .muhurt-form input[type="text"] {
-  font-size: 1.05rem;
-  font-weight: 700;
+  font-size: 0.97rem;
+  font-weight: 600;
   color: #323849;
   background: #f3f4fa;
   border-radius: 0.85rem;
-  padding: 0.85rem 1rem;
+  padding: 1.2rem 1rem 1.2rem 1rem;
   border: 1px solid var(--line-strong);
   box-sizing: border-box;
   max-width: 100%;
+  min-height: 3.2rem;
 }
 
 .muhurt-form input {

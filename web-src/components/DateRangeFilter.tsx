@@ -16,44 +16,48 @@ const DateRangeFilter: React.FC<DateRangeFilterProps> = ({ onFilter }) => {
   };
 
   return (
-    <div className="date-filter-fields compact-date-fields">
-      <div className="date-field no-label">
-        <span className="date-input-icon">
-          <CalendarDays size={16} />
-        </span>
-        <DatePicker
-          id="from-date"
-          selected={from}
-          onChange={(date: React.SetStateAction<Date | null>) => setFrom(date)}
-          dateFormat="yyyy-MM-dd"
-          placeholderText="YYYY-MM-DD"
-          className="date-input"
-          popperPlacement="bottom"
-        />
+    <div className="compact-date-filter">
+      <div className="compact-date-fields">
+        <div className="date-field no-label compact-input">
+          <span className="date-input-icon">
+            <CalendarDays size={14} />
+          </span>
+          <DatePicker
+            id="from-date"
+            selected={from}
+            onChange={(date: React.SetStateAction<Date | null>) =>
+              setFrom(date)
+            }
+            dateFormat="yyyy-MM-dd"
+            placeholderText="From"
+            className="date-input compact-input"
+            popperPlacement="bottom"
+          />
+        </div>
+        {/* Removed 'to' label for cleaner look */}
+        <div className="date-field no-label compact-input">
+          <span className="date-input-icon">
+            <CalendarDays size={14} />
+          </span>
+          <DatePicker
+            id="to-date"
+            selected={to}
+            onChange={(date: React.SetStateAction<Date | null>) => setTo(date)}
+            dateFormat="yyyy-MM-dd"
+            placeholderText="To"
+            className="date-input compact-input"
+            popperPlacement="bottom"
+          />
+        </div>
+        <button
+          type="button"
+          className="btn-icon filter-btn compact-btn"
+          onClick={handleFilter}
+          aria-label="Filter"
+        >
+          <SlidersHorizontal size={16} />
+        </button>
       </div>
-      <span className="date-separator">to</span>
-      <div className="date-field no-label">
-        <span className="date-input-icon">
-          <CalendarDays size={16} />
-        </span>
-        <DatePicker
-          id="to-date"
-          selected={to}
-          onChange={(date: React.SetStateAction<Date | null>) => setTo(date)}
-          dateFormat="yyyy-MM-dd"
-          placeholderText="YYYY-MM-DD"
-          className="date-input"
-          popperPlacement="bottom"
-        />
-      </div>
-      <button
-        type="button"
-        className="btn-icon filter-btn"
-        onClick={handleFilter}
-        aria-label="Filter"
-      >
-        <SlidersHorizontal size={20} />
-      </button>
     </div>
   );
 };

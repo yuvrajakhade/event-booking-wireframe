@@ -8,6 +8,7 @@ import {
   Bookmark,
   Eye,
   Plus,
+  Users,
 } from "lucide-react";
 
 type EnquiryCardProps = {
@@ -27,10 +28,10 @@ export function EnquiryCard({
     <article className="card enquiry-card interactive-card" onClick={onPress}>
       <div className="event-top">
         <div className="tile-icon">
-          <CalendarDays size={18} />
+          <CalendarDays size={14} />
         </div>
         <div className="event-head-copy">
-          <h3>Status: {enquiry.status}</h3>
+          <h3>{enquiry.name}</h3>
           <span className="date-pill">
             <Clock3 size={14} />
             {enquiry.eventDate}
@@ -51,9 +52,15 @@ export function EnquiryCard({
             {enquiry.source}
           </p>
         )}
+        {typeof enquiry.guests === "number" && (
+          <p>
+            <Users size={16} />
+            {enquiry.guests} guests
+          </p>
+        )}
         <p>
           <Bookmark size={16} />
-          {enquiry.name}
+          Enquiry
         </p>
       </div>
 
