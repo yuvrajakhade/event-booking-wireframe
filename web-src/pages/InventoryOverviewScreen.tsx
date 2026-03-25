@@ -23,10 +23,7 @@ export function InventoryOverviewScreen() {
       ? 0
       : Math.round(((totalPlanned - totalMissing) / totalPlanned) * 100);
 
-  const totalValue = allItems.reduce(
-    (sum, item) => sum + item.plannedQty * (item.rate ?? 0),
-    0,
-  );
+  // Removed totalValue calculation
 
   const missingByEvent = mockEvents
     .map((event) => {
@@ -62,18 +59,7 @@ export function InventoryOverviewScreen() {
             {totalMissing} Missing
           </span>
         </div>
-        <div className="metric-grid">
-          <article className="metric-card metric-danger">
-            <AlertCircle size={20} />
-            <strong>{totalMissing}</strong>
-            <span>Missing Items</span>
-          </article>
-          <article className="metric-card metric-warning">
-            <IndianRupee size={20} />
-            <strong>{totalValue}</strong>
-            <span>Total Value</span>
-          </article>
-        </div>
+        {/* Removed metric-grid cards for Missing Items and Total Value */}
       </header>
 
       <div className="search-row card">
