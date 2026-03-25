@@ -1,6 +1,7 @@
 import React from "react";
 import { mockEvents } from "../../src/data/mock";
 import { EventCard, DateRangeFilter } from "../components";
+import { RoomsDropdown } from "../components/RoomsDropdown";
 import { CalendarDays, Plus, Search, SlidersHorizontal } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -9,6 +10,7 @@ export function BookedEventsScreen() {
 
   const [fromDate, setFromDate] = React.useState<Date | null>(null);
   const [toDate, setToDate] = React.useState<Date | null>(null);
+  const [selectedRooms, setSelectedRooms] = React.useState<string[]>([]);
 
   // Filter events by status and date range
   const filteredEvents = mockEvents.filter((event) => {
@@ -32,7 +34,6 @@ export function BookedEventsScreen() {
       </header>
 
       <div className="date-filter-card compact-date-filter">
-        <div className="date-filter-header">Date Range</div>
         <DateRangeFilter
           onFilter={(from, to) => {
             setFromDate(from);

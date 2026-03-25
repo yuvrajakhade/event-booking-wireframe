@@ -8,6 +8,7 @@ import {
   Search,
   ChevronRight,
 } from "lucide-react";
+import { DateRangeFilter } from "../components";
 import { useNavigate } from "react-router-dom";
 
 export function InventoryOverviewScreen() {
@@ -23,8 +24,8 @@ export function InventoryOverviewScreen() {
       ? 0
       : Math.round(((totalPlanned - totalMissing) / totalPlanned) * 100);
 
-  // Removed totalValue calculation
-
+  const [fromDate, setFromDate] = React.useState<Date | null>(null);
+  const [toDate, setToDate] = React.useState<Date | null>(null);
   const missingByEvent = mockEvents
     .map((event) => {
       const missing = event.inventory
@@ -43,11 +44,17 @@ export function InventoryOverviewScreen() {
         customer: event.customerName,
         venue: event.venue,
         date: event.start.slice(0, 10),
+        eventDate: new Date(event.start),
         total,
         firstMissing: missing[0],
       };
     })
-    .filter((event) => event.total > 0);
+    .filter((event) => {
+      if (event.total <= 0) return false;
+      if (fromDate && event.eventDate < fromDate) return false;
+      if (toDate && event.eventDate > toDate) return false;
+      return true;
+    });
 
   return (
     <section className="stack">
@@ -62,6 +69,14 @@ export function InventoryOverviewScreen() {
         {/* Removed metric-grid cards for Missing Items and Total Value */}
       </header>
 
+      <div className="date-filter-card compact-date-filter">
+        <DateRangeFilter
+          onFilter={(from, to) => {
+            setFromDate(from);
+            setToDate(to);
+          }}
+        />
+      </div>
       <div className="search-row card">
         <Search size={20} />
         <span>Search event/customer/venue</span>

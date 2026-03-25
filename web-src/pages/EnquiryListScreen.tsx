@@ -1,6 +1,6 @@
 import React from "react";
 import { mockEnquiries } from "../../src/data/mock";
-import { EnquiryCard } from "../components/EnquiryCard";
+import { EnquiryCard, DateRangeFilter } from "../components";
 import { CalendarDays, Search, SlidersHorizontal, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -9,8 +9,8 @@ export function EnquiryListScreen() {
   const activeCount = mockEnquiries.filter(
     (item) => item.status !== "Closed",
   ).length;
-  const [fromDate] = React.useState("2026-03-01");
-  const [toDate] = React.useState("2026-03-31");
+  const [fromDate, setFromDate] = React.useState<Date | null>(null);
+  const [toDate, setToDate] = React.useState<Date | null>(null);
 
   return (
     <section className="stack">
@@ -25,26 +25,12 @@ export function EnquiryListScreen() {
       </header>
 
       <div className="date-filter-card compact-date-filter">
-        <div className="date-filter-header">Date Range</div>
-        <div className="date-filter-fields compact-date-fields">
-          <div className="date-field">
-            <CalendarDays size={18} />
-            <input value={fromDate} readOnly />
-          </div>
-          <span className="date-separator">to</span>
-          <div className="date-field">
-            <CalendarDays size={18} />
-            <input value={toDate} readOnly />
-          </div>
-          <button
-            type="button"
-            className="btn-icon btn-edit filter-btn"
-            aria-label="Filter"
-            style={{ minWidth: 44, minHeight: 44, marginLeft: 8 }}
-          >
-            <SlidersHorizontal size={18} />
-          </button>
-        </div>
+        <DateRangeFilter
+          onFilter={(from, to) => {
+            setFromDate(from);
+            setToDate(to);
+          }}
+        />
       </div>
 
       <div className="search-row card">

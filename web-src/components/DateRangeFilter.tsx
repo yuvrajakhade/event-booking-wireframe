@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { format } from "date-fns";
+import { CalendarDays, SlidersHorizontal } from "lucide-react";
 
 interface DateRangeFilterProps {
   onFilter: (from: Date | null, to: Date | null) => void;
@@ -16,47 +16,43 @@ const DateRangeFilter: React.FC<DateRangeFilterProps> = ({ onFilter }) => {
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <label htmlFor="from-date">From</label>
+    <div className="date-filter-fields compact-date-fields">
+      <div className="date-field no-label">
+        <span className="date-input-icon">
+          <CalendarDays size={16} />
+        </span>
         <DatePicker
           id="from-date"
           selected={from}
           onChange={(date: React.SetStateAction<Date | null>) => setFrom(date)}
           dateFormat="yyyy-MM-dd"
-          placeholderText="Select start date"
+          placeholderText="YYYY-MM-DD"
+          className="date-input"
+          popperPlacement="bottom"
         />
       </div>
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <label htmlFor="to-date">To</label>
+      <span className="date-separator">to</span>
+      <div className="date-field no-label">
+        <span className="date-input-icon">
+          <CalendarDays size={16} />
+        </span>
         <DatePicker
           id="to-date"
           selected={to}
           onChange={(date: React.SetStateAction<Date | null>) => setTo(date)}
           dateFormat="yyyy-MM-dd"
-          placeholderText="Select end date"
+          placeholderText="YYYY-MM-DD"
+          className="date-input"
+          popperPlacement="bottom"
         />
       </div>
       <button
-        style={{
-          height: 40,
-          width: 40,
-          borderRadius: 8,
-          background: "#6C63FF",
-          color: "white",
-          border: "none",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: 20,
-        }}
+        type="button"
+        className="btn-icon filter-btn"
         onClick={handleFilter}
         aria-label="Filter"
       >
-        <span role="img" aria-label="filter">
-          ⏵
-        </span>
+        <SlidersHorizontal size={20} />
       </button>
     </div>
   );

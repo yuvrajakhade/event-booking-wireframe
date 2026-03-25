@@ -2,6 +2,7 @@ import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { mockEvents } from "../../src/data/mock";
 import { AlertCircle, ArrowLeft, Search } from "lucide-react";
+import { DateRangeFilter } from "../components";
 
 type MissingRow = {
   id: string;
@@ -17,6 +18,8 @@ type MissingInventoryLocationState = {
 };
 
 export function MissingInventoryScreen() {
+  const [fromDate, setFromDate] = React.useState<Date | null>(null);
+  const [toDate, setToDate] = React.useState<Date | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { eventId } = useParams();
@@ -47,6 +50,7 @@ export function MissingInventoryScreen() {
     (location.state as MissingInventoryLocationState | null) ?? null;
   const missingRows = state?.missingRows ?? fallbackRows;
 
+  // Optionally filter missingRows by event date if available
   return (
     <section className="stack">
       <header className="card hero-card hero-header-row">
@@ -61,7 +65,14 @@ export function MissingInventoryScreen() {
           <h1 className="hero-header-small">Missing Inventory Overview</h1>
         </span>
       </header>
-
+      <div className="date-filter-card compact-date-filter">
+        <DateRangeFilter
+          onFilter={(from, to) => {
+            setFromDate(from);
+            setToDate(to);
+          }}
+        />
+      </div>
       {missingRows.length === 0 ? (
         <div className="card empty-state">No missing items in this event.</div>
       ) : (

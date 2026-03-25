@@ -1,6 +1,6 @@
 import React from "react";
 import { mockEvents } from "../../src/data/mock";
-import { EventCard } from "../components/EventCard";
+import { EventCard, DateRangeFilter } from "../components";
 import {
   CalendarDays,
   CheckCircle2,
@@ -11,12 +11,15 @@ import { useNavigate } from "react-router-dom";
 
 export function CompletedEventsScreen() {
   const navigate = useNavigate();
-  const completedEvents = mockEvents.filter(
-    (event) => event.status === "Completed",
-  );
-
-  const [fromDate] = React.useState("YYYY-MM-DD");
-  const [toDate] = React.useState("YYYY-MM-DD");
+  const [fromDate, setFromDate] = React.useState<Date | null>(null);
+  const [toDate, setToDate] = React.useState<Date | null>(null);
+  const completedEvents = mockEvents.filter((event) => {
+    if (event.status !== "Completed") return false;
+    const eventDate = new Date(event.start);
+    if (fromDate && eventDate < fromDate) return false;
+    if (toDate && eventDate > toDate) return false;
+    return true;
+  });
 
   return (
     <section className="stack">
@@ -30,32 +33,17 @@ export function CompletedEventsScreen() {
         </span>
       </header>
 
+      <div className="date-filter-card compact-date-filter">
+        <DateRangeFilter
+          onFilter={(from, to) => {
+            setFromDate(from);
+            setToDate(to);
+          }}
+        />
+      </div>
       <div className="search-row card">
         <Search size={20} />
         <span>Search completed events...</span>
-      </div>
-
-      <div className="date-filter-card compact-date-filter">
-        <div className="date-filter-header">Date Range</div>
-        <div className="date-filter-fields compact-date-fields">
-          <div className="date-field">
-            <CalendarDays size={18} />
-            <input value={fromDate} readOnly />
-          </div>
-          <span className="date-separator">to</span>
-          <div className="date-field">
-            <CalendarDays size={18} />
-            <input value={toDate} readOnly />
-          </div>
-          <button
-            type="button"
-            className="btn-icon btn-edit filter-btn"
-            aria-label="Filter"
-            style={{ minWidth: 44, minHeight: 44, marginLeft: 8 }}
-          >
-            <SlidersHorizontal size={18} />
-          </button>
-        </div>
       </div>
 
       {completedEvents.length === 0 ? (

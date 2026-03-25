@@ -89,13 +89,30 @@
   font-size: 0.95rem;
   flex: 1 1 120px;
   min-width: 0;
+  position: relative;
+}
+.date-field.no-label {
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+}
+.date-input-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--muted);
 }
 .date-field input {
   border: none;
   background: transparent;
   font-size: 1rem;
-  width: 90px;
+  width: 180px;
+  min-width: 150px;
+  max-width: 100%;
   outline: none;
+  padding-left: 28px;
+  flex: 1 1 180px;
 }
 .date-separator {
   font-size: 0.9rem;
