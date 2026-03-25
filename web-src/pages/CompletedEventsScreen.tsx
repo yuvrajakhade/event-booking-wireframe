@@ -35,9 +35,9 @@ export function CompletedEventsScreen() {
         <span>Search completed events...</span>
       </div>
 
-      <div className="date-filter-card">
+      <div className="date-filter-card compact-date-filter">
         <div className="date-filter-header">Date Range</div>
-        <div className="date-filter-fields">
+        <div className="date-filter-fields compact-date-fields">
           <div className="date-field">
             <CalendarDays size={18} />
             <input value={fromDate} readOnly />
@@ -51,6 +51,7 @@ export function CompletedEventsScreen() {
             type="button"
             className="btn-icon btn-edit filter-btn"
             aria-label="Filter"
+            style={{ minWidth: 44, minHeight: 44, marginLeft: 8 }}
           >
             <SlidersHorizontal size={18} />
           </button>

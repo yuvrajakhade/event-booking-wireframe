@@ -1,3 +1,21 @@
+/* Compact horizontal date filter layout */
+.compact-date-filter {
+  padding: 0.7rem 1rem 0.7rem 1rem;
+}
+.compact-date-fields {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+.compact-date-fields .date-field {
+  min-width: 120px;
+}
+.compact-date-fields .btn-icon {
+  margin-left: 8px;
+  min-width: 44px;
+  min-height: 44px;
+}
 /* Centered Inventory Overview label and metric cards */
 .inventory-hero-header {
   display: flex;
