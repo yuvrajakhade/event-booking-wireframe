@@ -1,6 +1,7 @@
 import React from "react";
 import { useMuhurt } from "../MuhurtContext";
 import { CalendarDays, Plus, Trash2 } from "lucide-react";
+import TextField from "@mui/material/TextField";
 import "../styles/modules/_material-muhurt.css";
 
 export function MuhurtScreen() {
@@ -33,27 +34,33 @@ export function MuhurtScreen() {
           <label className="material-label" htmlFor="muhurt-date">
             Date (DD-MM-YYYY)
           </label>
-          <input
+          <TextField
             id="muhurt-date"
-            className="material-input"
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
             required
+            size="small"
+            fullWidth
+            InputLabelProps={{ shrink: true }}
+            className="material-input"
           />
         </div>
         <div className="material-form-group">
           <label className="material-label" htmlFor="muhurt-desc">
             Description
           </label>
-          <input
+          <TextField
             id="muhurt-desc"
             className="material-input"
-            type="text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Example: Akshaya Tritiya"
             required
+            multiline
+            minRows={2}
+            maxRows={4}
+            fullWidth
           />
         </div>
         <button type="submit" className="material-btn material-btn-primary">
