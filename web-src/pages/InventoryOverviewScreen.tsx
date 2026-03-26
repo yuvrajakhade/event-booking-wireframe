@@ -66,7 +66,6 @@ export function InventoryOverviewScreen() {
             {totalMissing} Missing
           </span>
         </div>
-        {/* Removed metric-grid cards for Missing Items and Total Value */}
       </header>
 
       <div className="date-filter-card compact-date-filter">
@@ -131,8 +130,6 @@ export function InventoryOverviewScreen() {
           </button>
         </article>
       ))}
-
-      {/* Recovery Rate removed as per user request */}
     </section>
   );
 }

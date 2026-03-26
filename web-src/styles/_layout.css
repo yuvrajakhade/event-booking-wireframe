@@ -32,7 +32,7 @@ html {
   display: flex;
   flex-direction: column;
   background: transparent;
-  /* padding-bottom removed as per user request */
+  padding-bottom: 80px; /* Ensures content is not hidden behind tab bar */
 }
 
 .stack {
@@ -54,7 +54,7 @@ html {
     width: 100vw;
     min-height: 100vh;
     margin: 0;
-    padding: 0 0.5rem;
+    padding: 0 0.5rem 80px 0.5rem; /* Add bottom padding for mobile as well */
   }
   .stack {
     gap: 0.5rem;

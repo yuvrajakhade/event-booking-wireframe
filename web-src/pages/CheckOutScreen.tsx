@@ -13,6 +13,7 @@ import {
   Check,
   AlertCircle,
 } from "lucide-react";
+import "../styles/modules/_material-muhurt.css";
 
 type CheckoutLocationState = {
   issuedCounts?: Record<string, number>;
@@ -49,19 +50,20 @@ function iconForItem(name: string) {
 export function CheckOutScreen() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { eventId } = useParams();
-  const event = mockEvents.find((item) => item.id === eventId);
+  const params = useParams();
+  const { issuedCounts } = (location.state as CheckoutLocationState) || {};
+  const eventId = params.eventId;
+  const event = mockEvents.find((e) => e.id === eventId);
 
   if (!event) {
     return (
-      <section className="stack">
-        <div className="card empty-state">Check-out record not found.</div>
+      <section className="material-stack">
+        <div className="material-card material-empty">
+          Check-out record not found.
+        </div>
       </section>
     );
   }
-
-  const state = (location.state as CheckoutLocationState | null) ?? null;
-  const issuedCounts = state?.issuedCounts;
 
   const rows = React.useMemo<CheckoutRow[]>(
     () =>
@@ -76,109 +78,137 @@ export function CheckOutScreen() {
 
   const [returnedCounts, setReturnedCounts] = React.useState<
     Record<string, number>
-  >(() => Object.fromEntries(rows.map((row) => [row.id, 0])));
+  >(() => Object.fromEntries(rows.map((item) => [item.id, 0])));
 
   const decrease = (id: string) => {
     setReturnedCounts((prev) => ({ ...prev, [id]: Math.max(0, prev[id] - 1) }));
   };
 
   const increase = (id: string) => {
-    setReturnedCounts((prev) => {
-      const expected = rows.find((row) => row.id === id)?.expected ?? 0;
-      const next = Math.min(expected, prev[id] + 1);
-      return { ...prev, [id]: next };
-    });
+    setReturnedCounts((prev) => ({ ...prev, [id]: prev[id] + 1 }));
   };
 
   const completeCheckOut = () => {
-    const missingRows = rows
-      .map((row) => {
-        const returned = returnedCounts[row.id] ?? 0;
-        const missing = Math.max(0, row.expected - returned);
-
-        return {
-          id: row.id,
-          name: row.label,
-          unit: row.unit,
-          issuedQty: row.expected,
-          returnedQty: returned,
-          missing,
-        };
-      })
-      .filter((row) => row.missing > 0);
-
-    navigate(`/inventory/missing/${event.id}`, {
-      state: {
-        missingRows,
-      },
-    });
+    // You can handle submission or navigation here
+    alert("Check-Out completed!");
   };
 
   return (
-    <section className="stack">
-      <header className="card hero-card hero-header-row">
-        <span className="hero-header-inline">
-          <button
-            type="button"
-            className="icon-btn-ghost"
-            onClick={() => navigate(-1)}
-            aria-label="Back"
-          >
-            <ArrowLeft size={16} />
-          </button>
-          <h1 className="hero-header-small">Check-Out</h1>
-          <span className="hero-header-chip">{rows.length} Items</span>
-        </span>
-      </header>
+    <section className="material-stack">
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: ".7rem",
+          padding: "0.7rem 0.7rem 0.2rem 0.7rem",
+        }}
+      >
+        <button
+          type="button"
+          className="material-icon-btn"
+          onClick={() => navigate(-1)}
+          aria-label="Back"
+        >
+          <ArrowLeft size={18} />
+        </button>
+        <h1
+          className="material-title"
+          style={{ margin: 0, fontSize: "1.08rem" }}
+        >
+          Check-Out
+        </h1>
+      </div>
 
-      <article className="card check-inline-head">
-        <span className="check-inline-strip" />
-        <h2>{event.venue}</h2>
-        <p>{event.end.slice(0, 10)} • Count returned items</p>
+      <article
+        className="material-card material-attention event-info-card"
+        style={{
+          alignItems: "center",
+          textAlign: "center",
+          padding: "0.7rem 0.7rem",
+        }}
+      >
+        <h2
+          className="material-title"
+          style={{ margin: 0, fontSize: "1.08rem" }}
+        >
+          {event.venue}
+        </h2>
+        <p className="material-desc" style={{ margin: 0, fontSize: "0.98rem" }}>
+          {event.start.slice(0, 10)}
+        </p>
+        <div
+          style={{
+            marginTop: 6,
+            fontWeight: 500,
+            color: "#888",
+            fontSize: "0.95rem",
+          }}
+        >
+          Count returned items
+        </div>
       </article>
 
       {rows.map((row) => {
         const returned = returnedCounts[row.id] ?? 0;
-        const missing = Math.max(0, row.expected - returned);
-
+        const diff = returned - row.expected;
         return (
           <article
-            className="card check-item-card checkout-item-card"
+            className="material-card material-row"
             key={row.id}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
           >
-            <div className="check-item-head checkout-item-head">
-              <div className="checkout-title-wrap">
-                <span className="check-item-icon">
-                  {iconForItem(row.label)}
-                </span>
-                <h3>{row.label}</h3>
-              </div>
-              <span className="expected-pill">Expected: {row.expected}</span>
+            <div
+              style={{ display: "flex", alignItems: "center", gap: ".7rem" }}
+            >
+              <span className="material-tile-icon">
+                {iconForItem(row.label)}
+              </span>
+              <h3
+                className="material-title"
+                style={{ fontSize: "1.08rem", margin: 0 }}
+              >
+                {row.label}
+              </h3>
+              <span style={{ fontSize: ".95rem", color: "#888" }}>
+                {row.unit}
+              </span>
             </div>
-
-            <div className="check-counter-row checkout-counter-row">
-              <div className="checkout-counter-controls">
-                <button
-                  type="button"
-                  className="circle-btn circle-btn-minus"
-                  aria-label={`Decrease ${row.label}`}
-                  onClick={() => decrease(row.id)}
-                >
-                  <Minus size={16} />
-                </button>
-                <strong>{returned}</strong>
-                <button
-                  type="button"
-                  className="circle-btn circle-btn-plus"
-                  aria-label={`Increase ${row.label}`}
-                  onClick={() => increase(row.id)}
-                >
-                  <Plus size={16} />
-                </button>
-              </div>
-
-              <span className="missing-pill">
-                <AlertCircle size={12} />-{missing}
+            <div
+              style={{ display: "flex", alignItems: "center", gap: ".5rem" }}
+            >
+              <button
+                type="button"
+                className="material-icon-btn"
+                aria-label={`Decrease ${row.label}`}
+                onClick={() => decrease(row.id)}
+              >
+                <Minus size={24} color="#f44336" />
+              </button>
+              <strong
+                style={{ minWidth: 24, textAlign: "center", fontSize: 32 }}
+              >
+                {returned}
+              </strong>
+              <button
+                type="button"
+                className="material-icon-btn"
+                aria-label={`Increase ${row.label}`}
+                onClick={() => increase(row.id)}
+              >
+                <Plus size={24} color="#22c55e" />
+              </button>
+              <span className="pill-group">
+                <span className="expected-pill">Expected: {row.expected}</span>
+                {returned < row.expected && (
+                  <span className="missing-pill">
+                    <AlertCircle size={16} style={{ marginRight: 2 }} />
+                    Missing: {row.expected - returned}
+                  </span>
+                )}
               </span>
             </div>
           </article>
@@ -187,7 +217,8 @@ export function CheckOutScreen() {
 
       <button
         type="button"
-        className="check-complete-btn check-complete-btn-out"
+        className="material-btn material-btn-primary"
+        style={{ margin: "0 auto", width: "100%", maxWidth: 480 }}
         onClick={completeCheckOut}
       >
         <Check size={18} />

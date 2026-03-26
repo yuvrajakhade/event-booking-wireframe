@@ -43,17 +43,19 @@ export function EventDetailsScreen() {
             <ArrowLeft size={16} />
           </button>
           <h1 className="hero-header-small">Event Details</h1>
-          <span className="hero-header-chip">
+          <span className="hero-header-chip" style={{ marginLeft: "0.5rem" }}>
             {missingItems.length} Missing
           </span>
         </span>
-        <button
-          type="button"
-          className="btn-icon btn-edit detail-edit-btn"
-          onClick={() => navigate(`/events/${event.id}/edit`)}
-        >
-          <Pencil size={16} />
-        </button>
+        {event.status !== "Completed" && (
+          <button
+            type="button"
+            className="btn-icon btn-edit detail-edit-btn"
+            onClick={() => navigate(`/events/${event.id}/edit`)}
+          >
+            <Pencil size={16} />
+          </button>
+        )}
       </header>
 
       <article className="card detail-info-card">

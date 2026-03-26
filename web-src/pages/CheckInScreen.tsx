@@ -12,6 +12,7 @@ import {
   Square,
   Check,
 } from "lucide-react";
+import "../styles/modules/_material-muhurt.css";
 
 type IssuedRow = {
   id: string;
@@ -48,8 +49,10 @@ export function CheckInScreen() {
 
   if (!event) {
     return (
-      <section className="stack">
-        <div className="card empty-state">Check-in record not found.</div>
+      <section className="material-stack">
+        <div className="material-card material-empty">
+          Check-in record not found.
+        </div>
       </section>
     );
   }
@@ -86,49 +89,87 @@ export function CheckInScreen() {
   };
 
   return (
-    <section className="stack">
-      <header className="card hero-card hero-header-row">
-        <span className="hero-header-inline">
-          <button
-            type="button"
-            className="icon-btn-ghost"
-            onClick={() => navigate(-1)}
-            aria-label="Back"
-          >
-            <ArrowLeft size={16} />
-          </button>
-          <h1 className="hero-header-small">Check-In</h1>
-          <span className="hero-header-chip">{inventoryRows.length} Items</span>
-        </span>
-      </header>
+    <section className="material-stack">
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: ".7rem",
+          padding: "0.7rem 0.7rem 0.2rem 0.7rem",
+        }}
+      >
+        <button
+          type="button"
+          className="material-icon-btn"
+          onClick={() => navigate(-1)}
+          aria-label="Back"
+        >
+          <ArrowLeft size={18} />
+        </button>
+        <h1
+          className="material-title"
+          style={{ margin: 0, fontSize: "1.08rem" }}
+        >
+          Check-In
+        </h1>
+      </div>
 
-      <article className="card check-main-head check-main-head-in">
-        <span className="check-main-icon check-main-icon-in">
-          <LogIn size={20} />
-        </span>
-        <h2>{event.venue}</h2>
-        <p>{event.start.slice(0, 10)}</p>
+      <article
+        className="material-card material-attention event-info-card"
+        style={{
+          alignItems: "center",
+          textAlign: "center",
+          padding: "0.7rem 0.7rem",
+        }}
+      >
+        <h2
+          className="material-title"
+          style={{ margin: 0, fontSize: "1.08rem" }}
+        >
+          {event.venue}
+        </h2>
+        <p className="material-desc" style={{ margin: 0, fontSize: "0.98rem" }}>
+          {event.start.slice(0, 10)}
+        </p>
       </article>
 
       {inventoryRows.map((row) => (
-        <article className="card check-item-card" key={row.id}>
-          <div className="check-item-head">
-            <span className="check-item-icon">{iconForItem(row.label)}</span>
-            <h3>{row.label}</h3>
+        <article
+          className="material-card material-row"
+          key={row.id}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: ".7rem" }}>
+            <span className="material-tile-icon">{iconForItem(row.label)}</span>
+            <h3
+              className="material-title"
+              style={{ fontSize: "1.08rem", margin: 0 }}
+            >
+              {row.label}
+            </h3>
+            <span style={{ fontSize: ".95rem", color: "#888" }}>
+              {row.unit}
+            </span>
           </div>
-          <div className="check-counter-row">
+          <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
             <button
               type="button"
-              className="circle-btn circle-btn-minus"
+              className="material-icon-btn"
               aria-label={`Decrease ${row.label}`}
               onClick={() => decrease(row.id)}
             >
               <Minus size={16} />
             </button>
-            <strong>{issuedCounts[row.id] ?? 0}</strong>
+            <strong style={{ minWidth: 24, textAlign: "center" }}>
+              {issuedCounts[row.id] ?? 0}
+            </strong>
             <button
               type="button"
-              className="circle-btn circle-btn-plus"
+              className="material-icon-btn"
               aria-label={`Increase ${row.label}`}
               onClick={() => increase(row.id)}
             >
@@ -140,7 +181,8 @@ export function CheckInScreen() {
 
       <button
         type="button"
-        className="check-complete-btn check-complete-btn-in"
+        className="material-btn material-btn-primary"
+        style={{ margin: "0 auto", width: "100%", maxWidth: 480 }}
         onClick={completeCheckIn}
       >
         <Check size={18} />

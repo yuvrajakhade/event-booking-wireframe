@@ -1,0 +1,180 @@
+.event-info-card {
+  padding: 0.7rem 0.7rem !important;
+  min-height: unset;
+  box-shadow: none;
+  margin-bottom: 0.5rem;
+}
+/* Material Design styles for MuhurtScreen */
+.material-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.material-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow:
+    0 2px 8px rgba(60, 60, 60, 0.08),
+    0 1.5px 4px rgba(60, 60, 60, 0.04);
+  padding: 1.5rem 1.25rem;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.material-attention {
+  border-left: 4px solid #6366f1;
+  background: #f5f7ff;
+}
+.material-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+.material-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+.material-label {
+  font-size: 1rem;
+  color: #555;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+.material-input {
+  border: 1px solid #daddf0;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  background: #f8f9ff;
+  color: #222;
+  outline: none;
+  transition: border 0.2s;
+}
+.material-input:focus {
+  border: 1.5px solid #6366f1;
+  background: #fff;
+}
+.material-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  padding: 0.85rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: #e0e7ff;
+  color: #222;
+  transition: background 0.2s;
+}
+.material-btn-primary {
+  background: linear-gradient(90deg, #6366f1 60%, #1fb9ac 100%);
+  color: #fff;
+}
+.material-btn-primary:hover {
+  background: linear-gradient(90deg, #4f46e5 60%, #12a99a 100%);
+}
+.material-list-heading {
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: #222;
+  margin: 2.2rem auto 0.7rem auto;
+  padding: 0 1.5rem;
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  max-width: 480px;
+  box-sizing: border-box;
+}
+.material-list-heading::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, #e0e7ff 60%, #fff 100%);
+  margin-left: 1rem;
+  border-radius: 1px;
+}
+.material-row {
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+.material-tile-icon {
+  background: #e0e7ff;
+  border-radius: 50%;
+  padding: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.material-saved-date-copy {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.material-date {
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: #222;
+  margin: 0;
+}
+.material-desc {
+  font-size: 0.98rem;
+  color: #6366f1;
+}
+.material-icon-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  padding: 0.4rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.material-icon-btn:hover {
+  background: #fbe9e7;
+}
+.material-danger {
+  color: #ef4444;
+}
+.material-empty {
+  color: #888;
+  background: #f3f4fa;
+  text-align: center;
+  font-size: 1rem;
+  padding: 2rem 1rem;
+}
+@media (max-width: 600px) {
+  .material-card {
+    max-width: 100vw;
+    padding: 1rem 0.5rem;
+  }
+  .material-stack {
+    gap: 0.7rem;
+  }
+  .material-row {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .material-title {
+    font-size: 1.05rem;
+  }
+  .material-btn,
+  .material-btn-primary {
+    font-size: 0.95rem;
+    padding: 0.7rem 1rem;
+  }
+}
