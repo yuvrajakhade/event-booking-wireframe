@@ -110,7 +110,7 @@ export function BookedEventsScreen() {
       <Fab
         color="primary"
         aria-label="add"
-        sx={{ position: "fixed", bottom: 72, right: 24, zIndex: 1000 }}
+        sx={{ position: "fixed", bottom: 96, right: 24, zIndex: 1000 }}
         onClick={() => navigate("/events/new")}
       >
         <Plus />
