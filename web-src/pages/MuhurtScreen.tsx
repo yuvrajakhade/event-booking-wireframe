@@ -31,7 +31,7 @@ export function MuhurtScreen() {
         <h3 className="material-title">Add New Muhurt Date</h3>
         <div className="material-form-group">
           <label className="material-label" htmlFor="muhurt-date">
-            Date (YYYY-MM-DD)
+            Date (DD-MM-YYYY)
           </label>
           <input
             id="muhurt-date"

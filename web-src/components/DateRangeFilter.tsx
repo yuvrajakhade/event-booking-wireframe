@@ -54,6 +54,22 @@ const DateRangeFilter: React.FC<DateRangeFilterProps> = ({ onFilter }) => {
               <SlidersHorizontal size={18} />
             </IconButton>
           </Tooltip>
+          {(from || to) && (
+            <Tooltip title="Clear Dates">
+              <IconButton
+                color="secondary"
+                onClick={() => {
+                  setFrom(null);
+                  setTo(null);
+                  onFilter(null, null);
+                }}
+                sx={{ height: 36, width: 36 }}
+                aria-label="Clear"
+              >
+                <span style={{ fontWeight: 700, fontSize: 16 }}>×</span>
+              </IconButton>
+            </Tooltip>
+          )}
         </Stack>
       </LocalizationProvider>
     </Paper>
