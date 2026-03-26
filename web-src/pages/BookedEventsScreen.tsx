@@ -2,8 +2,10 @@ import React from "react";
 import { mockEvents } from "../../src/data/mock";
 import { EventCard, DateRangeFilter } from "../components";
 import { CalendarDays, Search } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, Typography, Stack, Box, Chip } from "@mui/material";
+import Fab from "@mui/material/Fab";
 import SearchFilter from "../components/SearchFilter";
 import Paper from "@mui/material/Paper";
 
@@ -25,7 +27,7 @@ export function BookedEventsScreen() {
   });
 
   return (
-    <Box sx={{ maxWidth: 480, mx: "auto", mt: 2, px: 1 }}>
+    <Box sx={{ maxWidth: 480, mx: "auto", mt: 2, px: 1, position: "relative" }}>
       <Card
         elevation={3}
         sx={{
@@ -103,6 +105,16 @@ export function BookedEventsScreen() {
           ))}
         </Stack>
       )}
+
+      {/* Floating Action Button for Add Event */}
+      <Fab
+        color="primary"
+        aria-label="add"
+        sx={{ position: "fixed", bottom: 72, right: 24, zIndex: 1000 }}
+        onClick={() => navigate("/events/new")}
+      >
+        <Plus />
+      </Fab>
     </Box>
   );
 }
