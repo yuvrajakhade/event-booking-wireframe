@@ -30,8 +30,27 @@ export function EnquiryCard({
         <div className="tile-icon">
           <CalendarDays size={14} />
         </div>
-        <div className="event-head-copy">
-          <h3>{enquiry.name}</h3>
+        <div
+          className="event-head-copy"
+          style={{ display: "flex", flexDirection: "column", gap: 4 }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <h3 style={{ margin: 0 }}>{enquiry.name}</h3>
+            <span
+              className={`badge badge-${enquiry.status.toLowerCase().replace(/\s+/g, "-")}`}
+              style={{
+                fontSize: "0.95em",
+                fontWeight: 600,
+                padding: "2px 12px",
+                borderRadius: 16,
+                background: "#e8f0fe",
+                color: "#2563eb",
+                marginLeft: 4,
+              }}
+            >
+              {enquiry.status}
+            </span>
+          </div>
           <span className="date-pill">
             <Clock3 size={14} />
             {enquiry.eventDate}
@@ -89,13 +108,7 @@ export function EnquiryCard({
         </button>
       </div>
 
-      <div className="enquiry-badge">
-        <span
-          className={`badge badge-${enquiry.status.toLowerCase().replace(/\s+/g, "-")}`}
-        >
-          {enquiry.status}
-        </span>
-      </div>
+      {/* Status badge moved in front of name */}
     </article>
   );
 }

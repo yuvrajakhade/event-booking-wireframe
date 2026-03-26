@@ -155,61 +155,69 @@ export function CheckOutScreen() {
           <article
             className="material-card material-row"
             key={row.id}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
+            style={{ paddingBottom: 10 }}
           >
             <div
-              style={{ display: "flex", alignItems: "center", gap: ".7rem" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: ".7rem",
+              }}
             >
-              <span className="material-tile-icon">
-                {iconForItem(row.label)}
-              </span>
-              <h3
-                className="material-title"
-                style={{ fontSize: "1.08rem", margin: 0 }}
+              <div
+                style={{ display: "flex", alignItems: "center", gap: ".7rem" }}
               >
-                {row.label}
-              </h3>
-              <span style={{ fontSize: ".95rem", color: "#888" }}>
-                {row.unit}
-              </span>
+                <span className="material-tile-icon">
+                  {iconForItem(row.label)}
+                </span>
+                <h3
+                  className="material-title"
+                  style={{ fontSize: "1.08rem", margin: 0 }}
+                >
+                  {row.label}
+                </h3>
+                <span style={{ fontSize: ".95rem", color: "#888" }}>
+                  {row.unit}
+                </span>
+              </div>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: ".5rem" }}
+              >
+                <button
+                  type="button"
+                  className="material-icon-btn"
+                  aria-label={`Decrease ${row.label}`}
+                  onClick={() => decrease(row.id)}
+                >
+                  <Minus size={24} color="#f44336" />
+                </button>
+                <strong
+                  style={{ minWidth: 24, textAlign: "center", fontSize: 32 }}
+                >
+                  {returned}
+                </strong>
+                <button
+                  type="button"
+                  className="material-icon-btn"
+                  aria-label={`Increase ${row.label}`}
+                  onClick={() => increase(row.id)}
+                >
+                  <Plus size={24} color="#22c55e" />
+                </button>
+              </div>
             </div>
             <div
-              style={{ display: "flex", alignItems: "center", gap: ".5rem" }}
+              className="pill-group"
+              style={{ marginTop: 6, marginLeft: 32 }}
             >
-              <button
-                type="button"
-                className="material-icon-btn"
-                aria-label={`Decrease ${row.label}`}
-                onClick={() => decrease(row.id)}
-              >
-                <Minus size={24} color="#f44336" />
-              </button>
-              <strong
-                style={{ minWidth: 24, textAlign: "center", fontSize: 32 }}
-              >
-                {returned}
-              </strong>
-              <button
-                type="button"
-                className="material-icon-btn"
-                aria-label={`Increase ${row.label}`}
-                onClick={() => increase(row.id)}
-              >
-                <Plus size={24} color="#22c55e" />
-              </button>
-              <span className="pill-group">
-                <span className="expected-pill">Expected: {row.expected}</span>
-                {returned < row.expected && (
-                  <span className="missing-pill">
-                    <AlertCircle size={16} style={{ marginRight: 2 }} />
-                    Missing: {row.expected - returned}
-                  </span>
-                )}
-              </span>
+              <span className="expected-pill">Expected: {row.expected}</span>
+              {returned < row.expected && (
+                <span className="missing-pill">
+                  <AlertCircle size={16} style={{ marginRight: 2 }} />
+                  Missing: {row.expected - returned}
+                </span>
+              )}
             </div>
           </article>
         );

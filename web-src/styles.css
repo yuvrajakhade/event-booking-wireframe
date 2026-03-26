@@ -12,6 +12,32 @@
 @import "./styles/modules/_auth.css";
 @import "./styles/modules/_muhurt.css";
 
+/* Reduce font size for card content on mobile devices */
+@media (max-width: 600px) {
+  .card,
+  .enquiry-card,
+  .event-card,
+  .dashboard-stats,
+  .rooms-dropdown,
+  .profile-card,
+  .inventory-table,
+  .date-range-filter,
+  .search-filter {
+    font-size: 0.92rem;
+  }
+  .card *,
+  .enquiry-card *,
+  .event-card *,
+  .dashboard-stats *,
+  .rooms-dropdown *,
+  .profile-card *,
+  .inventory-table *,
+  .date-range-filter *,
+  .search-filter * {
+    font-size: 0.8rem !important;
+  }
+}
+
 .modern-filter-section {
   display: flex;
   flex-direction: column;
@@ -190,15 +216,14 @@
 }
 
 .event-actions {
-  margin-top: 1rem;
   display: flex;
   justify-content: flex-end;
   gap: 0.72rem;
 }
 
 .btn-icon {
-  width: 56px;
-  height: 56px;
+  width: 40px;
+  height: 40px;
   border-radius: 999px;
   border: 0;
   display: inline-flex;
@@ -218,9 +243,12 @@
   background: linear-gradient(135deg, #6667ee, #5659de);
 }
 
-.btn-assign,
 .btn-add {
   background: linear-gradient(135deg, #1ab8a7, #0ea596);
+}
+
+.btn-assign {
+  background: linear-gradient(135deg, #6366f1, #6366f1);
 }
 
 .btn-complete {
@@ -242,7 +270,7 @@
 }
 
 .badge {
-  margin-top: 0.8rem;
+  /* margin-top: 0.8rem; */
   display: inline-flex;
   align-items: center;
   border-radius: 999px;

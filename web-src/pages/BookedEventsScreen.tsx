@@ -101,6 +101,8 @@ export function BookedEventsScreen() {
               event={event}
               onPress={() => navigate(`/events/${event.id}`)}
               onEdit={() => navigate(`/events/${event.id}/edit`)}
+              onCheckIn={() => navigate(`/events/${event.id}/check-in`)}
+              onCheckOut={() => navigate(`/events/${event.id}/check-out`)}
             />
           ))}
         </Stack>
@@ -110,7 +112,7 @@ export function BookedEventsScreen() {
       <Fab
         color="primary"
         aria-label="add"
-        sx={{ position: "fixed", bottom: 96, right: 24, zIndex: 1000 }}
+        sx={{ position: "fixed", bottom: 150, right: 24, zIndex: 1000 }}
         onClick={() => navigate("/events/new")}
       >
         <Plus />

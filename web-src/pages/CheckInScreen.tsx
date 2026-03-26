@@ -133,51 +133,76 @@ export function CheckInScreen() {
         </p>
       </article>
 
-      {inventoryRows.map((row) => (
-        <article
-          className="material-card material-row"
-          key={row.id}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: ".7rem" }}>
-            <span className="material-tile-icon">{iconForItem(row.label)}</span>
-            <h3
-              className="material-title"
-              style={{ fontSize: "1.08rem", margin: 0 }}
+      {inventoryRows.map((row) => {
+        const expected = row.issued;
+        const issued = issuedCounts[row.id] ?? 0;
+        const missing = Math.max(0, expected - issued);
+        return (
+          <article
+            className="material-card material-row"
+            key={row.id}
+            style={{ paddingBottom: 10 }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: ".7rem",
+              }}
             >
-              {row.label}
-            </h3>
-            <span style={{ fontSize: ".95rem", color: "#888" }}>
-              {row.unit}
-            </span>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
-            <button
-              type="button"
-              className="material-icon-btn"
-              aria-label={`Decrease ${row.label}`}
-              onClick={() => decrease(row.id)}
+              <div
+                style={{ display: "flex", alignItems: "center", gap: ".7rem" }}
+              >
+                <span className="material-tile-icon">
+                  {iconForItem(row.label)}
+                </span>
+                <h3
+                  className="material-title"
+                  style={{ fontSize: "1.08rem", margin: 0 }}
+                >
+                  {row.label}
+                </h3>
+                <span style={{ fontSize: ".95rem", color: "#888" }}>
+                  {row.unit}
+                </span>
+              </div>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: ".5rem" }}
+              >
+                <button
+                  type="button"
+                  className="material-icon-btn"
+                  aria-label={`Decrease ${row.label}`}
+                  onClick={() => decrease(row.id)}
+                >
+                  <Minus size={16} />
+                </button>
+                <strong style={{ minWidth: 24, textAlign: "center" }}>
+                  {issued}
+                </strong>
+                <button
+                  type="button"
+                  className="material-icon-btn"
+                  aria-label={`Increase ${row.label}`}
+                  onClick={() => increase(row.id)}
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
+            </div>
+            <div
+              className="pill-group"
+              style={{ marginTop: 6, marginLeft: 32 }}
             >
-              <Minus size={16} />
-            </button>
-            <strong style={{ minWidth: 24, textAlign: "center" }}>
-              {issuedCounts[row.id] ?? 0}
-            </strong>
-            <button
-              type="button"
-              className="material-icon-btn"
-              aria-label={`Increase ${row.label}`}
-              onClick={() => increase(row.id)}
-            >
-              <Plus size={16} />
-            </button>
-          </div>
-        </article>
-      ))}
+              <span className="expected-pill">Expected: {expected}</span>
+              {missing > 0 && (
+                <span className="missing-pill">Missing: {missing}</span>
+              )}
+            </div>
+          </article>
+        );
+      })}
 
       <button
         type="button"

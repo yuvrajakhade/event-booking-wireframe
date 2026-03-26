@@ -203,11 +203,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             </Box>
           )}
         </CardContent>
-        <Box sx={{ textAlign: "center", mt: 2 }}>
-          <Typography variant="caption" color="text.secondary">
-            Powered by <strong>SVOJUS PALACE</strong>
-          </Typography>
-        </Box>
+        {/* Footer removed as requested */}
       </Card>
     </Box>
   );

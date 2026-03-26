@@ -82,10 +82,10 @@
   background: linear-gradient(90deg, #4f46e5 60%, #12a99a 100%);
 }
 .material-list-heading {
-  font-size: 1.18rem;
+  font-size: 1rem;
   font-weight: 800;
   color: #222;
-  margin: 2.2rem auto 0.7rem auto;
+  margin: 0rem auto;
   padding: 0 1.5rem;
   letter-spacing: 0.01em;
   display: flex;
