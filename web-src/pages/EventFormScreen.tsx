@@ -210,6 +210,7 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
                 onChange={(e) => updateField("venue", e.target.value)}
                 required
                 fullWidth
+                // placeholder and SelectProps reverted
               >
                 <MenuItem value="">Select venue...</MenuItem>
                 <MenuItem value="Phase 1">Phase 1</MenuItem>
@@ -222,6 +223,7 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
                   label="Rooms *"
                   value={formData.rooms}
                   readOnly
+                  // placeholder reverted
                   endAdornment={
                     <IconButton
                       onClick={(e) => setRoomsAnchorEl(e.currentTarget)}
@@ -443,17 +445,58 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
                 <Typography variant="subtitle1" sx={{ mb: 1 }}>
                   Event Source *
                 </Typography>
-                <ToggleButtonGroup
-                  value={formData.eventSource}
-                  exclusive
-                  onChange={(_e, value) =>
-                    value && updateField("eventSource", value)
-                  }
-                  aria-label="event source"
+                <Box
+                  sx={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    my: 2,
+                  }}
                 >
-                  <ToggleButton value="Enquiry">Enquiry</ToggleButton>
-                  <ToggleButton value="Booking">Booking</ToggleButton>
-                </ToggleButtonGroup>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      width: "100%",
+                      maxWidth: 400,
+                      background: "#f0f4ff",
+                      borderRadius: 999,
+                      boxShadow: "0 2px 8px rgba(39,48,66,0.06)",
+                      p: 0.5,
+                    }}
+                  >
+                    {["Enquiry", "Booking"].map((option) => (
+                      <Box
+                        key={option}
+                        onClick={() => updateField("eventSource", option)}
+                        sx={{
+                          flex: 1,
+                          textAlign: "center",
+                          py: 1.2,
+                          cursor: "pointer",
+                          borderRadius: 999,
+                          transition: "all 0.2s",
+                          fontWeight: 700,
+                          fontSize: "1.1rem",
+                          color:
+                            formData.eventSource === option
+                              ? "white"
+                              : "primary.main",
+                          background:
+                            formData.eventSource === option
+                              ? "linear-gradient(90deg, #7266F0 60%, #1CC8C8 100%)"
+                              : "transparent",
+                          boxShadow:
+                            formData.eventSource === option
+                              ? "0 2px 12px rgba(114,102,240,0.12)"
+                              : "none",
+                        }}
+                      >
+                        {option}
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
               </Box>
             </Stack>
           </CardContent>

@@ -47,15 +47,7 @@ export function EventDetailsScreen() {
             {missingItems.length} Missing
           </span>
         </span>
-        {event.status !== "Completed" && (
-          <button
-            type="button"
-            className="btn-icon btn-edit detail-edit-btn"
-            onClick={() => navigate(`/events/${event.id}/edit`)}
-          >
-            <Pencil size={16} />
-          </button>
-        )}
+        {/* Edit button removed */}
       </header>
 
       <article className="card detail-info-card">
