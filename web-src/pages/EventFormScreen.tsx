@@ -137,13 +137,8 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
                 fullWidth
               >
                 <MenuItem value="">Select venue...</MenuItem>
-                <MenuItem value="Hall A">Hall A</MenuItem>
-                <MenuItem value="Lawn 1">Lawn 1</MenuItem>
-                <MenuItem value="Convention Center B">
-                  Convention Center B
-                </MenuItem>
-                <MenuItem value="Banquet Hall">Banquet Hall</MenuItem>
-                <MenuItem value="Open Ground">Open Ground</MenuItem>
+                <MenuItem value="Phase 1">Phase 1</MenuItem>
+                <MenuItem value="Phase 2">Phase 2</MenuItem>
               </TextField>
               <RoomsDropdown
                 selectedRooms={formData.rooms}

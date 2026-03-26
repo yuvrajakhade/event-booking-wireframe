@@ -125,14 +125,18 @@ export function RoomsDropdown({ selectedRooms, onChange }: RoomsDropdownProps) {
             left: 0,
             right: 0,
             top: "100%",
-            zIndex: 10,
-            background: "#fafbff",
-            border: "1.5px solid #d1d5db",
+            zIndex: 1302,
+            background: "#fff",
+            border: "1.5px solid #bdbdbd",
             borderRadius: "12px",
-            boxShadow: "0 4px 16px #e6e6f6",
-            padding: 12,
-            maxHeight: 320,
+            boxShadow:
+              "0 8px 32px 0 rgba(99,102,241,0.10), 0 1.5px 8px #e6e6f6",
+            padding: 16,
+            maxHeight: 420,
             overflowY: "auto",
+            minHeight: 180,
+            scrollbarColor: "#bdbdbd #f0f0fa",
+            scrollbarWidth: "thin",
           }}
         >
           <div style={{ marginBottom: 12 }}>
