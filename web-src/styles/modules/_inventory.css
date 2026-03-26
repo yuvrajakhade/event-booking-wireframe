@@ -1,0 +1,42 @@
+.inventory-line {
+  border-radius: 0.8rem;
+  border: 1px solid var(--line);
+  background: #fff;
+  padding: 0.65rem 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.inventory-line span {
+  font-weight: 700;
+}
+
+.inventory-line strong {
+  color: var(--danger);
+  font-size: 0.92rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: #fff;
+}
+
+th,
+td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+th {
+  background: #eef1ff;
+  color: var(--brand-deep);
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}

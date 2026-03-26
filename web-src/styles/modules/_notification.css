@@ -1,0 +1,27 @@
+.notifications-screen {
+  min-height: calc(100vh - 180px);
+}
+
+.notifications-empty {
+  min-height: 56vh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.65rem;
+  color: var(--pink);
+  text-align: center;
+}
+
+.notifications-empty h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.75rem;
+}
+
+.notifications-empty p {
+  margin: 0;
+  max-width: 390px;
+  color: var(--pink);
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
