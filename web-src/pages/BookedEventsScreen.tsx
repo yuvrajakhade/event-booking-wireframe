@@ -1,9 +1,11 @@
 import React from "react";
 import { mockEvents } from "../../src/data/mock";
 import { EventCard, DateRangeFilter } from "../components";
-import { RoomsDropdown } from "../components/RoomsDropdown";
-import { CalendarDays, Plus, Search, SlidersHorizontal } from "lucide-react";
+import { CalendarDays, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Card, CardContent, Typography, Stack, Box, Chip } from "@mui/material";
+import SearchFilter from "../components/SearchFilter";
+import Paper from "@mui/material/Paper";
 
 export function BookedEventsScreen() {
   const navigate = useNavigate();
@@ -11,6 +13,7 @@ export function BookedEventsScreen() {
   const [fromDate, setFromDate] = React.useState<Date | null>(null);
   const [toDate, setToDate] = React.useState<Date | null>(null);
   const [selectedRooms, setSelectedRooms] = React.useState<string[]>([]);
+  const [search, setSearch] = React.useState("");
 
   // Filter events by status and date range
   const filteredEvents = mockEvents.filter((event) => {
@@ -22,56 +25,83 @@ export function BookedEventsScreen() {
   });
 
   return (
-    <section className="stack">
-      <header className="card hero-card hero-header-row">
-        <span className="hero-header-inline">
-          <h1 className="hero-header-small">Booked Events</h1>
-          <span className="hero-header-chip">
-            <CalendarDays size={12} />
-            {filteredEvents.length} Events
-          </span>
-        </span>
-      </header>
+    <Box sx={{ maxWidth: 480, mx: "auto", mt: 5, px: 2 }}>
+      <Card
+        elevation={3}
+        sx={{
+          mb: 3,
+          borderRadius: 4,
+          boxShadow: "0 4px 24px rgba(39,48,66,0.08)",
+        }}
+      >
+        <CardContent>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Typography
+              variant="h5"
+              fontWeight={800}
+              color="primary"
+              sx={{ letterSpacing: 0.5 }}
+            >
+              Booked Events
+            </Typography>
+            <Chip
+              icon={<CalendarDays size={18} />}
+              color="primary"
+              label={`${filteredEvents.length} Events`}
+              sx={{
+                fontWeight: 700,
+                fontSize: "1rem",
+                px: 1.5,
+                borderRadius: 2,
+              }}
+            />
+          </Stack>
+        </CardContent>
+      </Card>
 
-      <div className="date-filter-card compact-date-filter">
-        <DateRangeFilter
-          onFilter={(from, to) => {
-            setFromDate(from);
-            setToDate(to);
-          }}
-        />
-      </div>
-
-      <div className="search-row card">
-        <Search size={28 - 8} />
-        <span>Search event/customer/venue</span>
-      </div>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 3 }}>
+        <Box sx={{ width: "100%", mb: 1 }}>
+          <DateRangeFilter
+            onFilter={(from, to) => {
+              setFromDate(from);
+              setToDate(to);
+            }}
+          />
+        </Box>
+        <Box sx={{ width: "100%" }}>
+          <SearchFilter
+            value={search}
+            onChange={setSearch}
+            placeholder="Search event/customer/venue"
+            className="modern-search"
+          />
+        </Box>
+      </Box>
 
       {filteredEvents.length === 0 ? (
-        <div className="card empty-state">
-          No active booked events right now.
-        </div>
+        <Card elevation={1} sx={{ borderRadius: 4, py: 4 }}>
+          <CardContent>
+            <Typography color="text.secondary" align="center">
+              No active booked events right now.
+            </Typography>
+          </CardContent>
+        </Card>
       ) : (
-        filteredEvents.map((event) => (
-          <EventCard
-            key={event.id}
-            event={event}
-            onPress={() => navigate(`/events/${event.id}`)}
-            onEdit={() => navigate(`/events/${event.id}/edit`)}
-            onCheckIn={() => navigate(`/events/${event.id}/check-in`)}
-            onCheckOut={() => navigate(`/events/${event.id}/check-out`)}
-          />
-        ))
+        <Stack spacing={2}>
+          {filteredEvents.map((event) => (
+            <EventCard
+              key={event.id}
+              event={event}
+              onPress={() => navigate(`/events/${event.id}`)}
+              onEdit={() => navigate(`/events/${event.id}/edit`)}
+            />
+          ))}
+        </Stack>
       )}
-
-      <button
-        type="button"
-        className="btn-icon btn-edit floating-add"
-        aria-label="Add event"
-        onClick={() => navigate("/events/new")}
-      >
-        <Plus size={26} />
-      </button>
-    </section>
+    </Box>
   );
 }

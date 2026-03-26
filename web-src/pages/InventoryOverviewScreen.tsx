@@ -3,13 +3,24 @@ import { mockEvents } from "../../src/data/mock";
 import {
   AlertCircle,
   CalendarDays,
-  IndianRupee,
   MinusCircle,
   Search,
   ChevronRight,
 } from "lucide-react";
 import { DateRangeFilter } from "../components";
 import { useNavigate } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Stack,
+  Box,
+  Chip,
+  Button,
+  Divider,
+} from "@mui/material";
+import SearchFilter from "../components/SearchFilter";
+import Paper from "@mui/material/Paper";
 
 export function InventoryOverviewScreen() {
   const navigate = useNavigate();
@@ -23,9 +34,8 @@ export function InventoryOverviewScreen() {
     totalPlanned === 0
       ? 0
       : Math.round(((totalPlanned - totalMissing) / totalPlanned) * 100);
+  const [search, setSearch] = React.useState("");
 
-  const [fromDate, setFromDate] = React.useState<Date | null>(null);
-  const [toDate, setToDate] = React.useState<Date | null>(null);
   const missingByEvent = mockEvents
     .map((event) => {
       const missing = event.inventory
@@ -44,92 +54,143 @@ export function InventoryOverviewScreen() {
         customer: event.customerName,
         venue: event.venue,
         date: event.start.slice(0, 10),
-        eventDate: new Date(event.start),
         total,
         firstMissing: missing[0],
       };
     })
-    .filter((event) => {
-      if (event.total <= 0) return false;
-      if (fromDate && event.eventDate < fromDate) return false;
-      if (toDate && event.eventDate > toDate) return false;
-      return true;
-    });
+    .filter((event) => event.total > 0);
+
+  // Filter events by search
+  const filteredEvents = missingByEvent.filter((event) => {
+    const q = search.toLowerCase();
+    return (
+      event.title.toLowerCase().includes(q) ||
+      event.customer.toLowerCase().includes(q) ||
+      event.venue.toLowerCase().includes(q)
+    );
+  });
 
   return (
-    <section className="stack">
-      <header className="card hero-card inventory-hero-header">
-        <div className="inventory-overview-label">
-          <h1 className="hero-header-small">Inventory Overview</h1>
-          <span className="hero-header-chip">
-            <AlertCircle size={12} />
-            {totalMissing} Missing
-          </span>
-        </div>
-      </header>
-
-      <div className="date-filter-card compact-date-filter">
-        <DateRangeFilter
-          onFilter={(from, to) => {
-            setFromDate(from);
-            setToDate(to);
-          }}
-        />
-      </div>
-      <div className="search-row card">
-        <Search size={20} />
-        <span>Search event/customer/venue</span>
-      </div>
-
-      <article className="card split-stats">
-        <div>
-          <AlertCircle size={20} />
-          <strong>{totalMissing}</strong>
-          <p>Total Missing Items</p>
-        </div>
-        <div>
-          <CalendarDays size={20} />
-          <strong>{missingByEvent.length}</strong>
-          <p>Events</p>
-        </div>
-      </article>
-
-      {missingByEvent.map((event) => (
-        <article
-          className="card missing-event-card interactive-card"
-          key={event.id}
-          onClick={() => navigate(`/inventory/missing/${event.id}`)}
-        >
-          <div className="missing-card-head">
-            <div>
-              <h3>{event.title}</h3>
-              <p>
-                {event.customer} • {event.venue}
-              </p>
-              <small>{event.date}</small>
-            </div>
-            <span className="count-pill">{event.total}</span>
-          </div>
-          {event.firstMissing && (
-            <p className="missing-line">
-              <MinusCircle size={15} />
-              {event.firstMissing.name}: {event.firstMissing.qty}{" "}
-              {event.firstMissing.unit}
-            </p>
-          )}
-          <button
-            type="button"
-            className="inline-link-btn"
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/inventory/missing/${event.id}`);
-            }}
+    <Box sx={{ maxWidth: 480, mx: "auto", mt: 5, px: 2 }}>
+      <Card
+        elevation={3}
+        sx={{
+          mb: 3,
+          borderRadius: 4,
+          boxShadow: "0 4px 24px rgba(39,48,66,0.08)",
+        }}
+      >
+        <CardContent>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
           >
-            <ChevronRight size={16} />
-            View Details
-          </button>
-        </article>
-      ))}
-    </section>
+            <Typography
+              variant="h5"
+              fontWeight={800}
+              color="primary"
+              sx={{ letterSpacing: 0.5 }}
+            >
+              Inventory Overview
+            </Typography>
+            <Chip
+              icon={<AlertCircle size={18} />}
+              color="error"
+              label={`${totalMissing} Missing`}
+              sx={{
+                fontWeight: 700,
+                fontSize: "1rem",
+                px: 1.5,
+                borderRadius: 2,
+              }}
+            />
+          </Stack>
+        </CardContent>
+      </Card>
+
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 3 }}>
+        {/* No date filter for inventory, but keep layout consistent */}
+        <Box sx={{ width: "100%" }}>
+          <SearchFilter
+            value={search}
+            onChange={setSearch}
+            placeholder="Search event/customer/venue"
+            className="modern-search"
+          />
+        </Box>
+      </Box>
+
+      <Stack spacing={2}>
+        {filteredEvents.length === 0 ? (
+          <Card elevation={1} sx={{ borderRadius: 4, py: 4 }}>
+            <CardContent>
+              <Typography color="text.secondary" align="center">
+                No inventory events found.
+              </Typography>
+            </CardContent>
+          </Card>
+        ) : (
+          filteredEvents.map((event) => (
+            <Card
+              key={event.id}
+              elevation={2}
+              sx={{
+                borderRadius: 3,
+                cursor: "pointer",
+                transition: "box-shadow 0.2s",
+                "&:hover": { boxShadow: 8 },
+              }}
+              onClick={() => navigate(`/inventory/missing/${event.id}`)}
+            >
+              <CardContent>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Box>
+                    <Typography variant="subtitle1" fontWeight={600}>
+                      {event.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {event.customer} • {event.venue}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {event.date}
+                    </Typography>
+                  </Box>
+                  <Chip
+                    color="error"
+                    label={event.total}
+                    sx={{ fontWeight: 600 }}
+                  />
+                </Stack>
+                {event.firstMissing && (
+                  <Stack direction="row" alignItems="center" spacing={1} mt={2}>
+                    <MinusCircle size={18} />
+                    <Typography variant="body2">
+                      {event.firstMissing.name}: {event.firstMissing.qty}{" "}
+                      {event.firstMissing.unit}
+                    </Typography>
+                  </Stack>
+                )}
+                <Button
+                  variant="text"
+                  endIcon={<ChevronRight size={18} />}
+                  sx={{ mt: 1, fontWeight: 600 }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/inventory/missing/${event.id}`);
+                  }}
+                >
+                  View Details
+                </Button>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </Stack>
+    </Box>
   );
 }

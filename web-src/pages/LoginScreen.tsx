@@ -1,5 +1,14 @@
 import React from "react";
-import { ArrowLeft, ArrowRight, ShieldCheck, UserPlus } from "lucide-react";
+import { ArrowLeft, ShieldCheck, UserPlus } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Stack,
+  Box,
+  TextField,
+  Button,
+} from "@mui/material";
 
 type LoginScreenProps = {
   onLogin: () => void;
@@ -38,201 +47,168 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
   };
 
   return (
-    <section className="login-shell">
-      <div className="login-container">
-        <div className="login-header">
-          <h1 className="login-title">Welcome Back</h1>
-          <p className="login-subtitle">Sign in to manage your events</p>
-        </div>
-
-        {!showSignUp ? (
-          <form className="login-form" onSubmit={handleLogin}>
-            <div className="form-group">
-              <label htmlFor="email" className="form-label">
-                Email Address
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                required
-                className="form-input"
-              />
-            </div>
-
-            <div className="form-group">
-              <div className="form-label-row">
-                <label htmlFor="password" className="form-label">
-                  Password
-                </label>
-                <a href="#" className="forgot-password">
-                  Forgot Password?
-                </a>
-              </div>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                required
-                className="form-input"
-              />
-            </div>
-
-            <button type="submit" className="login-button">
-              Sign In
-            </button>
-
-            <div className="divider">
-              <span>or</span>
-            </div>
-
-            <button
-              type="button"
-              className="signup-button"
-              onClick={() => setShowSignUp(true)}
-            >
-              Don't have an account? Sign Up
-            </button>
-          </form>
-        ) : (
-          <div className="register-shell">
-            <div className="register-topbar">
-              <button
-                type="button"
-                className="icon-btn-ghost"
-                onClick={() => setShowSignUp(false)}
-                aria-label="Back"
-              >
-                <ArrowLeft size={22} />
-              </button>
-              <h2>Register</h2>
-              <span />
-            </div>
-
-            <div className="register-badge">
-              <UserPlus size={34} />
-            </div>
-
-            <div className="register-head">
-              <h1>Create Account</h1>
-              <p>Join us to start managing events</p>
-            </div>
-
-            <form className="login-form register-form" onSubmit={handleSignUp}>
-              <div className="form-group">
-                <label htmlFor="name" className="form-label">
-                  Full Name
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  value={signUpData.name}
-                  onChange={(e) =>
-                    setSignUpData({ ...signUpData, name: e.target.value })
-                  }
-                  placeholder="Enter your full name"
-                  required
-                  className="form-input"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="signup-email" className="form-label">
-                  Email Address
-                </label>
-                <input
-                  id="signup-email"
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        bgcolor: "#f7f7f7",
+      }}
+    >
+      <Card sx={{ minWidth: 340, maxWidth: 400, mx: 2, p: 2 }} elevation={3}>
+        <CardContent>
+          <Typography
+            variant="h5"
+            fontWeight={700}
+            color="primary"
+            gutterBottom
+          >
+            {showSignUp ? "Create Account" : "Welcome Back"}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" mb={3}>
+            {showSignUp
+              ? "Register to manage your events"
+              : "Sign in to manage your events"}
+          </Typography>
+          {!showSignUp ? (
+            <Box component="form" onSubmit={handleLogin}>
+              <Stack spacing={2}>
+                <TextField
+                  label="Email Address"
                   type="email"
-                  value={signUpData.email}
-                  onChange={(e) =>
-                    setSignUpData({ ...signUpData, email: e.target.value })
-                  }
-                  placeholder="yourname@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
                   required
-                  className="form-input"
+                  fullWidth
                 />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="signup-phone" className="form-label">
-                  Phone Number
-                </label>
-                <input
-                  id="signup-phone"
-                  type="tel"
-                  value={signUpData.phone}
-                  onChange={(e) =>
-                    setSignUpData({ ...signUpData, phone: e.target.value })
-                  }
-                  placeholder="+91 98765 43210"
-                  required
-                  className="form-input"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="signup-password" className="form-label">
-                  Password
-                </label>
-                <input
-                  id="signup-password"
+                <TextField
+                  label="Password"
                   type="password"
-                  value={signUpData.password}
-                  onChange={(e) =>
-                    setSignUpData({ ...signUpData, password: e.target.value })
-                  }
-                  placeholder="Create a strong password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
                   required
-                  className="form-input"
+                  fullWidth
                 />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="signup-confirm-password" className="form-label">
-                  Confirm Password
-                </label>
-                <input
-                  id="signup-confirm-password"
-                  type="password"
-                  value={signUpData.confirmPassword}
-                  onChange={(e) =>
-                    setSignUpData({
-                      ...signUpData,
-                      confirmPassword: e.target.value,
-                    })
-                  }
-                  placeholder="Re-enter your password"
-                  required
-                  className="form-input"
-                />
-              </div>
-
-              <p className="terms-row">
-                <ShieldCheck size={16} />
-                By registering, you agree to our Terms & Conditions
-              </p>
-
-              <button
-                type="submit"
-                className="login-button register-create-btn"
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  sx={{ fontWeight: 600 }}
+                >
+                  Sign In
+                </Button>
+                <Button
+                  type="button"
+                  variant="text"
+                  onClick={() => setShowSignUp(true)}
+                  fullWidth
+                  startIcon={<UserPlus size={18} />}
+                >
+                  Don't have an account? Sign Up
+                </Button>
+              </Stack>
+            </Box>
+          ) : (
+            <Box>
+              <Button
+                type="button"
+                variant="text"
+                onClick={() => setShowSignUp(false)}
+                startIcon={<ArrowLeft size={18} />}
+                sx={{ mb: 2 }}
               >
-                Create Account
-                <ArrowRight size={18} />
-              </button>
-            </form>
-          </div>
-        )}
-
-        <div className="login-footer">
-          <p>
+                Back to Login
+              </Button>
+              <Box component="form" onSubmit={handleSignUp}>
+                <Stack spacing={2}>
+                  <TextField
+                    label="Full Name"
+                    type="text"
+                    value={signUpData.name}
+                    onChange={(e) =>
+                      setSignUpData({ ...signUpData, name: e.target.value })
+                    }
+                    placeholder="Enter your full name"
+                    required
+                    fullWidth
+                  />
+                  <TextField
+                    label="Email Address"
+                    type="email"
+                    value={signUpData.email}
+                    onChange={(e) =>
+                      setSignUpData({ ...signUpData, email: e.target.value })
+                    }
+                    placeholder="yourname@example.com"
+                    required
+                    fullWidth
+                  />
+                  <TextField
+                    label="Phone Number"
+                    type="tel"
+                    value={signUpData.phone}
+                    onChange={(e) =>
+                      setSignUpData({ ...signUpData, phone: e.target.value })
+                    }
+                    placeholder="+91 98765 43210"
+                    required
+                    fullWidth
+                  />
+                  <TextField
+                    label="Password"
+                    type="password"
+                    value={signUpData.password}
+                    onChange={(e) =>
+                      setSignUpData({ ...signUpData, password: e.target.value })
+                    }
+                    placeholder="Create a strong password"
+                    required
+                    fullWidth
+                  />
+                  <TextField
+                    label="Confirm Password"
+                    type="password"
+                    value={signUpData.confirmPassword}
+                    onChange={(e) =>
+                      setSignUpData({
+                        ...signUpData,
+                        confirmPassword: e.target.value,
+                      })
+                    }
+                    placeholder="Re-enter your password"
+                    required
+                    fullWidth
+                  />
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <ShieldCheck size={16} />
+                    <Typography variant="caption" color="text.secondary">
+                      By registering, you agree to our Terms & Conditions
+                    </Typography>
+                  </Stack>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    sx={{ fontWeight: 600 }}
+                  >
+                    Create Account
+                  </Button>
+                </Stack>
+              </Box>
+            </Box>
+          )}
+        </CardContent>
+        <Box sx={{ textAlign: "center", mt: 2 }}>
+          <Typography variant="caption" color="text.secondary">
             Powered by <strong>SVOJUS PALACE</strong>
-          </p>
-        </div>
-      </div>
-    </section>
+          </Typography>
+        </Box>
+      </Card>
+    </Box>
   );
 }

@@ -2,6 +2,16 @@ import React from "react";
 import { mockEvents } from "../../src/data/mock";
 import { Event } from "../../src/types";
 import { BellOff } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Chip,
+  Stack,
+  Alert,
+  Box,
+  Divider,
+} from "@mui/material";
 
 function listMissing(event: Event) {
   return event.inventory
@@ -26,39 +36,63 @@ export function NotificationsScreen() {
   const totalMissingUnits = missing.reduce((sum, item) => sum + item.qty, 0);
 
   return (
-    <section className="stack notifications-screen">
-      <header className="card hero-card hero-header-row">
-        <span className="hero-header-inline">
-          <h1 className="hero-header-small">Notifications</h1>
-          <span className="hero-header-chip">
-            {affectedEvents} Events &bull;
-            {totalMissingUnits} Missing
-          </span>
-        </span>
-      </header>
+    <Box sx={{ maxWidth: 600, mx: "auto", mt: 4, px: 2 }}>
+      <Card elevation={3} sx={{ mb: 3, borderRadius: 3 }}>
+        <CardContent>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Typography variant="h5" fontWeight={700} color="primary">
+              Notifications
+            </Typography>
+            <Chip
+              color="secondary"
+              label={`${affectedEvents} Events • ${totalMissingUnits} Missing`}
+              sx={{ fontWeight: 600 }}
+            />
+          </Stack>
+        </CardContent>
+      </Card>
 
       {missing.length === 0 ? (
-        <div className="notifications-empty">
-          <BellOff size={44} />
-          <h3>No notifications for today</h3>
-          <p>You will see Muhurt reminders here when a date matches today.</p>
-        </div>
+        <Card elevation={1} sx={{ p: 3, textAlign: "center", borderRadius: 3 }}>
+          <CardContent>
+            <BellOff size={48} style={{ color: "#bdbdbd", marginBottom: 8 }} />
+            <Typography variant="h6" color="text.secondary" gutterBottom>
+              No notifications for today
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              You will see Muhurt reminders here when a date matches today.
+            </Typography>
+          </CardContent>
+        </Card>
       ) : (
-        <>
-          <p className="subtitle warning-subtitle">
+        <Stack spacing={2}>
+          <Alert severity="warning" sx={{ fontWeight: 500 }}>
             Active alerts: {missing.length} • Events: {affectedEvents} • Missing
             units: {totalMissingUnits}
-          </p>
+          </Alert>
           {missing.map((notice) => (
-            <article className="card" key={notice.id}>
-              <h3>{notice.event}</h3>
-              <p className="notification-message">
-                Missing {notice.qty} x {notice.item}
-              </p>
-            </article>
+            <Card key={notice.id} elevation={2} sx={{ borderRadius: 2 }}>
+              <CardContent>
+                <Typography
+                  variant="subtitle1"
+                  fontWeight={600}
+                  color="primary.dark"
+                >
+                  {notice.event}
+                </Typography>
+                <Divider sx={{ my: 1 }} />
+                <Typography variant="body1" color="error.main">
+                  Missing {notice.qty} × {notice.item}
+                </Typography>
+              </CardContent>
+            </Card>
           ))}
-        </>
+        </Stack>
       )}
-    </section>
+    </Box>
   );
 }
