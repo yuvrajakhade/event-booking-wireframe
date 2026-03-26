@@ -21,16 +21,16 @@ export function CompletedEventsScreen() {
   });
 
   return (
-    <Box sx={{ maxWidth: 480, mx: "auto", mt: 5, px: 2 }}>
+    <Box sx={{ maxWidth: 480, mx: "auto", mt: 2, px: 1 }}>
       <Card
         elevation={3}
         sx={{
-          mb: 3,
+          mb: 1.5,
           borderRadius: 4,
           boxShadow: "0 4px 24px rgba(39,48,66,0.08)",
         }}
       >
-        <CardContent>
+        <CardContent sx={{ py: 1.5, px: 2 }}>
           <Stack
             direction="row"
             alignItems="center"
@@ -59,8 +59,8 @@ export function CompletedEventsScreen() {
         </CardContent>
       </Card>
 
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 3 }}>
-        <Box sx={{ width: "100%", mb: 1 }}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mb: 1.5 }}>
+        <Box sx={{ width: "100%", mb: 0.5 }}>
           <DateRangeFilter
             onFilter={(from, to) => {
               setFromDate(from);
@@ -68,12 +68,13 @@ export function CompletedEventsScreen() {
             }}
           />
         </Box>
-        <Box sx={{ width: "100%" }}>
+        <Box sx={{ width: "100%", mt: 0 }}>
           <SearchFilter
             value={search}
             onChange={setSearch}
             placeholder="Search completed events..."
             className="modern-search"
+            sx={{ mb: 0 }}
           />
         </Box>
       </Box>

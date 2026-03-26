@@ -20,18 +20,18 @@ const DateRangeFilter: React.FC<DateRangeFilterProps> = ({ onFilter }) => {
 
   return (
     <Paper
-      elevation={3}
+      elevation={1}
       sx={{
-        p: 2,
-        borderRadius: 3,
-        mb: 2,
+        p: 1,
+        borderRadius: 2,
+        mb: 0.5,
         background: "#fff",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+        boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
         minHeight: 0,
       }}
     >
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Stack direction="row" spacing={1.5} alignItems="center">
+        <Stack direction="row" spacing={0.7} alignItems="center">
           <DatePicker
             label="From"
             value={from}
@@ -48,10 +48,10 @@ const DateRangeFilter: React.FC<DateRangeFilterProps> = ({ onFilter }) => {
             <IconButton
               color="primary"
               onClick={handleFilter}
-              sx={{ height: 48, width: 48 }}
+              sx={{ height: 36, width: 36 }}
               aria-label="Filter"
             >
-              <SlidersHorizontal size={22} />
+              <SlidersHorizontal size={18} />
             </IconButton>
           </Tooltip>
         </Stack>

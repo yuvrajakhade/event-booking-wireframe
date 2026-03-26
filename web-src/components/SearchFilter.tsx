@@ -3,11 +3,14 @@ import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import { Search } from "lucide-react";
 
+import { SxProps } from "@mui/material";
+
 interface SearchFilterProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
+  sx?: SxProps;
 }
 
 const SearchFilter: React.FC<SearchFilterProps> = ({
@@ -15,6 +18,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
   onChange,
   placeholder,
   className,
+  sx,
 }) => {
   return (
     <TextField
@@ -25,11 +29,11 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder || "Search..."}
       className={className}
-      sx={{ mb: 2 }}
+      sx={{ mb: 0.5, mt: 0, py: 0, ...((sx as object) || {}) }}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
-            <Search size={20} />
+            <Search size={18} />
           </InputAdornment>
         ),
         endAdornment: value ? (
