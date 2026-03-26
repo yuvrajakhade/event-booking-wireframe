@@ -3,6 +3,21 @@ import { RoomsDropdown } from "../components/RoomsDropdown";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { mockEnquiries, mockEvents } from "../../src/data/mock";
 import { CalendarDays, Save, X } from "lucide-react";
+import PersonIcon from "@mui/icons-material/Person";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  TextField,
+  Typography,
+  MenuItem,
+  ToggleButton,
+  ToggleButtonGroup,
+  Stack,
+  Grid,
+} from "@mui/material";
 
 export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
   const navigate = useNavigate();
@@ -46,172 +61,190 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
   }
 
   return (
-    <section className="event-form-section">
-      <form className="event-form" onSubmit={handleSubmit} autoComplete="off">
-        {/* Basic Information Section */}
-        <div className="form-card">
-          <div className="form-card-header">
-            <span className="form-card-icon" style={{ background: "#7266F0" }}>
-              <svg width="24" height="24" fill="white">
-                <rect width="24" height="24" rx="6" />
-              </svg>
-            </span>
-            <span className="form-card-title">Basic Information</span>
-          </div>
-          <div className="form-group">
-            <label>Title *</label>
-            <input
-              type="text"
-              placeholder="Event title"
-              value={formData.title}
-              onChange={(e) => updateField("title", e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Customer *</label>
-            <input
-              type="text"
-              placeholder="Customer name"
-              value={formData.customer}
-              onChange={(e) => updateField("customer", e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Phone</label>
-            <input
-              type="tel"
-              placeholder="+91..."
-              value={formData.phone}
-              onChange={(e) => updateField("phone", e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label>Alternative Number</label>
-            <input
-              type="tel"
-              placeholder="+91..."
-              value={formData.altPhone}
-              onChange={(e) => updateField("altPhone", e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label>Event Type *</label>
-            <select
-              value={formData.eventType}
-              onChange={(e) => updateField("eventType", e.target.value)}
-              required
-            >
-              <option value="">Select event type...</option>
-              <option value="Wedding">Wedding</option>
-              <option value="Conference">Conference</option>
-              <option value="Birthday">Birthday</option>
-              <option value="Corporate">Corporate</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label>Venue *</label>
-            <select
-              value={formData.venue}
-              onChange={(e) => updateField("venue", e.target.value)}
-              required
-            >
-              <option value="">Select venue...</option>
-              <option value="Hall A">Hall A</option>
-              <option value="Lawn 1">Lawn 1</option>
-              <option value="Convention Center B">Convention Center B</option>
-              <option value="Banquet Hall">Banquet Hall</option>
-              <option value="Open Ground">Open Ground</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <RoomsDropdown
-              selectedRooms={formData.rooms}
-              onChange={(rooms) => updateField("rooms", rooms)}
-            />
-          </div>
-          <div className="form-group row-between">
-            <label style={{ flex: 1 }}>Event Source *</label>
-            <div className="event-source-toggle">
-              <button
-                type="button"
-                className={formData.eventSource === "Enquiry" ? "active" : ""}
-                onClick={() => updateField("eventSource", "Enquiry")}
+    <Box sx={{ maxWidth: 600, mx: "auto", my: 4 }}>
+      <form onSubmit={handleSubmit} autoComplete="off">
+        <Card sx={{ mb: 3 }}>
+          <CardHeader
+            avatar={
+              <Box
+                sx={{
+                  background: "#7266F0",
+                  borderRadius: 2,
+                  p: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
-                Enquiry
-              </button>
-              <button
-                type="button"
-                className={formData.eventSource === "Booking" ? "active" : ""}
-                onClick={() => updateField("eventSource", "Booking")}
+                <PersonIcon sx={{ color: "white" }} />
+              </Box>
+            }
+            title={<Typography variant="h6">Basic Information</Typography>}
+          />
+          <CardContent>
+            <Stack spacing={2}>
+              <TextField
+                label="Title *"
+                placeholder="Event title"
+                value={formData.title}
+                onChange={(e) => updateField("title", e.target.value)}
+                required
+                fullWidth
+              />
+              <TextField
+                label="Customer *"
+                placeholder="Customer name"
+                value={formData.customer}
+                onChange={(e) => updateField("customer", e.target.value)}
+                required
+                fullWidth
+              />
+              <TextField
+                label="Phone"
+                placeholder="+91..."
+                value={formData.phone}
+                onChange={(e) => updateField("phone", e.target.value)}
+                fullWidth
+              />
+              <TextField
+                label="Alternative Number"
+                placeholder="+91..."
+                value={formData.altPhone}
+                onChange={(e) => updateField("altPhone", e.target.value)}
+                fullWidth
+              />
+              <TextField
+                select
+                label="Event Type *"
+                value={formData.eventType}
+                onChange={(e) => updateField("eventType", e.target.value)}
+                required
+                fullWidth
               >
-                Booking
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Event Schedule Section */}
-        <div className="form-card">
-          <div className="form-card-header">
-            <span className="form-card-icon" style={{ background: "#1CC8C8" }}>
-              <CalendarDays size={24} color="#fff" />
-            </span>
-            <span className="form-card-title">Event Schedule</span>
-          </div>
-          <div className="form-group">
-            <label>Start Date (YYYY-MM-DD)</label>
-            <input
-              type="date"
-              value={formData.startDate}
-              onChange={(e) => updateField("startDate", e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Start Time (HH:MM)</label>
-            <input
-              type="time"
-              value={formData.startTime}
-              onChange={(e) => updateField("startTime", e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>End Date (YYYY-MM-DD)</label>
-            <input
-              type="date"
-              value={formData.endDate}
-              onChange={(e) => updateField("endDate", e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>End Time (HH:MM)</label>
-            <input
-              type="time"
-              value={formData.endTime}
-              onChange={(e) => updateField("endTime", e.target.value)}
-              required
-            />
-          </div>
-        </div>
-
-        <div className="event-form-actions">
-          <button
-            type="button"
-            className="btn-cancel"
+                <MenuItem value="">Select event type...</MenuItem>
+                <MenuItem value="Wedding">Wedding</MenuItem>
+                <MenuItem value="Conference">Conference</MenuItem>
+                <MenuItem value="Birthday">Birthday</MenuItem>
+                <MenuItem value="Corporate">Corporate</MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </TextField>
+              <TextField
+                select
+                label="Venue *"
+                value={formData.venue}
+                onChange={(e) => updateField("venue", e.target.value)}
+                required
+                fullWidth
+              >
+                <MenuItem value="">Select venue...</MenuItem>
+                <MenuItem value="Hall A">Hall A</MenuItem>
+                <MenuItem value="Lawn 1">Lawn 1</MenuItem>
+                <MenuItem value="Convention Center B">
+                  Convention Center B
+                </MenuItem>
+                <MenuItem value="Banquet Hall">Banquet Hall</MenuItem>
+                <MenuItem value="Open Ground">Open Ground</MenuItem>
+              </TextField>
+              <RoomsDropdown
+                selectedRooms={formData.rooms}
+                onChange={(rooms) => updateField("rooms", rooms)}
+              />
+              <Box>
+                <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                  Event Source *
+                </Typography>
+                <ToggleButtonGroup
+                  value={formData.eventSource}
+                  exclusive
+                  onChange={(_e, value) =>
+                    value && updateField("eventSource", value)
+                  }
+                  aria-label="event source"
+                >
+                  <ToggleButton value="Enquiry">Enquiry</ToggleButton>
+                  <ToggleButton value="Booking">Booking</ToggleButton>
+                </ToggleButtonGroup>
+              </Box>
+            </Stack>
+          </CardContent>
+        </Card>
+        <Card sx={{ mb: 3 }}>
+          <CardHeader
+            avatar={
+              <Box sx={{ background: "#1CC8C8", borderRadius: 2, p: 1 }}>
+                <CalendarDays size={24} color="#fff" />
+              </Box>
+            }
+            title={<Typography variant="h6">Event Schedule</Typography>}
+          />
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField
+                  label="Start Date"
+                  type="date"
+                  value={formData.startDate}
+                  onChange={(e) => updateField("startDate", e.target.value)}
+                  InputLabelProps={{ shrink: true }}
+                  required
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  label="Start Time"
+                  type="time"
+                  value={formData.startTime}
+                  onChange={(e) => updateField("startTime", e.target.value)}
+                  InputLabelProps={{ shrink: true }}
+                  required
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  label="End Date"
+                  type="date"
+                  value={formData.endDate}
+                  onChange={(e) => updateField("endDate", e.target.value)}
+                  InputLabelProps={{ shrink: true }}
+                  required
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  label="End Time"
+                  type="time"
+                  value={formData.endTime}
+                  onChange={(e) => updateField("endTime", e.target.value)}
+                  InputLabelProps={{ shrink: true }}
+                  required
+                  fullWidth
+                />
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+        <Stack direction="row" spacing={2} justifyContent="flex-end">
+          <Button
+            variant="outlined"
+            color="secondary"
+            startIcon={<X size={16} />}
             onClick={() => navigate(-1)}
           >
-            <X size={16} /> Cancel
-          </button>
-          <button type="submit" className="btn-create">
-            <Save size={16} /> {mode === "edit" ? "Update" : "Create"}
-          </button>
-        </div>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            startIcon={<Save size={16} />}
+          >
+            {mode === "edit" ? "Update" : "Create"}
+          </Button>
+        </Stack>
       </form>
-    </section>
+    </Box>
   );
 }

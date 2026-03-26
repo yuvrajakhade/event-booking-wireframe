@@ -1,4 +1,6 @@
 import React from "react";
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import theme from "./theme";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { MuhurtProvider } from "./MuhurtContext";
 import { AppLayout } from "./layouts/AppLayout";
@@ -37,43 +39,57 @@ export default function App() {
   }, []);
 
   if (!authenticated) {
-    return <LoginScreen onLogin={onLogin} />;
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <LoginScreen onLogin={onLogin} />
+      </ThemeProvider>
+    );
   }
 
   return (
-    <MuhurtProvider>
-      <InstallPrompt />
-      <AppLayout>
-        <Routes>
-          <Route path="/" element={<Navigate to="/events" replace />} />
-          <Route path="/events" element={<BookedEventsScreen />} />
-          <Route path="/events/new" element={<EventFormScreen mode="add" />} />
-          <Route
-            path="/events/:eventId/edit"
-            element={<EventFormScreen mode="edit" />}
-          />
-          <Route path="/events/:eventId/check-in" element={<CheckInScreen />} />
-          <Route
-            path="/events/:eventId/check-out"
-            element={<CheckOutScreen />}
-          />
-          <Route path="/events/:eventId" element={<EventDetailsScreen />} />
-          <Route path="/enquiries" element={<EnquiryListScreen />} />
-          <Route path="/completed" element={<CompletedEventsScreen />} />
-          <Route path="/inventory" element={<InventoryOverviewScreen />} />
-          <Route
-            path="/inventory/missing/:eventId"
-            element={<MissingInventoryScreen />}
-          />
-          <Route path="/muhurt" element={<MuhurtScreen />} />
-          <Route path="/notifications" element={<NotificationsScreen />} />
-          <Route
-            path="/profile"
-            element={<ProfileScreen onLogout={onLogout} />}
-          />
-          <Route path="*" element={<Navigate to="/events" replace />} />
-        </Routes>
-      </AppLayout>
-    </MuhurtProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <MuhurtProvider>
+        <InstallPrompt />
+        <AppLayout>
+          <Routes>
+            <Route path="/" element={<Navigate to="/events" replace />} />
+            <Route path="/events" element={<BookedEventsScreen />} />
+            <Route
+              path="/events/new"
+              element={<EventFormScreen mode="add" />}
+            />
+            <Route
+              path="/events/:eventId/edit"
+              element={<EventFormScreen mode="edit" />}
+            />
+            <Route
+              path="/events/:eventId/check-in"
+              element={<CheckInScreen />}
+            />
+            <Route
+              path="/events/:eventId/check-out"
+              element={<CheckOutScreen />}
+            />
+            <Route path="/events/:eventId" element={<EventDetailsScreen />} />
+            <Route path="/enquiries" element={<EnquiryListScreen />} />
+            <Route path="/completed" element={<CompletedEventsScreen />} />
+            <Route path="/inventory" element={<InventoryOverviewScreen />} />
+            <Route
+              path="/inventory/missing/:eventId"
+              element={<MissingInventoryScreen />}
+            />
+            <Route path="/muhurt" element={<MuhurtScreen />} />
+            <Route path="/notifications" element={<NotificationsScreen />} />
+            <Route
+              path="/profile"
+              element={<ProfileScreen onLogout={onLogout} />}
+            />
+            <Route path="*" element={<Navigate to="/events" replace />} />
+          </Routes>
+        </AppLayout>
+      </MuhurtProvider>
+    </ThemeProvider>
   );
 }
