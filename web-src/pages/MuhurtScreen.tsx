@@ -1,106 +1,311 @@
 import React from "react";
 import { useMuhurt } from "../MuhurtContext";
 import { CalendarDays, Plus, Trash2 } from "lucide-react";
-import TextField from "@mui/material/TextField";
-import "../styles/modules/_material-muhurt.css";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Fab,
+  IconButton,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 export function MuhurtScreen() {
   const { muhurtDates, todayMuhurtDates, addMuhurtDate, removeMuhurtDate } =
     useMuhurt();
-  const [date, setDate] = React.useState("");
-  const [description, setDescription] = React.useState("");
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [draftDate, setDraftDate] = React.useState("");
+  const [draftDescription, setDraftDescription] = React.useState("");
 
-  const onSubmit = (event: React.FormEvent) => {
+  const isDuplicateDate = React.useMemo(
+    () =>
+      Boolean(draftDate && muhurtDates.some((item) => item.date === draftDate)),
+    [draftDate, muhurtDates],
+  );
+
+  const resetDraft = () => {
+    setDraftDate("");
+    setDraftDescription("");
+  };
+
+  const handleOpenDialog = () => setIsDialogOpen(true);
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+    resetDraft();
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!date || !description.trim()) return;
-    addMuhurtDate({ date, description: description.trim() });
-    setDate("");
-    setDescription("");
+    if (!draftDate || !draftDescription.trim() || isDuplicateDate) {
+      return;
+    }
+
+    addMuhurtDate({
+      date: draftDate,
+      description: draftDescription.trim(),
+    });
+    handleCloseDialog();
   };
 
   return (
-    <section className="material-stack">
-      {todayMuhurtDates.length > 0 && (
-        <div className="material-card material-attention">
-          <h3 className="material-title">Today's Muhurt</h3>
-          <p className="material-desc">
-            {todayMuhurtDates.map((item) => item.description).join(", ")}
-          </p>
-        </div>
-      )}
-      <form className="material-card material-form" onSubmit={onSubmit}>
-        <h3 className="material-title">Add New Muhurt Date</h3>
-        <div className="material-form-group">
-          <label className="material-label" htmlFor="muhurt-date">
-            Date (DD-MM-YYYY)
-          </label>
-          <TextField
-            id="muhurt-date"
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            required
-            size="small"
-            fullWidth
-            InputLabelProps={{ shrink: true }}
-            className="material-input"
-          />
-        </div>
-        <div className="material-form-group">
-          <label className="material-label" htmlFor="muhurt-desc">
-            Description
-          </label>
-          <TextField
-            id="muhurt-desc"
-            className="material-input"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Example: Akshaya Tritiya"
-            required
-            multiline
-            minRows={2}
-            maxRows={4}
-            fullWidth
-          />
-        </div>
-        <button type="submit" className="material-btn material-btn-primary">
-          <Plus size={18} />
-          Add Muhurt Date
-        </button>
-      </form>
-      <h2 className="material-list-heading">
-        Saved Muhurt Dates ({muhurtDates.length})
-      </h2>
-      <div className="material-stack">
-        {muhurtDates.length === 0 ? (
-          <div className="material-card material-empty">
-            No Muhurt dates added yet.
-          </div>
-        ) : (
-          muhurtDates.map((item) => (
-            <article
-              className="material-card material-row saved-date-row"
-              key={item.id}
+    <Box sx={{ maxWidth: 480, mx: "auto", mt: 2, px: 1, position: "relative" }}>
+      <Card
+        elevation={3}
+        sx={{
+          mb: 1.5,
+          borderRadius: 4,
+          boxShadow: "0 4px 24px rgba(39,48,66,0.08)",
+        }}
+      >
+        <CardContent sx={{ py: 1.5, px: 2 }}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Typography
+              variant="h5"
+              fontWeight={800}
+              color="primary"
+              sx={{ letterSpacing: 0.5 }}
             >
-              <div className="material-tile-icon">
-                <CalendarDays size={20} />
-              </div>
-              <div className="material-saved-date-copy">
-                <h3 className="material-date">{item.date}</h3>
-                <small className="material-desc">{item.description}</small>
-              </div>
-              <button
-                type="button"
-                className="material-icon-btn material-danger"
-                onClick={() => removeMuhurtDate(item.id)}
-                aria-label="Delete Muhurt date"
+              Muhurt Dates
+            </Typography>
+            <Chip
+              icon={<CalendarDays size={18} />}
+              color="primary"
+              label={`${muhurtDates.length} Saved`}
+              sx={{
+                fontWeight: 700,
+                fontSize: "1rem",
+                px: 1.5,
+                borderRadius: 2,
+              }}
+            />
+          </Stack>
+        </CardContent>
+      </Card>
+
+      {todayMuhurtDates.length > 0 && (
+        <Card
+          elevation={3}
+          sx={{
+            mb: 1.5,
+            borderRadius: 4,
+            boxShadow: "0 4px 24px rgba(39,48,66,0.08)",
+            background:
+              "linear-gradient(135deg, rgba(114,102,240,0.12), rgba(28,200,200,0.14))",
+          }}
+        >
+          <CardContent sx={{ py: 1.5, px: 2 }}>
+            <Typography variant="subtitle1" fontWeight={800} color="primary">
+              Today's Muhurt
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              {todayMuhurtDates.map((item) => item.description).join(", ")}
+            </Typography>
+          </CardContent>
+        </Card>
+      )}
+
+      {muhurtDates.length === 0 ? (
+        <Card
+          elevation={1}
+          sx={{
+            mb: 1.5,
+            borderRadius: 4,
+            boxShadow: "0 4px 24px rgba(39,48,66,0.08)",
+          }}
+        >
+          <CardContent sx={{ py: 1.5, px: 2 }}>
+            <Stack spacing={0.75} alignItems="center" textAlign="center">
+              <Box
+                sx={{
+                  width: 42,
+                  height: 42,
+                  borderRadius: 2,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  bgcolor: "primary.main",
+                  color: "white",
+                }}
               >
-                <Trash2 size={20} />
-              </button>
-            </article>
-          ))
-        )}
-      </div>
-    </section>
+                <CalendarDays size={20} />
+              </Box>
+              <Typography variant="subtitle1" fontWeight={800}>
+                No Muhurt dates yet
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Tap the + button to add your first Muhurt date.
+              </Typography>
+            </Stack>
+          </CardContent>
+        </Card>
+      ) : (
+        <Stack spacing={1.5} sx={{ mb: 2 }}>
+          {muhurtDates.map((item) => (
+            <Card
+              key={item.id}
+              elevation={1}
+              sx={{ borderRadius: 4, overflow: "hidden" }}
+            >
+              <CardContent
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 2,
+                  py: 1.5,
+                  px: 2,
+                }}
+              >
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                  <Box
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 2,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      bgcolor: "primary.main",
+                      color: "white",
+                    }}
+                  >
+                    <CalendarDays size={20} />
+                  </Box>
+                  <Box>
+                    <Typography variant="subtitle1" fontWeight={800}>
+                      {item.date}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {item.description}
+                    </Typography>
+                  </Box>
+                </Box>
+                <IconButton
+                  aria-label={`Delete muhurt date ${item.date}`}
+                  color="error"
+                  onClick={() => removeMuhurtDate(item.id)}
+                >
+                  <Trash2 size={18} />
+                </IconButton>
+              </CardContent>
+            </Card>
+          ))}
+        </Stack>
+      )}
+
+      <Fab
+        color="primary"
+        aria-label="add muhurt"
+        sx={{ position: "fixed", bottom: 150, right: 24, zIndex: 1000 }}
+        onClick={handleOpenDialog}
+      >
+        <Plus />
+      </Fab>
+
+      <Dialog
+        open={isDialogOpen}
+        onClose={handleCloseDialog}
+        fullWidth
+        maxWidth="sm"
+        PaperProps={{
+          sx: {
+            borderRadius: 4,
+            boxShadow: "0 12px 32px rgba(39,48,66,0.14)",
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            px: 2,
+            pt: 1.75,
+            pb: 1,
+          }}
+        >
+          <Stack spacing={0.75}>
+            <Typography variant="h6" fontWeight={800} sx={{ lineHeight: 1.2 }}>
+              Add Muhurt Date
+            </Typography>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ mt: 0.25 }}
+            >
+              Add a date and a short description to save it.
+            </Typography>
+          </Stack>
+        </DialogTitle>
+        <form onSubmit={handleSubmit}>
+          <DialogContent sx={{ px: 2, pt: 1.5, pb: 1.5 }}>
+            <Stack spacing={1.5}>
+              <TextField
+                label="Date"
+                type="date"
+                value={draftDate}
+                onChange={(event) => setDraftDate(event.target.value)}
+                required
+                fullWidth
+                error={isDuplicateDate}
+                helperText={
+                  isDuplicateDate ? "This Muhurt date already exists." : " "
+                }
+                InputLabelProps={{ shrink: true }}
+                sx={{ mt: 0.5 }}
+              />
+              <TextField
+                label="Description"
+                value={draftDescription}
+                onChange={(event) => setDraftDescription(event.target.value)}
+                placeholder="Example: Akshaya Tritiya"
+                required
+                fullWidth
+                multiline
+                minRows={2}
+                maxRows={4}
+              />
+            </Stack>
+          </DialogContent>
+          <DialogActions
+            sx={{
+              px: 2,
+              pb: 2,
+              pt: 0.5,
+              justifyContent: "flex-end",
+              gap: 1,
+            }}
+          >
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={handleCloseDialog}
+              sx={{ px: 2.25, py: 0.8, borderRadius: 2, fontWeight: 700 }}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={isDuplicateDate}
+              sx={{ px: 2.25, py: 0.8, borderRadius: 2, fontWeight: 700 }}
+            >
+              Add Muhurt
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+    </Box>
   );
 }
