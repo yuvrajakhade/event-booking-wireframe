@@ -96,7 +96,7 @@ export const mockRecords: RecordItem[] = [
     altPhone: "+91-98111-22339",
     venue: "Phase 1",
     rooms: ["Phase 1-101", "Phase 1-102"],
-    eventDate: "2026-05-26",
+    eventDate: "2026-06-09",
     eventTime: "10:00",
     eventType: "Corporate",
     eventSource: "Booking",
