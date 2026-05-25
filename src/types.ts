@@ -23,6 +23,7 @@ export type RecordItem = {
   eventType?: string;
   eventSource: RecordSource;
   inventory?: InventoryItem[];
+  completed?: boolean;
 };
 
 export type RootStackParamList = {

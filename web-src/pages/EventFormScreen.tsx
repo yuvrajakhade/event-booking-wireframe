@@ -1,7 +1,12 @@
 import React from "react";
 // import { RoomsDropdown } from "../components/RoomsDropdown";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { mockRecords } from "../../src/data/mock";
+import {
+  getDefaultInventory,
+  mockRecords,
+  saveMockRecord,
+} from "../../src/data/mock";
+import { addStoredNotification } from "../../src/data/notificationLog";
 import type { RecordItem } from "../../src/types";
 import { CalendarDays, Save, X } from "lucide-react";
 import PersonIcon from "@mui/icons-material/Person";
@@ -103,8 +108,56 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
       return;
     }
 
-    // TODO: Save logic here
-    alert("Event " + (mode === "edit" ? "updated" : "created") + "! (Demo)");
+    if (mode === "edit" && !existingEvent) {
+      navigate(-1);
+      return;
+    }
+
+    const inventory = existingEvent?.inventory?.length
+      ? existingEvent.inventory
+      : sourceRecord?.inventory?.length
+        ? sourceRecord.inventory
+        : getDefaultInventory();
+    const targetId = existingEvent?.id ?? enquiry?.id;
+    const isConvertingEnquiry = Boolean(enquiry && !existingEvent);
+    const isCreatingNewEvent = !existingEvent && !enquiry;
+
+    const savedRecord = saveMockRecord(
+      {
+        title: formData.title,
+        customerName: formData.customer,
+        phone: formData.phone,
+        altPhone: formData.altPhone,
+        venue: formData.venue,
+        rooms: formData.rooms,
+        eventDate: formData.eventDate,
+        eventTime: formData.eventTime,
+        eventType: formData.eventType,
+        eventSource: formData.eventSource as RecordItem["eventSource"],
+        inventory,
+      },
+      targetId,
+    );
+
+    if (isCreatingNewEvent) {
+      addStoredNotification(
+        "created",
+        savedRecord.customerName ?? savedRecord.title,
+        savedRecord.eventDate,
+      );
+    } else if (isConvertingEnquiry) {
+      addStoredNotification(
+        "converted",
+        savedRecord.customerName ?? savedRecord.title,
+        savedRecord.eventDate,
+      );
+    }
+
+    if (isConvertingEnquiry) {
+      navigate(`/enquiries?refresh=${Date.now()}`, { replace: true });
+      return;
+    }
+
     navigate(-1);
   }
 

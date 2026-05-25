@@ -8,8 +8,10 @@ import { EventCard, DateRangeFilter } from "../components";
 import { CheckCircle2 } from "lucide-react";
 import { Card, CardContent, Typography, Stack, Box, Chip } from "@mui/material";
 import SearchFilter from "../components/SearchFilter";
+import { useNavigate } from "react-router-dom";
 
 export function CompletedEventsScreen() {
+  const navigate = useNavigate();
   const [fromDate, setFromDate] = React.useState<Date | null>(null);
   const [toDate, setToDate] = React.useState<Date | null>(null);
   const [search, setSearch] = React.useState("");
@@ -97,7 +99,12 @@ export function CompletedEventsScreen() {
       ) : (
         <Stack spacing={2}>
           {completedEvents.map((event) => (
-            <EventCard key={event.id} event={event} mode="completed" />
+            <EventCard
+              key={event.id}
+              event={event}
+              mode="completed"
+              onClick={() => navigate(`/inventory/missing/${event.id}`)}
+            />
           ))}
         </Stack>
       )}

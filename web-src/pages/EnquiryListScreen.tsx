@@ -2,15 +2,33 @@ import React from "react";
 import { mockRecords, sortRecordsByDateTime } from "../../src/data/mock";
 import { EnquiryCard, DateRangeFilter } from "../components";
 import { Users } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { Card, CardContent, Typography, Stack, Box, Chip } from "@mui/material";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Alert,
+  Box,
+  Card,
+  CardContent,
+  Chip,
+  Snackbar,
+  Stack,
+  Typography,
+} from "@mui/material";
 import SearchFilter from "../components/SearchFilter";
 
 export function EnquiryListScreen() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [fromDate, setFromDate] = React.useState<Date | null>(null);
   const [toDate, setToDate] = React.useState<Date | null>(null);
   const [search, setSearch] = React.useState("");
+  const [showConvertedToast, setShowConvertedToast] = React.useState(false);
+
+  React.useEffect(() => {
+    if (searchParams.get("refresh")) {
+      setShowConvertedToast(true);
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   const enquiries = sortRecordsByDateTime(
     mockRecords.filter((record) => {
@@ -120,6 +138,22 @@ export function EnquiryListScreen() {
           ))}
         </Stack>
       )}
+
+      <Snackbar
+        open={showConvertedToast}
+        autoHideDuration={2400}
+        onClose={() => setShowConvertedToast(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setShowConvertedToast(false)}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%", fontWeight: 700 }}
+        >
+          Converted successfully.
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

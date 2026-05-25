@@ -34,7 +34,7 @@ export function ProfileScreen({ onLogout }: ProfileScreenProps) {
             </Avatar>
             <Box>
               <Typography variant="h6" fontWeight={600}>
-                Event Manager
+                Yuvraj Akhade
               </Typography>
               <Chip
                 icon={<ShieldCheck size={18} style={{ marginLeft: 4 }} />}
@@ -53,11 +53,7 @@ export function ProfileScreen({ onLogout }: ProfileScreenProps) {
             </Stack>
             <Stack direction="row" alignItems="center" spacing={1}>
               <Phone size={18} />
-              <Typography variant="body1">+91 99999 99999</Typography>
-            </Stack>
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Building2 size={18} />
-              <Typography variant="body1">Event Operations</Typography>
+              <Typography variant="body1">+91 98765 43210</Typography>
             </Stack>
           </Stack>
           <Button

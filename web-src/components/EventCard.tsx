@@ -10,11 +10,13 @@ import {
   SquarePen,
   LogIn,
   LogOut,
+  ChevronRight,
 } from "lucide-react";
 
 type EventCardProps = {
   event: RecordItem;
   mode?: "booked" | "completed";
+  onClick?: () => void;
   onEdit?: () => void;
   onCheckIn?: () => void;
   onCheckOut?: () => void;
@@ -23,15 +25,49 @@ type EventCardProps = {
 export function EventCard({
   event,
   mode = "booked",
+  onClick,
   onEdit,
   onCheckIn,
   onCheckOut,
 }: EventCardProps) {
   const isCompleted = mode === "completed";
   const displayDate = event.eventDate ?? "";
+  const missingCount = (event.inventory ?? []).reduce(
+    (sum, item) => sum + Math.max(0, item.issuedQty - item.returnedQty),
+    0,
+  );
+  const hasMissing = missingCount > 0;
+  const [isHovered, setIsHovered] = React.useState(false);
+  const [isFocused, setIsFocused] = React.useState(false);
+  const isInventoryCard = isCompleted && Boolean(onClick);
 
   return (
-    <article className="card event-card">
+    <article
+      className="card event-card"
+      style={{
+        border: isInventoryCard
+          ? isHovered
+            ? "1px solid rgba(99, 102, 241, 0.3)"
+            : "1px solid rgba(99, 102, 241, 0.22)"
+          : undefined,
+        boxShadow: isInventoryCard
+          ? isHovered
+            ? "0 0 0 1px rgba(180, 35, 24, 0.08), 0 10px 24px rgba(29, 78, 216, 0.12)"
+            : "0 0 0 1px rgba(99, 102, 241, 0.08), 0 7px 20px rgba(39, 48, 66, 0.06)"
+          : undefined,
+        transition: "border-color 150ms ease, box-shadow 150ms ease",
+      }}
+    >
+      <style>{`
+        @keyframes badgePulse {
+          0%, 100% {
+            box-shadow: 0 1px 2px rgba(15, 122, 79, 0.12);
+          }
+          50% {
+            box-shadow: 0 4px 12px rgba(15, 122, 79, 0.18);
+          }
+        }
+      `}</style>
       <div className="event-top">
         <div className="tile-icon">
           <CalendarDays size={14} />
@@ -65,6 +101,82 @@ export function EventCard({
           {event.rooms.length} rooms
         </p>
       </div>
+
+      {isCompleted && onClick ? (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClick();
+          }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          style={{
+            marginTop: "0.9rem",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.55rem",
+            padding: "0.5rem 0.9rem",
+            borderRadius: "999px",
+            background: isHovered
+              ? "linear-gradient(135deg, rgba(219, 234, 254, 1), rgba(255, 231, 228, 1))"
+              : "linear-gradient(135deg, rgba(232, 240, 255, 1), rgba(255, 242, 242, 1))",
+            color: "#1d4ed8",
+            fontWeight: 900,
+            fontSize: "0.85rem",
+            letterSpacing: "0.02em",
+            border: "1px solid rgba(29, 78, 216, 0.2)",
+            boxShadow: isHovered
+              ? "0 3px 10px rgba(29, 78, 216, 0.14), 0 0 0 1px rgba(180, 35, 24, 0.08)"
+              : "0 1px 2px rgba(29, 78, 216, 0.08)",
+            transform: isHovered ? "translateY(-1px)" : "translateY(0)",
+            transition:
+              "transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease, border-color 150ms ease",
+            animation: isHovered
+              ? "badgePulse 700ms ease-in-out infinite"
+              : "none",
+            cursor: "pointer",
+            outline: isFocused ? "2px solid rgba(25, 118, 210, 0.28)" : "none",
+            outlineOffset: 2,
+          }}
+        >
+          <ChevronRight size={14} />
+          View inventory
+          {hasMissing ? (
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "0.25rem",
+                minWidth: "1.3rem",
+                height: "1.3rem",
+                padding: "0 0.45rem",
+                borderRadius: "999px",
+                background: "#b42318",
+                color: "#fff",
+                fontSize: "0.72rem",
+                fontWeight: 900,
+                lineHeight: 1,
+                boxShadow: "0 1px 3px rgba(180, 35, 24, 0.24)",
+              }}
+            >
+              <span
+                style={{
+                  width: "0.35rem",
+                  height: "0.35rem",
+                  borderRadius: "999px",
+                  background: "#fff",
+                  display: "inline-block",
+                }}
+              />
+              {missingCount}
+            </span>
+          ) : null}
+        </button>
+      ) : null}
 
       {!isCompleted && (
         <div className="event-actions">

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { mockRecords } from "../../src/data/mock";
+import { mockRecords, saveMockRecordUpdate } from "../../src/data/mock";
 import {
   ArrowLeft,
   BedSingle,
@@ -66,8 +66,12 @@ export function CheckInScreen() {
     [event.inventory],
   );
 
-  const [issuedCounts, setIssuedCounts] = React.useState<Record<string, number>>(
-    () => Object.fromEntries(inventoryRows.map((item) => [item.id, 0])),
+  const [issuedCounts, setIssuedCounts] = React.useState<
+    Record<string, number>
+  >(() =>
+    Object.fromEntries(
+      (event.inventory ?? []).map((item) => [item.id, item.issuedQty]),
+    ),
   );
 
   const decrease = (id: string) => {
@@ -79,11 +83,17 @@ export function CheckInScreen() {
   };
 
   const completeCheckIn = () => {
-    navigate(`/events/${event.id}/check-out`, {
-      state: {
-        issuedCounts,
-      },
+    const updatedInventory = (event.inventory ?? []).map((item) => ({
+      ...item,
+      issuedQty: issuedCounts[item.id] ?? item.issuedQty,
+    }));
+
+    saveMockRecordUpdate(event, {
+      inventory: updatedInventory,
+      completed: false,
     });
+
+    navigate("/events");
   };
 
   return (
@@ -104,7 +114,10 @@ export function CheckInScreen() {
         >
           <ArrowLeft size={18} />
         </button>
-        <h1 className="material-title" style={{ margin: 0, fontSize: "1.08rem" }}>
+        <h1
+          className="material-title"
+          style={{ margin: 0, fontSize: "1.08rem" }}
+        >
           Check-In
         </h1>
       </div>
@@ -118,10 +131,16 @@ export function CheckInScreen() {
           gap: "0.35rem",
         }}
       >
-        <h2 className="material-title" style={{ margin: 0, fontSize: "1.02rem", lineHeight: 1.4 }}>
+        <h2
+          className="material-title"
+          style={{ margin: 0, fontSize: "1.02rem", lineHeight: 1.4 }}
+        >
           {event.customerName ?? event.name}
         </h2>
-        <p className="material-desc" style={{ margin: 0, fontSize: "0.95rem", fontWeight: 600 }}>
+        <p
+          className="material-desc"
+          style={{ margin: 0, fontSize: "0.95rem", fontWeight: 600 }}
+        >
           {event.venue}
         </p>
       </article>
@@ -132,22 +151,21 @@ export function CheckInScreen() {
 
         return (
           <article
-            className="material-card material-row"
+            className="material-card"
             key={row.id}
             style={{
               padding: "0.9rem 1rem",
-              alignItems: "stretch",
               gap: "0.75rem",
+              boxSizing: "border-box",
             }}
           >
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
+                display: "grid",
+                gridTemplateColumns: "minmax(0, 1fr) auto",
                 gap: ".75rem",
+                alignItems: "center",
                 width: "100%",
-                flexWrap: "wrap",
               }}
             >
               <div
@@ -155,11 +173,12 @@ export function CheckInScreen() {
                   display: "flex",
                   alignItems: "center",
                   gap: ".75rem",
-                  flex: 1,
-                  minWidth: 180,
+                  minWidth: 0,
                 }}
               >
-                <span className="material-tile-icon">{iconForItem(row.label)}</span>
+                <span className="material-tile-icon">
+                  {iconForItem(row.label)}
+                </span>
                 <div style={{ minWidth: 0 }}>
                   <h3
                     className="material-title"
@@ -168,6 +187,7 @@ export function CheckInScreen() {
                       margin: 0,
                       lineHeight: 1.3,
                       wordBreak: "break-word",
+                      overflowWrap: "anywhere",
                     }}
                   >
                     {row.label}
@@ -179,6 +199,7 @@ export function CheckInScreen() {
                   display: "flex",
                   alignItems: "center",
                   gap: ".5rem",
+                  justifySelf: "end",
                   flexShrink: 0,
                 }}
               >
@@ -191,7 +212,13 @@ export function CheckInScreen() {
                 >
                   <Minus size={18} />
                 </button>
-                <strong style={{ minWidth: 28, textAlign: "center", fontSize: "1.05rem" }}>
+                <strong
+                  style={{
+                    minWidth: 28,
+                    textAlign: "center",
+                    fontSize: "1.15rem",
+                  }}
+                >
                   {issued}
                 </strong>
                 <button
@@ -205,19 +232,16 @@ export function CheckInScreen() {
                 </button>
               </div>
             </div>
-            {expected > 0 && (
-              <div
-                className="pill-group"
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: ".5rem",
-                  marginLeft: 44,
-                }}
-              >
-                <span className="expected-pill">Expected: {expected}</span>
-              </div>
-            )}
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: ".5rem",
+                marginLeft: 44,
+              }}
+            >
+              <span className="expected-pill">Expected: {expected}</span>
+            </div>
           </article>
         );
       })}
@@ -230,11 +254,13 @@ export function CheckInScreen() {
           width: "100%",
           maxWidth: 480,
           justifyContent: "center",
+          gap: "0.65rem",
+          fontWeight: 700,
         }}
         onClick={completeCheckIn}
       >
-        <Check size={18} />
-        Complete Check-In
+        <ArrowLeft size={18} />
+        Back to Booked Events
       </button>
     </section>
   );

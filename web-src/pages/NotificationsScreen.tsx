@@ -1,17 +1,18 @@
 import React from "react";
 import { mockRecords } from "../../src/data/mock";
+import { getStoredNotifications } from "../../src/data/notificationLog";
 import { RecordItem } from "../../src/types";
-import { BellOff } from "lucide-react";
+import { useMuhurt } from "../MuhurtContext";
 import {
-  Card,
-  CardContent,
-  Typography,
-  Chip,
-  Stack,
-  Alert,
-  Box,
-  Divider,
-} from "@mui/material";
+  AlertTriangle,
+  BellOff,
+  BellRing,
+  CalendarDays,
+  CheckCircle2,
+  RefreshCw,
+  Sparkles,
+} from "lucide-react";
+import { Box, Card, CardContent, Chip, Stack, Typography } from "@mui/material";
 
 function listMissing(record: RecordItem) {
   return (record.inventory ?? [])
@@ -22,7 +23,112 @@ function listMissing(record: RecordItem) {
     .filter(({ missing }) => missing > 0);
 }
 
+const actionMeta = {
+  created: {
+    title: "New event created",
+    icon: Sparkles,
+    accent: "#3b82f6",
+  },
+  converted: {
+    title: "Event converted",
+    icon: RefreshCw,
+    accent: "#10b981",
+  },
+  checkout: {
+    title: "Checkout completed",
+    icon: CheckCircle2,
+    accent: "#10b981",
+  },
+};
+
+const reminderMeta = {
+  muhurt: {
+    title: "Muhurt reminder",
+    icon: CalendarDays,
+    accent: "#f59e0b",
+  },
+  missing: {
+    title: "Inventory alert",
+    icon: AlertTriangle,
+    accent: "#ef4444",
+  },
+};
+
+function NoticeCard({
+  title,
+  description,
+  icon: Icon,
+  accent,
+}: {
+  title: string;
+  description: string;
+  icon: React.ComponentType<{ size?: number; color?: string }>;
+  accent: string;
+}) {
+  return (
+    <Card
+      elevation={0}
+      sx={{
+        borderRadius: 3,
+        border: `1px solid ${accent}22`,
+        background:
+          "linear-gradient(180deg, rgba(255,255,255,0.99), rgba(248,250,252,0.96))",
+        overflow: "hidden",
+        position: "relative",
+        boxShadow: "0 10px 22px rgba(39,48,66,0.08)",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          inset: 0,
+          left: 0,
+          width: 4,
+          background: `linear-gradient(180deg, ${accent}, ${accent}cc)`,
+        },
+      }}
+    >
+      <CardContent sx={{ px: 1.5, py: 1.4, pl: 2.1 }}>
+        <Stack direction="row" spacing={1.2} alignItems="flex-start">
+          <Box
+            sx={{
+              mt: 0.15,
+              width: 36,
+              height: 36,
+              borderRadius: 2,
+              display: "grid",
+              placeItems: "center",
+              background: `${accent}14`,
+              color: accent,
+              flexShrink: 0,
+            }}
+          >
+            <Icon size={18} />
+          </Box>
+          <Box sx={{ minWidth: 0, flex: 1 }}>
+            <Typography
+              variant="subtitle1"
+              fontWeight={800}
+              color="text.primary"
+              sx={{ fontSize: "0.98rem", lineHeight: 1.25 }}
+            >
+              {title}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ mt: 0.4, lineHeight: 1.5, fontSize: "0.92rem" }}
+            >
+              {description}
+            </Typography>
+          </Box>
+        </Stack>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function NotificationsScreen() {
+  const { todayMuhurtDates } = useMuhurt();
+
   const missing = mockRecords.flatMap((record) =>
     listMissing(record).map(({ item, missing: qty }) => ({
       id: `${record.id}-${item.id}`,
@@ -32,31 +138,76 @@ export function NotificationsScreen() {
     })),
   );
 
-  const affectedEvents = new Set(missing.map((item) => item.event)).size;
-  const totalMissingUnits = missing.reduce((sum, item) => sum + item.qty, 0);
+  const activityNotifications = getStoredNotifications().map(
+    (notification) => ({
+      id: notification.id,
+      title: actionMeta[notification.action].title,
+      description: `${notification.eventName}${notification.eventDate ? ` • ${notification.eventDate}` : ""}`,
+      icon: actionMeta[notification.action].icon,
+      accent: actionMeta[notification.action].accent,
+    }),
+  );
+
+  const reminderNotifications = [
+    ...todayMuhurtDates.map((muhurt) => ({
+      id: `muhurt-${muhurt.id}`,
+      title: reminderMeta.muhurt.title,
+      description: `${muhurt.description} • ${muhurt.date}`,
+      icon: reminderMeta.muhurt.icon,
+      accent: reminderMeta.muhurt.accent,
+    })),
+    ...missing.map((notice) => ({
+      id: `missing-${notice.id}`,
+      title: reminderMeta.missing.title,
+      description: `${notice.event} • Missing ${notice.qty} × ${notice.item}`,
+      icon: reminderMeta.missing.icon,
+      accent: reminderMeta.missing.accent,
+    })),
+  ];
+
+  const totalAlerts =
+    activityNotifications.length + reminderNotifications.length;
 
   return (
-    <Box sx={{ maxWidth: 600, mx: "auto", mt: 4, px: 2 }}>
-      <Card elevation={3} sx={{ mb: 3, borderRadius: 3 }}>
-        <CardContent>
+    <Box sx={{ maxWidth: 640, mx: "auto", mt: 2, px: 1.25, pb: 3 }}>
+      <Card
+        elevation={3}
+        sx={{
+          mb: 2,
+          borderRadius: 4,
+          background:
+            "linear-gradient(135deg, rgba(59,130,246,0.12), rgba(20,184,166,0.08), rgba(255,255,255,0.98))",
+        }}
+      >
+        <CardContent sx={{ py: 1.6, px: 1.8 }}>
           <Stack
             direction="row"
             alignItems="center"
             justifyContent="space-between"
+            spacing={1}
           >
-            <Typography variant="h5" fontWeight={700} color="primary">
-              Notifications
-            </Typography>
+            <Box>
+              <Typography
+                variant="overline"
+                color="primary.main"
+                fontWeight={800}
+              >
+                Mobile alert centre
+              </Typography>
+              <Typography variant="h5" fontWeight={800} color="text.primary">
+                Notifications
+              </Typography>
+            </Box>
             <Chip
-              color="secondary"
-              label={`${affectedEvents} Events • ${totalMissingUnits} Missing`}
-              sx={{ fontWeight: 600 }}
+              color="primary"
+              label={`${totalAlerts} alerts`}
+              sx={{ fontWeight: 800, px: 1.2, borderRadius: 999 }}
             />
           </Stack>
         </CardContent>
       </Card>
 
-      {missing.length === 0 ? (
+      {totalAlerts === 0 ? (
         <Card elevation={1} sx={{ p: 3, textAlign: "center", borderRadius: 3 }}>
           <CardContent>
             <BellOff size={48} style={{ color: "#bdbdbd", marginBottom: 8 }} />
@@ -64,33 +215,113 @@ export function NotificationsScreen() {
               No notifications for today
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              You will see Muhurt reminders here when a date matches today.
+              New events, checkouts, and Muhurt reminders will appear here.
             </Typography>
           </CardContent>
         </Card>
       ) : (
-        <Stack spacing={2}>
-          <Alert severity="warning" sx={{ fontWeight: 500 }}>
-            Active alerts: {missing.length} • Events: {affectedEvents} • Missing
-            units: {totalMissingUnits}
-          </Alert>
-          {missing.map((notice) => (
-            <Card key={notice.id} elevation={2} sx={{ borderRadius: 2 }}>
-              <CardContent>
-                <Typography
-                  variant="subtitle1"
-                  fontWeight={600}
-                  color="primary.dark"
-                >
-                  {notice.event}
-                </Typography>
-                <Divider sx={{ my: 1 }} />
-                <Typography variant="body1" color="error.main">
-                  Missing {notice.qty} × {notice.item}
-                </Typography>
-              </CardContent>
-            </Card>
-          ))}
+        <Stack spacing={2.2}>
+          <Box>
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={1}
+              sx={{ mb: 1 }}
+            >
+              <BellRing size={18} color="#3b82f6" />
+              <Typography
+                variant="subtitle1"
+                fontWeight={800}
+                color="primary.main"
+              >
+                Activity
+              </Typography>
+              <Chip
+                size="small"
+                label={`${activityNotifications.length}`}
+                sx={{ fontWeight: 700, borderRadius: 999 }}
+              />
+            </Stack>
+            {activityNotifications.length === 0 ? (
+              <Card
+                elevation={0}
+                sx={{
+                  borderRadius: 3,
+                  border: "1px dashed rgba(59,130,246,0.24)",
+                  background: "rgba(59,130,246,0.03)",
+                }}
+              >
+                <CardContent sx={{ py: 1.4, px: 1.5 }}>
+                  <Typography variant="body2" color="text.secondary">
+                    No activity alerts yet.
+                  </Typography>
+                </CardContent>
+              </Card>
+            ) : (
+              <Stack spacing={1}>
+                {activityNotifications.map((notice) => (
+                  <NoticeCard
+                    key={notice.id}
+                    title={notice.title}
+                    description={notice.description}
+                    icon={notice.icon}
+                    accent={notice.accent}
+                  />
+                ))}
+              </Stack>
+            )}
+          </Box>
+
+          <Box>
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={1}
+              sx={{ mb: 1 }}
+            >
+              <CalendarDays size={18} color="#f59e0b" />
+              <Typography
+                variant="subtitle1"
+                fontWeight={800}
+                color="warning.main"
+              >
+                Reminders
+              </Typography>
+              <Chip
+                size="small"
+                label={`${reminderNotifications.length}`}
+                sx={{ fontWeight: 700, borderRadius: 999 }}
+              />
+            </Stack>
+            {reminderNotifications.length === 0 ? (
+              <Card
+                elevation={0}
+                sx={{
+                  borderRadius: 3,
+                  border: "1px dashed rgba(245,158,11,0.24)",
+                  background: "rgba(245,158,11,0.03)",
+                }}
+              >
+                <CardContent sx={{ py: 1.4, px: 1.5 }}>
+                  <Typography variant="body2" color="text.secondary">
+                    No reminders right now.
+                  </Typography>
+                </CardContent>
+              </Card>
+            ) : (
+              <Stack spacing={1}>
+                {reminderNotifications.map((notice) => (
+                  <NoticeCard
+                    key={notice.id}
+                    title={notice.title}
+                    description={notice.description}
+                    icon={notice.icon}
+                    accent={notice.accent}
+                  />
+                ))}
+              </Stack>
+            )}
+          </Box>
         </Stack>
       )}
     </Box>

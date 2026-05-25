@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { mockRecords } from "../../src/data/mock";
+import { mockRecords, saveMockRecordUpdate } from "../../src/data/mock";
+import { addStoredNotification } from "../../src/data/notificationLog";
 import {
   ArrowLeft,
   BedSingle,
@@ -87,7 +88,23 @@ export function CheckOutScreen() {
   };
 
   const completeCheckOut = () => {
-    alert("Check-Out completed!");
+    const updatedInventory = (event.inventory ?? []).map((item) => ({
+      ...item,
+      returnedQty: returnedCounts[item.id] ?? item.returnedQty ?? 0,
+    }));
+
+    saveMockRecordUpdate(event, {
+      inventory: updatedInventory,
+      completed: true,
+    });
+
+    addStoredNotification(
+      "checkout",
+      event.customerName ?? event.title,
+      event.eventDate,
+    );
+
+    navigate("/completed");
   };
 
   return (

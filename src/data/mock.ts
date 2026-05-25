@@ -1,6 +1,6 @@
 import type { RecordItem } from "../types";
 
-const fixedInventory = [
+export const getDefaultInventory = () => [
   {
     id: "bedsheet",
     name: "Bedsheet",
@@ -58,6 +58,8 @@ const fixedInventory = [
     returnedQty: 0,
   },
 ];
+
+const fixedInventory = getDefaultInventory();
 
 export const mockRecords: RecordItem[] = [
   {
@@ -188,6 +190,64 @@ export const mockRecords: RecordItem[] = [
   },
 ];
 
+export function createMockRecordId() {
+  return `evt_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
+type MockRecordDraft = Omit<RecordItem, "id">;
+
+function normalizeCompletedFlag(record: MockRecordDraft, existingId?: string) {
+  if (!existingId) {
+    return {
+      ...record,
+      completed: false,
+    };
+  }
+
+  const existingRecord = mockRecords.find((item) => item.id === existingId);
+
+  return {
+    ...record,
+    completed: record.completed ?? existingRecord?.completed === true,
+  };
+}
+
+export function saveMockRecord(record: MockRecordDraft, existingId?: string) {
+  const normalizedRecord = normalizeCompletedFlag(record, existingId);
+
+  const savedRecord: RecordItem = {
+    ...normalizedRecord,
+    id: existingId ?? createMockRecordId(),
+  };
+
+  if (existingId) {
+    const existingIndex = mockRecords.findIndex(
+      (item) => item.id === existingId,
+    );
+
+    if (existingIndex !== -1) {
+      mockRecords[existingIndex] = savedRecord;
+      return savedRecord;
+    }
+  }
+
+  mockRecords.push(savedRecord);
+  return savedRecord;
+}
+
+export function saveMockRecordUpdate(
+  existingRecord: RecordItem,
+  updates: Partial<RecordItem>,
+) {
+  return saveMockRecord(
+    {
+      ...existingRecord,
+      ...updates,
+    },
+    existingRecord.id,
+  );
+}
+
 export function getRecordDate(record: RecordItem) {
   return record.eventDate ?? "";
 }
@@ -211,6 +271,10 @@ function getRecordDateTimeValue(record: RecordItem) {
 }
 
 export function isRecordCompleted(record: RecordItem) {
+  if (record.completed === true) {
+    return true;
+  }
+
   const date = getRecordDate(record);
   return Boolean(date) && new Date(date) < new Date();
 }
