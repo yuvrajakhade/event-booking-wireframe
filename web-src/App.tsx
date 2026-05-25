@@ -16,7 +16,6 @@ import {
   MuhurtScreen,
   NotificationsScreen,
   ProfileScreen,
-  EventDetailsScreen,
   EventFormScreen,
   MissingInventoryScreen,
 } from "./pages";
@@ -72,7 +71,6 @@ export default function App() {
               path="/events/:eventId/check-out"
               element={<CheckOutScreen />}
             />
-            <Route path="/events/:eventId" element={<EventDetailsScreen />} />
             <Route path="/enquiries" element={<EnquiryListScreen />} />
             <Route path="/completed" element={<CompletedEventsScreen />} />
             <Route path="/inventory" element={<InventoryOverviewScreen />} />

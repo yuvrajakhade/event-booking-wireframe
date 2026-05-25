@@ -16,7 +16,6 @@ export function InventoryTable({
         <thead>
           <tr>
             <th>Item</th>
-            <th>Unit</th>
             <th>Planned</th>
             <th>Issued</th>
             <th>Returned</th>
@@ -30,7 +29,6 @@ export function InventoryTable({
             return (
               <tr key={item.id} className={missing > 0 ? "has-missing" : ""}>
                 <td>{item.name}</td>
-                <td>{item.unit}</td>
                 <td>{item.plannedQty}</td>
                 <td>{item.issuedQty}</td>
                 <td>{item.returnedQty}</td>

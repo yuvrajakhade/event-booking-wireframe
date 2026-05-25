@@ -1,7 +1,8 @@
 import React from "react";
 // import { RoomsDropdown } from "../components/RoomsDropdown";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { mockEnquiries, mockEvents } from "../../src/data/mock";
+import { mockRecords } from "../../src/data/mock";
+import type { RecordItem } from "../../src/types";
 import { CalendarDays, Save, X } from "lucide-react";
 import PersonIcon from "@mui/icons-material/Person";
 import {
@@ -16,7 +17,6 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Stack,
-  Grid,
   Checkbox,
   FormControl,
   InputLabel,
@@ -25,7 +25,14 @@ import {
   IconButton,
   Popover,
   Divider,
+  Chip,
 } from "@mui/material";
+import { Grid } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { PickersDay } from "@mui/x-date-pickers/PickersDay";
+import { useMuhurt } from "../MuhurtContext";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
@@ -34,29 +41,56 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
   const [searchParams] = useSearchParams();
   const enquiryId = searchParams.get("enquiryId");
 
-  const existingEvent =
+  const existingEvent:
+    | (RecordItem & {
+        altPhone?: string;
+        eventType?: string;
+        confirmed?: boolean;
+      })
+    | undefined =
     mode === "edit"
-      ? mockEvents.find((event) => event.id === eventId)
+      ? mockRecords.find(
+          (record) => record.id === eventId && record.eventSource === "Booking",
+        )
       : undefined;
   const enquiry = enquiryId
-    ? mockEnquiries.find((item) => item.id === enquiryId)
+    ? mockRecords.find(
+        (record) => record.id === enquiryId && record.eventSource === "Enquiry",
+      )
     : undefined;
+  const sourceRecord = existingEvent ?? enquiry;
   // New form state for all fields in the screenshot
   const [formData, setFormData] = React.useState({
-    title: existingEvent?.title || "",
-    customer: existingEvent?.customerName || "",
-    phone: existingEvent?.phone || "",
-    altPhone: existingEvent?.altPhone || "",
-    eventType: existingEvent?.eventType || "",
-    venue: existingEvent?.venue || "",
-    rooms: existingEvent?.rooms || [],
-    eventSource: existingEvent?.eventSource || "Enquiry",
-    confirmed: existingEvent?.confirmed || false,
-    startDate: existingEvent?.start?.slice(0, 10) || "",
-    startTime: existingEvent?.start?.slice(11, 16) || "",
-    endDate: existingEvent?.end?.slice(0, 10) || "",
-    endTime: existingEvent?.end?.slice(11, 16) || "",
+    title: sourceRecord?.title || "",
+    customer: sourceRecord?.customerName || "",
+    phone: sourceRecord?.phone || "",
+    altPhone: sourceRecord?.altPhone || "",
+    eventType: sourceRecord?.eventType || "",
+    venue: sourceRecord?.venue || "",
+    rooms: sourceRecord?.rooms || [],
+    eventSource:
+      existingEvent?.eventSource || (enquiry ? "Booking" : "Enquiry"),
+    confirmed: (sourceRecord as any)?.confirmed || false,
+    eventDate: sourceRecord?.eventDate || "",
+    eventTime: sourceRecord?.eventTime || "",
   });
+
+  React.useEffect(() => {
+    setFormData({
+      title: sourceRecord?.title || "",
+      customer: sourceRecord?.customerName || "",
+      phone: sourceRecord?.phone || "",
+      altPhone: sourceRecord?.altPhone || "",
+      eventType: sourceRecord?.eventType || "",
+      venue: sourceRecord?.venue || "",
+      rooms: sourceRecord?.rooms || [],
+      eventSource:
+        existingEvent?.eventSource || (enquiry ? "Booking" : "Enquiry"),
+      confirmed: (sourceRecord as any)?.confirmed || false,
+      eventDate: sourceRecord?.eventDate || "",
+      eventTime: sourceRecord?.eventTime || "",
+    });
+  }, [sourceRecord, existingEvent, enquiry]);
 
   function updateField(field: string, value: any) {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -64,6 +98,11 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    if (hasBookingConflict) {
+      return;
+    }
+
     // TODO: Save logic here
     alert("Event " + (mode === "edit" ? "updated" : "created") + "! (Demo)");
     navigate(-1);
@@ -135,15 +174,106 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
     null,
   );
 
+  const { muhurtDates } = useMuhurt();
+
+  // Helper function to format date to YYYY-MM-DD without timezone issues
+  const toLocalIsoDate = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  // Helper function to parse ISO date string to Date without timezone issues
+  const parseLocalIsoDate = (dateString: string): Date | null => {
+    if (!dateString) return null;
+    const [year, month, day] = dateString.split("-");
+    return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+  };
+
+  // Helper to check if a date is a muhurt date
+  const isMuhurtDate = (date: Date) => {
+    const iso = toLocalIsoDate(date);
+    return muhurtDates.some((d) => d.date === iso);
+  };
+
+  // Helper to get Muhurt info for a date
+  const getMuhurtInfo = (date: Date) => {
+    const iso = toLocalIsoDate(date);
+    return muhurtDates.find((d) => d.date === iso) || null;
+  };
+
+  const isFromEnquiry = Boolean(enquiry && !existingEvent);
+  const conflictingBooking = mockRecords.find(
+    (record) =>
+      record.eventSource === "Booking" &&
+      record.eventDate === formData.eventDate &&
+      record.id !== existingEvent?.id,
+  );
+  const hasBookingConflict =
+    Boolean(formData.eventDate) && Boolean(conflictingBooking);
+
+  const prefillFieldSx = isFromEnquiry
+    ? {
+        backgroundColor: "rgba(114,102,240,0.08)",
+        borderRadius: 2,
+        border: "1px solid rgba(114,102,240,0.6)",
+        boxShadow: "0 0 0 1px rgba(114,102,240,0.12)",
+      }
+    : undefined;
+  const scheduleAccentSx = isFromEnquiry
+    ? {
+        background:
+          "linear-gradient(180deg, rgba(114,102,240,0.09), rgba(255,255,255,1))",
+        borderRadius: 3,
+        border: "1px solid rgba(114,102,240,0.55)",
+        boxShadow: "0 0 0 1px rgba(114,102,240,0.1)",
+        p: 2,
+      }
+    : undefined;
+
+  const sectionLabelSx = {
+    display: "inline-flex",
+    alignItems: "center",
+    px: 1.25,
+    py: 0.55,
+    borderRadius: 999,
+    background: isFromEnquiry
+      ? "linear-gradient(135deg, rgba(114,102,240,0.16), rgba(28,200,200,0.22))"
+      : "rgba(39,48,66,0.06)",
+    border: isFromEnquiry
+      ? "1px solid rgba(114,102,240,0.45)"
+      : "1px solid transparent",
+  };
+
+  const sectionBodySx = {
+    mt: 1,
+  };
+
   return (
     <Box sx={{ maxWidth: 600, mx: "auto", my: 4 }}>
       <form onSubmit={handleSubmit} autoComplete="off">
-        <Card sx={{ mb: 3 }}>
+        <Card
+          sx={{
+            mb: 3,
+            border: isFromEnquiry
+              ? "1.5px solid rgba(28,200,200,0.85)"
+              : "1px solid transparent",
+            boxShadow: isFromEnquiry
+              ? "0 12px 32px rgba(28,200,200,0.16)"
+              : "0 4px 20px rgba(39,48,66,0.08)",
+            background: isFromEnquiry
+              ? "linear-gradient(180deg, rgba(28,200,200,0.08), rgba(255,255,255,1))"
+              : undefined,
+          }}
+        >
           <CardHeader
             avatar={
               <Box
                 sx={{
-                  background: "#7266F0",
+                  background: isFromEnquiry
+                    ? "linear-gradient(135deg, #7266F0, #1CC8C8)"
+                    : "#7266F0",
                   borderRadius: 2,
                   p: 1,
                   display: "flex",
@@ -154,10 +284,216 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
                 <PersonIcon sx={{ color: "white" }} />
               </Box>
             }
-            title={<Typography variant="h6">Basic Information</Typography>}
+            title={
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                spacing={1}
+                sx={{ flexWrap: "wrap", gap: 1 }}
+              >
+                <Typography variant="h6">Basic Information</Typography>
+                {isFromEnquiry && (
+                  <Chip
+                    label="Prefilled from enquiry"
+                    color="secondary"
+                    size="small"
+                    sx={{
+                      fontWeight: 700,
+                      background:
+                        "linear-gradient(135deg, rgba(114,102,240,0.16), rgba(28,200,200,0.22))",
+                      color: "#2c2a63",
+                      border: "1px solid rgba(114,102,240,0.45)",
+                    }}
+                  />
+                )}
+              </Stack>
+            }
           />
           <CardContent>
             <Stack spacing={2}>
+              <Box
+                sx={{
+                  pt: 0.5,
+                  borderTop: isFromEnquiry
+                    ? "1px solid rgba(114,102,240,0.35)"
+                    : "1px solid rgba(39,48,66,0.08)",
+                }}
+              >
+                <Box sx={{ ...sectionBodySx, ...scheduleAccentSx }}>
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <Box
+                      sx={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
+                        gap: 1.5,
+                      }}
+                    >
+                      <Box>
+                        <DatePicker
+                          label="Date"
+                          value={parseLocalIsoDate(formData.eventDate)}
+                          onChange={(date: Date | null) => {
+                            if (date) {
+                              updateField("eventDate", toLocalIsoDate(date));
+                            } else {
+                              updateField("eventDate", "");
+                            }
+                          }}
+                          slots={{
+                            day: (dayProps) => {
+                              const isMuhurt = isMuhurtDate(dayProps.day);
+                              return (
+                                <PickersDay
+                                  {...dayProps}
+                                  sx={
+                                    isMuhurt
+                                      ? {
+                                          backgroundColor: "#ff5252",
+                                          color: "#fff",
+                                          borderRadius: "50%",
+                                          "&:hover": {
+                                            backgroundColor: "#e53935",
+                                          },
+                                          border: "2px solid #fff",
+                                        }
+                                      : {}
+                                  }
+                                />
+                              );
+                            },
+                          }}
+                          slotProps={{
+                            textField: {
+                              variant: "outlined",
+                              required: true,
+                              fullWidth: true,
+                              InputLabelProps: { shrink: true },
+                              sx: prefillFieldSx,
+                            },
+                          }}
+                        />
+                        {formData.eventDate &&
+                          isMuhurtDate(
+                            parseLocalIsoDate(formData.eventDate) || new Date(),
+                          ) && (
+                            <Box
+                              sx={{
+                                mt: 1,
+                                p: 1,
+                                bgcolor: "#ffe5e5",
+                                borderRadius: 1,
+                                border: "1px solid #ff5252",
+                              }}
+                            >
+                              <Typography
+                                variant="caption"
+                                sx={{ color: "#d32f2f", fontWeight: 600 }}
+                              >
+                                ✓ Muhurt Date:{" "}
+                                {
+                                  getMuhurtInfo(
+                                    parseLocalIsoDate(formData.eventDate) ||
+                                      new Date(),
+                                  )?.description
+                                }
+                              </Typography>
+                            </Box>
+                          )}
+                        {hasBookingConflict && (
+                          <Box
+                            sx={{
+                              mt: 1.25,
+                              px: 1.5,
+                              py: 1,
+                              bgcolor: "rgba(244, 67, 54, 0.12)",
+                              borderRadius: 2,
+                              border: "1px solid rgba(244, 67, 54, 0.45)",
+                              display: "flex",
+                              alignItems: "flex-start",
+                              gap: 1,
+                              boxShadow: "0 6px 18px rgba(244, 67, 54, 0.12)",
+                              animation:
+                                "warningPulse 0.42s ease-out, fadeInUp 0.28s ease-out",
+                              "@keyframes warningPulse": {
+                                "0%": {
+                                  transform: "scale(0.98)",
+                                  boxShadow:
+                                    "0 0 0 0 rgba(244, 67, 54, 0.24), 0 6px 18px rgba(244, 67, 54, 0.12)",
+                                },
+                                "70%": {
+                                  transform: "scale(1.01)",
+                                  boxShadow:
+                                    "0 0 0 10px rgba(244, 67, 54, 0.08), 0 6px 18px rgba(244, 67, 54, 0.12)",
+                                },
+                                "100%": {
+                                  transform: "scale(1)",
+                                  boxShadow:
+                                    "0 0 0 0 rgba(244, 67, 54, 0), 0 6px 18px rgba(244, 67, 54, 0.12)",
+                                },
+                              },
+                              "@keyframes fadeInUp": {
+                                "0%": {
+                                  opacity: 0,
+                                  transform: "translateY(4px)",
+                                },
+                                "100%": {
+                                  opacity: 1,
+                                  transform: "translateY(0)",
+                                },
+                              },
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                mt: 0.15,
+                                width: 20,
+                                height: 20,
+                                borderRadius: "50%",
+                                bgcolor: "error.main",
+                                color: "white",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                fontSize: "0.85rem",
+                                fontWeight: 800,
+                                flexShrink: 0,
+                              }}
+                            >
+                              !
+                            </Box>
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: "error.main",
+                                fontWeight: 800,
+                                lineHeight: 1.5,
+                              }}
+                            >
+                              A booking already exists for this date. Choose a
+                              different date before creating another event.
+                            </Typography>
+                          </Box>
+                        )}
+                      </Box>
+                      <Box>
+                        <TextField
+                          label="Time"
+                          type="time"
+                          value={formData.eventTime}
+                          onChange={(e) =>
+                            updateField("eventTime", e.target.value)
+                          }
+                          InputLabelProps={{ shrink: true }}
+                          required
+                          fullWidth
+                          sx={prefillFieldSx}
+                        />
+                      </Box>
+                    </Box>
+                  </LocalizationProvider>
+                </Box>
+              </Box>
               <TextField
                 label="Title *"
                 placeholder="Event title"
@@ -165,6 +501,7 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
                 onChange={(e) => updateField("title", e.target.value)}
                 required
                 fullWidth
+                sx={prefillFieldSx}
               />
               <TextField
                 label="Customer *"
@@ -173,13 +510,16 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
                 onChange={(e) => updateField("customer", e.target.value)}
                 required
                 fullWidth
+                sx={prefillFieldSx}
               />
               <TextField
-                label="Phone"
+                label="Phone *"
                 placeholder="+91..."
                 value={formData.phone}
                 onChange={(e) => updateField("phone", e.target.value)}
+                required
                 fullWidth
+                sx={prefillFieldSx}
               />
               <TextField
                 label="Alternative Number"
@@ -187,6 +527,7 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
                 value={formData.altPhone}
                 onChange={(e) => updateField("altPhone", e.target.value)}
                 fullWidth
+                sx={prefillFieldSx}
               />
               <TextField
                 select
@@ -195,6 +536,7 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
                 onChange={(e) => updateField("eventType", e.target.value)}
                 required
                 fullWidth
+                sx={prefillFieldSx}
               >
                 <MenuItem value="">Select event type...</MenuItem>
                 <MenuItem value="Wedding">Wedding</MenuItem>
@@ -210,6 +552,7 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
                 onChange={(e) => updateField("venue", e.target.value)}
                 required
                 fullWidth
+                sx={prefillFieldSx}
                 // placeholder and SelectProps reverted
               >
                 <MenuItem value="">Select venue...</MenuItem>
@@ -217,7 +560,7 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
                 <MenuItem value="Phase 2">Phase 2</MenuItem>
               </TextField>
               {/* Group-wise Multi-Select Dropdown for Rooms */}
-              <FormControl fullWidth required>
+              <FormControl fullWidth required sx={prefillFieldSx}>
                 <InputLabel id="rooms-multiselect-label">Rooms *</InputLabel>
                 <OutlinedInput
                   label="Rooms *"
@@ -234,7 +577,12 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
                     </IconButton>
                   }
                   onClick={(e) => setRoomsAnchorEl(e.currentTarget)}
-                  sx={{ cursor: "pointer", background: "#fafbff" }}
+                  sx={{
+                    cursor: "pointer",
+                    background: isFromEnquiry
+                      ? "linear-gradient(180deg, rgba(114,102,240,0.09), rgba(255,255,255,0.98))"
+                      : "#fafbff",
+                  }}
                 />
               </FormControl>
               <Popover
@@ -442,141 +790,105 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
                 </Box>
               </Popover>
               <Box>
-                <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                  Event Source *
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    width: "100%",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    my: 2,
-                  }}
-                >
+                <Box sx={sectionBodySx}>
                   <Box
                     sx={{
                       display: "flex",
                       width: "100%",
-                      maxWidth: 400,
-                      background: "#f0f4ff",
-                      borderRadius: 999,
-                      boxShadow: "0 2px 8px rgba(39,48,66,0.06)",
-                      p: 0.5,
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
                   >
-                    {["Enquiry", "Booking"].map((option) => (
-                      <Box
-                        key={option}
-                        onClick={() => updateField("eventSource", option)}
-                        sx={{
-                          flex: 1,
-                          textAlign: "center",
-                          py: 1.2,
-                          cursor: "pointer",
-                          borderRadius: 999,
-                          transition: "all 0.2s",
-                          fontWeight: 700,
-                          fontSize: "1.1rem",
-                          color:
-                            formData.eventSource === option
-                              ? "white"
-                              : "primary.main",
-                          background:
-                            formData.eventSource === option
-                              ? "linear-gradient(90deg, #7266F0 60%, #1CC8C8 100%)"
-                              : "transparent",
-                          boxShadow:
-                            formData.eventSource === option
-                              ? "0 2px 12px rgba(114,102,240,0.12)"
-                              : "none",
-                        }}
-                      >
-                        {option}
-                      </Box>
-                    ))}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        width: "100%",
+                        maxWidth: 380,
+                        background: isFromEnquiry
+                          ? "linear-gradient(180deg, rgba(114,102,240,0.09), rgba(28,200,200,0.08))"
+                          : "#f0f4ff",
+                        borderRadius: 999,
+                        border: isFromEnquiry
+                          ? "1px solid rgba(114,102,240,0.45)"
+                          : "none",
+                        boxShadow: isFromEnquiry
+                          ? "0 0 0 1px rgba(114,102,240,0.12)"
+                          : "0 2px 8px rgba(39,48,66,0.06)",
+                        p: 0.5,
+                      }}
+                    >
+                      {(["Enquiry", "Booking"] as const).map((option) => (
+                        <Box
+                          key={option}
+                          onClick={() => updateField("eventSource", option)}
+                          sx={{
+                            flex: 1,
+                            textAlign: "center",
+                            py: 1,
+                            cursor: "pointer",
+                            borderRadius: 999,
+                            transition: "all 0.2s",
+                            fontWeight: 800,
+                            fontSize: "1rem",
+                            letterSpacing: 0.2,
+                            color:
+                              formData.eventSource === option
+                                ? "white"
+                                : isFromEnquiry
+                                  ? "#2c2a63"
+                                  : "primary.main",
+                            background:
+                              formData.eventSource === option
+                                ? "linear-gradient(90deg, #7266F0 60%, #1CC8C8 100%)"
+                                : "transparent",
+                            boxShadow:
+                              formData.eventSource === option
+                                ? "0 2px 12px rgba(114,102,240,0.12)"
+                                : "none",
+                          }}
+                        >
+                          {option}
+                        </Box>
+                      ))}
+                    </Box>
                   </Box>
                 </Box>
               </Box>
+              <Stack
+                direction="row"
+                spacing={1.5}
+                justifyContent="flex-end"
+                sx={{
+                  mt: 2,
+                  pt: 1.5,
+                  borderTop: isFromEnquiry
+                    ? "1.5px solid rgba(114,102,240,0.35)"
+                    : "1.5px solid rgba(39,48,66,0.12)",
+                }}
+              >
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  startIcon={<X size={16} />}
+                  onClick={() => navigate(-1)}
+                  sx={{ px: 2.25, py: 0.8 }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  startIcon={<Save size={16} />}
+                  disabled={hasBookingConflict}
+                  sx={{ px: 2.25, py: 0.8 }}
+                >
+                  {mode === "edit" ? "Update" : "Create"}
+                </Button>
+              </Stack>
             </Stack>
           </CardContent>
         </Card>
-        <Card sx={{ mb: 3 }}>
-          <CardHeader
-            avatar={
-              <Box sx={{ background: "#1CC8C8", borderRadius: 2, p: 1 }}>
-                <CalendarDays size={24} color="#fff" />
-              </Box>
-            }
-            title={<Typography variant="h6">Event Schedule</Typography>}
-          />
-          <CardContent>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <TextField
-                  label="Start Date"
-                  type="date"
-                  value={formData.startDate}
-                  onChange={(e) => updateField("startDate", e.target.value)}
-                  InputLabelProps={{ shrink: true }}
-                  required
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  label="Start Time"
-                  type="time"
-                  value={formData.startTime}
-                  onChange={(e) => updateField("startTime", e.target.value)}
-                  InputLabelProps={{ shrink: true }}
-                  required
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  label="End Date"
-                  type="date"
-                  value={formData.endDate}
-                  onChange={(e) => updateField("endDate", e.target.value)}
-                  InputLabelProps={{ shrink: true }}
-                  required
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  label="End Time"
-                  type="time"
-                  value={formData.endTime}
-                  onChange={(e) => updateField("endTime", e.target.value)}
-                  InputLabelProps={{ shrink: true }}
-                  required
-                  fullWidth
-                />
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-        <Stack direction="row" spacing={2} justifyContent="flex-end">
-          <Button
-            variant="outlined"
-            color="secondary"
-            startIcon={<X size={16} />}
-            onClick={() => navigate(-1)}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            startIcon={<Save size={16} />}
-          >
-            {mode === "edit" ? "Update" : "Create"}
-          </Button>
-        </Stack>
       </form>
     </Box>
   );

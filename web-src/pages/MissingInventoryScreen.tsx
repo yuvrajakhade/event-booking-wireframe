@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { mockEvents } from "../../src/data/mock";
+import { mockRecords } from "../../src/data/mock";
 import { AlertCircle, ArrowLeft } from "lucide-react";
 import {
   Card,
@@ -22,7 +22,6 @@ import {
 type MissingRow = {
   id: string;
   name: string;
-  unit: string;
   issuedQty: number;
   returnedQty: number;
   missing: number;
@@ -36,7 +35,7 @@ export function MissingInventoryScreen() {
   const navigate = useNavigate();
   const location = useLocation();
   const { eventId } = useParams();
-  const event = mockEvents.find((item) => item.id === eventId);
+  const event = mockRecords.find((item) => item.id === eventId);
 
   if (!event) {
     return (
@@ -52,11 +51,10 @@ export function MissingInventoryScreen() {
     );
   }
 
-  const fallbackRows: MissingRow[] = event.inventory
+  const fallbackRows: MissingRow[] = (event.inventory ?? [])
     .map((item) => ({
       id: item.id,
       name: item.name,
-      unit: item.unit,
       issuedQty: item.issuedQty,
       returnedQty: item.returnedQty,
       missing: Math.max(0, item.issuedQty - item.returnedQty),
@@ -112,7 +110,6 @@ export function MissingInventoryScreen() {
               <TableRow sx={{ background: "#f5f5f5" }}>
                 <TableCell>Name</TableCell>
                 <TableCell align="center">Missing</TableCell>
-                <TableCell align="center">Unit</TableCell>
                 <TableCell align="center">Issued</TableCell>
                 <TableCell align="center">Returned</TableCell>
               </TableRow>
@@ -122,7 +119,6 @@ export function MissingInventoryScreen() {
                 <TableRow key={item.id}>
                   <TableCell>{item.name}</TableCell>
                   <TableCell align="center">{item.missing}</TableCell>
-                  <TableCell align="center">{item.unit}</TableCell>
                   <TableCell align="center">{item.issuedQty}</TableCell>
                   <TableCell align="center">{item.returnedQty}</TableCell>
                 </TableRow>

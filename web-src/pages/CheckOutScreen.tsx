@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { mockEvents } from "../../src/data/mock";
+import { mockRecords } from "../../src/data/mock";
 import {
   ArrowLeft,
   BedSingle,
@@ -22,7 +22,6 @@ type CheckoutLocationState = {
 type CheckoutRow = {
   id: string;
   label: string;
-  unit: string;
   expected: number;
 };
 
@@ -53,7 +52,7 @@ export function CheckOutScreen() {
   const params = useParams();
   const { issuedCounts } = (location.state as CheckoutLocationState) || {};
   const eventId = params.eventId;
-  const event = mockEvents.find((e) => e.id === eventId);
+  const event = mockRecords.find((e) => e.id === eventId);
 
   if (!event) {
     return (
@@ -67,10 +66,9 @@ export function CheckOutScreen() {
 
   const rows = React.useMemo<CheckoutRow[]>(
     () =>
-      event.inventory.map((item) => ({
+      (event.inventory ?? []).map((item) => ({
         id: item.id,
         label: item.name,
-        unit: item.unit,
         expected: Math.max(0, issuedCounts?.[item.id] ?? item.issuedQty),
       })),
     [event.inventory, issuedCounts],
@@ -89,7 +87,6 @@ export function CheckOutScreen() {
   };
 
   const completeCheckOut = () => {
-    // You can handle submission or navigation here
     alert("Check-Out completed!");
   };
 
@@ -124,76 +121,96 @@ export function CheckOutScreen() {
         style={{
           alignItems: "center",
           textAlign: "center",
-          padding: "0.7rem 0.7rem",
+          padding: "0.85rem 1rem",
+          gap: "0.35rem",
         }}
       >
         <h2
           className="material-title"
-          style={{ margin: 0, fontSize: "1.08rem" }}
+          style={{ margin: 0, fontSize: "1.02rem", lineHeight: 1.4 }}
+        >
+          {event.customerName ?? event.name}
+        </h2>
+        <p
+          className="material-desc"
+          style={{ margin: 0, fontSize: "0.95rem", fontWeight: 600 }}
         >
           {event.venue}
-        </h2>
-        <p className="material-desc" style={{ margin: 0, fontSize: "0.98rem" }}>
-          {event.start.slice(0, 10)}
         </p>
-        <div
-          style={{
-            marginTop: 6,
-            fontWeight: 500,
-            color: "#888",
-            fontSize: "0.95rem",
-          }}
-        >
-          Count returned items
-        </div>
       </article>
 
       {rows.map((row) => {
         const returned = returnedCounts[row.id] ?? 0;
-        const diff = returned - row.expected;
+
         return (
           <article
-            className="material-card material-row"
+            className="material-card"
             key={row.id}
-            style={{ paddingBottom: 10 }}
+            style={{
+              padding: "0.9rem 1rem",
+              gap: "0.75rem",
+              boxSizing: "border-box",
+            }}
           >
             <div
               style={{
-                display: "flex",
+                display: "grid",
+                gridTemplateColumns: "minmax(0, 1fr) auto",
+                gap: ".75rem",
                 alignItems: "center",
-                justifyContent: "space-between",
-                gap: ".7rem",
+                width: "100%",
               }}
             >
               <div
-                style={{ display: "flex", alignItems: "center", gap: ".7rem" }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: ".75rem",
+                  minWidth: 0,
+                }}
               >
                 <span className="material-tile-icon">
                   {iconForItem(row.label)}
                 </span>
-                <h3
-                  className="material-title"
-                  style={{ fontSize: "1.08rem", margin: 0 }}
-                >
-                  {row.label}
-                </h3>
-                <span style={{ fontSize: ".95rem", color: "#888" }}>
-                  {row.unit}
-                </span>
+                <div style={{ minWidth: 0 }}>
+                  <h3
+                    className="material-title"
+                    style={{
+                      fontSize: "1rem",
+                      margin: 0,
+                      lineHeight: 1.3,
+                      wordBreak: "break-word",
+                      overflowWrap: "anywhere",
+                    }}
+                  >
+                    {row.label}
+                  </h3>
+                </div>
               </div>
               <div
-                style={{ display: "flex", alignItems: "center", gap: ".5rem" }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: ".5rem",
+                  justifySelf: "end",
+                  flexShrink: 0,
+                }}
               >
                 <button
                   type="button"
                   className="material-icon-btn"
                   aria-label={`Decrease ${row.label}`}
                   onClick={() => decrease(row.id)}
+                  style={{ padding: "0.45rem" }}
                 >
-                  <Minus size={24} color="#f44336" />
+                  <Minus size={18} color="#f44336" />
                 </button>
                 <strong
-                  style={{ minWidth: 24, textAlign: "center", fontSize: 32 }}
+                  style={{
+                    minWidth: 28,
+                    textAlign: "center",
+                    fontSize: "1.15rem",
+                  }}
                 >
                   {returned}
                 </strong>
@@ -202,14 +219,23 @@ export function CheckOutScreen() {
                   className="material-icon-btn"
                   aria-label={`Increase ${row.label}`}
                   onClick={() => increase(row.id)}
+                  style={{ padding: "0.45rem" }}
+                  disabled={returned >= row.expected}
                 >
-                  <Plus size={24} color="#22c55e" />
+                  <Plus
+                    size={18}
+                    color={returned >= row.expected ? "#ccc" : "#22c55e"}
+                  />
                 </button>
               </div>
             </div>
             <div
-              className="pill-group"
-              style={{ marginTop: 6, marginLeft: 32 }}
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: ".5rem",
+                marginLeft: 44,
+              }}
             >
               <span className="expected-pill">Expected: {row.expected}</span>
               {returned < row.expected && (
@@ -226,7 +252,12 @@ export function CheckOutScreen() {
       <button
         type="button"
         className="material-btn material-btn-primary"
-        style={{ margin: "0 auto", width: "100%", maxWidth: 480 }}
+        style={{
+          margin: "0 auto",
+          width: "100%",
+          maxWidth: 480,
+          justifyContent: "center",
+        }}
         onClick={completeCheckOut}
       >
         <Check size={18} />

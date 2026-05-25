@@ -1,20 +1,45 @@
 import React from "react";
-import { mockEnquiries } from "../../src/data/mock";
+import { mockRecords, sortRecordsByDateTime } from "../../src/data/mock";
 import { EnquiryCard, DateRangeFilter } from "../components";
-import { Users, Search } from "lucide-react";
+import { Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, Typography, Stack, Box, Chip } from "@mui/material";
 import SearchFilter from "../components/SearchFilter";
-import Paper from "@mui/material/Paper";
 
 export function EnquiryListScreen() {
   const navigate = useNavigate();
-  const activeCount = mockEnquiries.filter(
-    (item) => item.status !== "Closed",
-  ).length;
   const [fromDate, setFromDate] = React.useState<Date | null>(null);
   const [toDate, setToDate] = React.useState<Date | null>(null);
   const [search, setSearch] = React.useState("");
+
+  const enquiries = sortRecordsByDateTime(
+    mockRecords.filter((record) => {
+      if (record.eventSource !== "Enquiry") return false;
+      if (record.eventDate) {
+        const eventDate = new Date(record.eventDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (eventDate < today) return false;
+        if (fromDate && eventDate < fromDate) return false;
+        if (toDate && eventDate > toDate) return false;
+      }
+      if (!search) return true;
+      const haystack =
+        `${record.customerName ?? ""} ${record.phone ?? ""}`.toLowerCase();
+      return haystack.includes(search.toLowerCase());
+    }),
+  );
+
+  const activeCount = enquiries.length;
+
+  const isConvertDisabled = (enquiryDate?: string) =>
+    Boolean(
+      enquiryDate &&
+      mockRecords.some(
+        (record) =>
+          record.eventSource === "Booking" && record.eventDate === enquiryDate,
+      ),
+    );
 
   return (
     <Box sx={{ maxWidth: 480, mx: "auto", mt: 2, px: 1 }}>
@@ -75,7 +100,7 @@ export function EnquiryListScreen() {
         </Box>
       </Box>
 
-      {mockEnquiries.length === 0 ? (
+      {enquiries.length === 0 ? (
         <Card elevation={1} sx={{ borderRadius: 4, py: 4 }}>
           <CardContent>
             <Typography color="text.secondary" align="center">
@@ -85,11 +110,11 @@ export function EnquiryListScreen() {
         </Card>
       ) : (
         <Stack spacing={1.2}>
-          {mockEnquiries.map((enquiry) => (
+          {enquiries.map((enquiry) => (
             <EnquiryCard
               key={enquiry.id}
               enquiry={enquiry}
-              onView={() => navigate("/events/evt_1")}
+              isConvertDisabled={isConvertDisabled(enquiry.eventDate)}
               onConvert={() => navigate(`/events/new?enquiryId=${enquiry.id}`)}
             />
           ))}

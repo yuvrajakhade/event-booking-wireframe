@@ -1,13 +1,6 @@
 import React from "react";
-import { mockEvents } from "../../src/data/mock";
-import {
-  AlertCircle,
-  CalendarDays,
-  MinusCircle,
-  Search,
-  ChevronRight,
-} from "lucide-react";
-import { DateRangeFilter } from "../components";
+import { mockRecords } from "../../src/data/mock";
+import { AlertCircle, MinusCircle, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
   Card,
@@ -17,48 +10,40 @@ import {
   Box,
   Chip,
   Button,
-  Divider,
 } from "@mui/material";
 import SearchFilter from "../components/SearchFilter";
-import Paper from "@mui/material/Paper";
 
 export function InventoryOverviewScreen() {
   const navigate = useNavigate();
-  const allItems = mockEvents.flatMap((event) => event.inventory);
+  const allItems = mockRecords.flatMap((record) => record.inventory ?? []);
   const totalMissing = allItems.reduce(
     (sum, item) => sum + Math.max(0, item.issuedQty - item.returnedQty),
     0,
   );
-  const totalPlanned = allItems.reduce((sum, item) => sum + item.plannedQty, 0);
-  const recoveryRate =
-    totalPlanned === 0
-      ? 0
-      : Math.round(((totalPlanned - totalMissing) / totalPlanned) * 100);
   const [search, setSearch] = React.useState("");
 
-  const missingByEvent = mockEvents
-    .map((event) => {
-      const missing = event.inventory
+  const missingByEvent = mockRecords
+    .map((record) => {
+      const missing = (record.inventory ?? [])
         .map((item) => ({
           name: item.name,
           qty: Math.max(0, item.issuedQty - item.returnedQty),
-          unit: item.unit,
         }))
         .filter((item) => item.qty > 0);
 
       const total = missing.reduce((sum, item) => sum + item.qty, 0);
 
       return {
-        id: event.id,
-        title: event.title,
-        customer: event.customerName,
-        venue: event.venue,
-        date: event.start.slice(0, 10),
+        id: record.id,
+        title: record.title,
+        customer: record.customerName ?? record.name ?? "",
+        venue: record.venue,
+        date: record.eventDate ?? "",
         total,
         firstMissing: missing[0],
       };
     })
-    .filter((event) => event.total > 0);
+    .filter((record) => record.total > 0);
 
   // Filter events by search
   const filteredEvents = missingByEvent.filter((event) => {
@@ -170,8 +155,7 @@ export function InventoryOverviewScreen() {
                   <Stack direction="row" alignItems="center" spacing={1} mt={2}>
                     <MinusCircle size={18} />
                     <Typography variant="body2">
-                      {event.firstMissing.name}: {event.firstMissing.qty}{" "}
-                      {event.firstMissing.unit}
+                      {event.firstMissing.name}: {event.firstMissing.qty}
                     </Typography>
                   </Stack>
                 )}

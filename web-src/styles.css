@@ -239,6 +239,13 @@
   transform: translateY(-2px);
 }
 
+.btn-icon:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  box-shadow: none;
+  transform: none;
+}
+
 .btn-edit {
   background: linear-gradient(135deg, #6667ee, #5659de);
 }

@@ -1,30 +1,41 @@
 import React from "react";
-import { mockEvents } from "../../src/data/mock";
+import {
+  mockRecords,
+  isRecordCompleted,
+  sortRecordsByDateTime,
+} from "../../src/data/mock";
 import { EventCard, DateRangeFilter } from "../components";
-import { CalendarDays, Search } from "lucide-react";
-import { Plus } from "lucide-react";
+import { CalendarDays, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, Typography, Stack, Box, Chip } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import SearchFilter from "../components/SearchFilter";
-import Paper from "@mui/material/Paper";
 
 export function BookedEventsScreen() {
   const navigate = useNavigate();
 
   const [fromDate, setFromDate] = React.useState<Date | null>(null);
   const [toDate, setToDate] = React.useState<Date | null>(null);
-  const [selectedRooms, setSelectedRooms] = React.useState<string[]>([]);
   const [search, setSearch] = React.useState("");
 
-  // Filter events by status and date range
-  const filteredEvents = mockEvents.filter((event) => {
-    if (event.status === "Completed") return false;
-    const eventDate = new Date(event.start);
-    if (fromDate && eventDate < fromDate) return false;
-    if (toDate && eventDate > toDate) return false;
-    return true;
-  });
+  const filteredEvents = sortRecordsByDateTime(
+    mockRecords.filter((record) => {
+      if (record.eventSource !== "Booking") return false;
+      if (isRecordCompleted(record)) return false;
+      if (record.eventDate) {
+        const eventDate = new Date(record.eventDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (eventDate < today) return false;
+        if (fromDate && eventDate < fromDate) return false;
+        if (toDate && eventDate > toDate) return false;
+      }
+      if (!search) return true;
+      const haystack =
+        `${record.customerName ?? ""} ${record.title} ${record.venue}`.toLowerCase();
+      return haystack.includes(search.toLowerCase());
+    }),
+  );
 
   return (
     <Box sx={{ maxWidth: 480, mx: "auto", mt: 2, px: 1, position: "relative" }}>
@@ -99,7 +110,6 @@ export function BookedEventsScreen() {
             <EventCard
               key={event.id}
               event={event}
-              onPress={() => navigate(`/events/${event.id}`)}
               onEdit={() => navigate(`/events/${event.id}/edit`)}
               onCheckIn={() => navigate(`/events/${event.id}/check-in`)}
               onCheckOut={() => navigate(`/events/${event.id}/check-out`)}
@@ -108,7 +118,6 @@ export function BookedEventsScreen() {
         </Stack>
       )}
 
-      {/* Floating Action Button for Add Event */}
       <Fab
         color="primary"
         aria-label="add"

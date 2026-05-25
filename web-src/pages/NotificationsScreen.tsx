@@ -1,6 +1,6 @@
 import React from "react";
-import { mockEvents } from "../../src/data/mock";
-import { Event } from "../../src/types";
+import { mockRecords } from "../../src/data/mock";
+import { RecordItem } from "../../src/types";
 import { BellOff } from "lucide-react";
 import {
   Card,
@@ -13,8 +13,8 @@ import {
   Divider,
 } from "@mui/material";
 
-function listMissing(event: Event) {
-  return event.inventory
+function listMissing(record: RecordItem) {
+  return (record.inventory ?? [])
     .map((item) => ({
       item,
       missing: Math.max(0, item.issuedQty - item.returnedQty),
@@ -23,10 +23,10 @@ function listMissing(event: Event) {
 }
 
 export function NotificationsScreen() {
-  const missing = mockEvents.flatMap((event) =>
-    listMissing(event).map(({ item, missing: qty }) => ({
-      id: `${event.id}-${item.id}`,
-      event: event.title,
+  const missing = mockRecords.flatMap((record) =>
+    listMissing(record).map(({ item, missing: qty }) => ({
+      id: `${record.id}-${item.id}`,
+      event: record.title,
       item: item.name,
       qty,
     })),

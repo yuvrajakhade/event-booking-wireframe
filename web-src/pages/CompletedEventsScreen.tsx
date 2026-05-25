@@ -1,24 +1,31 @@
 import React from "react";
-import { mockEvents } from "../../src/data/mock";
+import {
+  mockRecords,
+  isRecordCompleted,
+  sortRecordsByDateTime,
+} from "../../src/data/mock";
 import { EventCard, DateRangeFilter } from "../components";
-import { CheckCircle2, Search } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { CheckCircle2 } from "lucide-react";
 import { Card, CardContent, Typography, Stack, Box, Chip } from "@mui/material";
 import SearchFilter from "../components/SearchFilter";
-import Paper from "@mui/material/Paper";
 
 export function CompletedEventsScreen() {
-  const navigate = useNavigate();
   const [fromDate, setFromDate] = React.useState<Date | null>(null);
   const [toDate, setToDate] = React.useState<Date | null>(null);
   const [search, setSearch] = React.useState("");
-  const completedEvents = mockEvents.filter((event) => {
-    if (event.status !== "Completed") return false;
-    const eventDate = new Date(event.start);
-    if (fromDate && eventDate < fromDate) return false;
-    if (toDate && eventDate > toDate) return false;
-    return true;
-  });
+
+  const completedEvents = sortRecordsByDateTime(
+    mockRecords.filter((record) => {
+      if (!isRecordCompleted(record)) return false;
+      const recordDate = new Date(record.eventDate ?? "");
+      if (fromDate && recordDate < fromDate) return false;
+      if (toDate && recordDate > toDate) return false;
+      if (!search) return true;
+      const haystack =
+        `${record.customerName ?? ""} ${record.title} ${record.venue}`.toLowerCase();
+      return haystack.includes(search.toLowerCase());
+    }),
+  );
 
   return (
     <Box sx={{ maxWidth: 480, mx: "auto", mt: 2, px: 1 }}>
@@ -90,13 +97,7 @@ export function CompletedEventsScreen() {
       ) : (
         <Stack spacing={2}>
           {completedEvents.map((event) => (
-            <EventCard
-              key={event.id}
-              event={event}
-              mode="completed"
-              onPress={() => navigate(`/events/${event.id}`)}
-              onView={() => navigate(`/events/${event.id}`)}
-            />
+            <EventCard key={event.id} event={event} mode="completed" />
           ))}
         </Stack>
       )}

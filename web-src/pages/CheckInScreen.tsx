@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { mockEvents } from "../../src/data/mock";
+import { mockRecords } from "../../src/data/mock";
 import {
   ArrowLeft,
   BedSingle,
@@ -17,7 +17,6 @@ import "../styles/modules/_material-muhurt.css";
 type IssuedRow = {
   id: string;
   label: string;
-  unit: string;
   issued: number;
 };
 
@@ -45,7 +44,7 @@ function iconForItem(name: string) {
 export function CheckInScreen() {
   const navigate = useNavigate();
   const { eventId } = useParams();
-  const event = mockEvents.find((item) => item.id === eventId);
+  const event = mockRecords.find((item) => item.id === eventId);
 
   if (!event) {
     return (
@@ -59,18 +58,17 @@ export function CheckInScreen() {
 
   const inventoryRows = React.useMemo<IssuedRow[]>(
     () =>
-      event.inventory.map((item) => ({
+      (event.inventory ?? []).map((item) => ({
         id: item.id,
         label: item.name,
-        unit: item.unit,
         issued: item.issuedQty,
       })),
     [event.inventory],
   );
 
-  const [issuedCounts, setIssuedCounts] = React.useState<
-    Record<string, number>
-  >(() => Object.fromEntries(inventoryRows.map((item) => [item.id, 0])));
+  const [issuedCounts, setIssuedCounts] = React.useState<Record<string, number>>(
+    () => Object.fromEntries(inventoryRows.map((item) => [item.id, 0])),
+  );
 
   const decrease = (id: string) => {
     setIssuedCounts((prev) => ({ ...prev, [id]: Math.max(0, prev[id] - 1) }));
@@ -106,10 +104,7 @@ export function CheckInScreen() {
         >
           <ArrowLeft size={18} />
         </button>
-        <h1
-          className="material-title"
-          style={{ margin: 0, fontSize: "1.08rem" }}
-        >
+        <h1 className="material-title" style={{ margin: 0, fontSize: "1.08rem" }}>
           Check-In
         </h1>
       </div>
@@ -119,66 +114,84 @@ export function CheckInScreen() {
         style={{
           alignItems: "center",
           textAlign: "center",
-          padding: "0.7rem 0.7rem",
+          padding: "0.85rem 1rem",
+          gap: "0.35rem",
         }}
       >
-        <h2
-          className="material-title"
-          style={{ margin: 0, fontSize: "1.08rem" }}
-        >
-          {event.venue}
+        <h2 className="material-title" style={{ margin: 0, fontSize: "1.02rem", lineHeight: 1.4 }}>
+          {event.customerName ?? event.name}
         </h2>
-        <p className="material-desc" style={{ margin: 0, fontSize: "0.98rem" }}>
-          {event.start.slice(0, 10)}
+        <p className="material-desc" style={{ margin: 0, fontSize: "0.95rem", fontWeight: 600 }}>
+          {event.venue}
         </p>
       </article>
 
       {inventoryRows.map((row) => {
         const expected = row.issued;
         const issued = issuedCounts[row.id] ?? 0;
-        const missing = Math.max(0, expected - issued);
+
         return (
           <article
             className="material-card material-row"
             key={row.id}
-            style={{ paddingBottom: 10 }}
+            style={{
+              padding: "0.9rem 1rem",
+              alignItems: "stretch",
+              gap: "0.75rem",
+            }}
           >
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                gap: ".7rem",
+                gap: ".75rem",
+                width: "100%",
+                flexWrap: "wrap",
               }}
             >
               <div
-                style={{ display: "flex", alignItems: "center", gap: ".7rem" }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: ".75rem",
+                  flex: 1,
+                  minWidth: 180,
+                }}
               >
-                <span className="material-tile-icon">
-                  {iconForItem(row.label)}
-                </span>
-                <h3
-                  className="material-title"
-                  style={{ fontSize: "1.08rem", margin: 0 }}
-                >
-                  {row.label}
-                </h3>
-                <span style={{ fontSize: ".95rem", color: "#888" }}>
-                  {row.unit}
-                </span>
+                <span className="material-tile-icon">{iconForItem(row.label)}</span>
+                <div style={{ minWidth: 0 }}>
+                  <h3
+                    className="material-title"
+                    style={{
+                      fontSize: "1rem",
+                      margin: 0,
+                      lineHeight: 1.3,
+                      wordBreak: "break-word",
+                    }}
+                  >
+                    {row.label}
+                  </h3>
+                </div>
               </div>
               <div
-                style={{ display: "flex", alignItems: "center", gap: ".5rem" }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: ".5rem",
+                  flexShrink: 0,
+                }}
               >
                 <button
                   type="button"
                   className="material-icon-btn"
                   aria-label={`Decrease ${row.label}`}
                   onClick={() => decrease(row.id)}
+                  style={{ padding: "0.45rem" }}
                 >
-                  <Minus size={16} />
+                  <Minus size={18} />
                 </button>
-                <strong style={{ minWidth: 24, textAlign: "center" }}>
+                <strong style={{ minWidth: 28, textAlign: "center", fontSize: "1.05rem" }}>
                   {issued}
                 </strong>
                 <button
@@ -186,20 +199,25 @@ export function CheckInScreen() {
                   className="material-icon-btn"
                   aria-label={`Increase ${row.label}`}
                   onClick={() => increase(row.id)}
+                  style={{ padding: "0.45rem" }}
                 >
-                  <Plus size={16} />
+                  <Plus size={18} />
                 </button>
               </div>
             </div>
-            <div
-              className="pill-group"
-              style={{ marginTop: 6, marginLeft: 32 }}
-            >
-              <span className="expected-pill">Expected: {expected}</span>
-              {missing > 0 && (
-                <span className="missing-pill">Missing: {missing}</span>
-              )}
-            </div>
+            {expected > 0 && (
+              <div
+                className="pill-group"
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: ".5rem",
+                  marginLeft: 44,
+                }}
+              >
+                <span className="expected-pill">Expected: {expected}</span>
+              </div>
+            )}
           </article>
         );
       })}
@@ -207,7 +225,12 @@ export function CheckInScreen() {
       <button
         type="button"
         className="material-btn material-btn-primary"
-        style={{ margin: "0 auto", width: "100%", maxWidth: 480 }}
+        style={{
+          margin: "0 auto",
+          width: "100%",
+          maxWidth: 480,
+          justifyContent: "center",
+        }}
         onClick={completeCheckIn}
       >
         <Check size={18} />

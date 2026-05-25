@@ -1,5 +1,5 @@
 import React from "react";
-import { Event } from "../../src/types";
+import { RecordItem } from "../../src/types";
 import {
   CalendarDays,
   Clock3,
@@ -10,45 +10,37 @@ import {
   SquarePen,
   LogIn,
   LogOut,
-  Eye,
 } from "lucide-react";
 
 type EventCardProps = {
-  event: Event;
-  onPress?: () => void;
+  event: RecordItem;
   mode?: "booked" | "completed";
   onEdit?: () => void;
   onCheckIn?: () => void;
   onCheckOut?: () => void;
-  onView?: () => void;
 };
 
 export function EventCard({
   event,
-  onPress,
   mode = "booked",
   onEdit,
   onCheckIn,
   onCheckOut,
-  onView,
 }: EventCardProps) {
-  const formatDate = (input: string) => {
-    return new Date(input).toISOString().slice(0, 10);
-  };
-
   const isCompleted = mode === "completed";
+  const displayDate = event.eventDate ?? "";
 
   return (
-    <article className="card event-card interactive-card" onClick={onPress}>
+    <article className="card event-card">
       <div className="event-top">
         <div className="tile-icon">
           <CalendarDays size={14} />
         </div>
         <div className="event-head-copy">
-          <h3>{event.customerName}</h3>
+          <h3>{event.customerName ?? event.name}</h3>
           <span className="date-pill">
             <Clock3 size={14} />
-            {formatDate(event.start)}
+            {displayDate}
           </span>
         </div>
       </div>
@@ -74,57 +66,43 @@ export function EventCard({
         </p>
       </div>
 
-      <div className="event-actions">
-        {isCompleted ? (
+      {!isCompleted && (
+        <div className="event-actions">
           <button
             type="button"
-            className="btn-icon btn-add"
-            aria-label="View details"
+            className="btn-icon btn-edit"
+            aria-label="Edit event"
             onClick={(e) => {
               e.stopPropagation();
-              onView?.();
+              onEdit?.();
             }}
           >
-            <Eye size={18} />
+            <SquarePen size={18} />
           </button>
-        ) : (
-          <>
-            <button
-              type="button"
-              className="btn-icon btn-edit"
-              aria-label="Edit event"
-              onClick={(e) => {
-                e.stopPropagation();
-                onEdit?.();
-              }}
-            >
-              <SquarePen size={18} />
-            </button>
-            <button
-              type="button"
-              className="btn-icon btn-assign"
-              aria-label="Check in"
-              onClick={(e) => {
-                e.stopPropagation();
-                onCheckIn?.();
-              }}
-            >
-              <LogIn size={18} />
-            </button>
-            <button
-              type="button"
-              className="btn-icon btn-complete"
-              aria-label="Check out"
-              onClick={(e) => {
-                e.stopPropagation();
-                onCheckOut?.();
-              }}
-            >
-              <LogOut size={18} />
-            </button>
-          </>
-        )}
-      </div>
+          <button
+            type="button"
+            className="btn-icon btn-assign"
+            aria-label="Check in"
+            onClick={(e) => {
+              e.stopPropagation();
+              onCheckIn?.();
+            }}
+          >
+            <LogIn size={18} />
+          </button>
+          <button
+            type="button"
+            className="btn-icon btn-complete"
+            aria-label="Check out"
+            onClick={(e) => {
+              e.stopPropagation();
+              onCheckOut?.();
+            }}
+          >
+            <LogOut size={18} />
+          </button>
+        </div>
+      )}
     </article>
   );
 }
