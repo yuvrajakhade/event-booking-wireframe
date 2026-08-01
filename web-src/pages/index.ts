@@ -1,4 +1,5 @@
 export { BookedEventsScreen } from "./BookedEventsScreen";
+export { CalendarScreen } from "./CalendarScreen";
 export { CompletedEventsScreen } from "./CompletedEventsScreen";
 export { EnquiryListScreen } from "./EnquiryListScreen";
 export { CheckInScreen } from "./CheckInScreen";

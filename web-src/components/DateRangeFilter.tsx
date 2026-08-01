@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { SlidersHorizontal } from "lucide-react";
+import { Search, X } from "lucide-react";
 import TextField from "@mui/material/TextField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { enIN } from "date-fns/locale";
 import { Stack, IconButton, Paper, Tooltip } from "@mui/material";
 
 interface DateRangeFilterProps {
@@ -30,18 +31,20 @@ const DateRangeFilter: React.FC<DateRangeFilterProps> = ({ onFilter }) => {
         minHeight: 0,
       }}
     >
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enIN}>
         <Stack direction="row" spacing={0.7} alignItems="center">
           <DatePicker
             label="From"
             value={from}
             onChange={setFrom}
+            format="dd/MM/yyyy"
             slotProps={{ textField: { variant: "outlined", size: "small" } }}
           />
           <DatePicker
             label="To"
             value={to}
             onChange={setTo}
+            format="dd/MM/yyyy"
             slotProps={{ textField: { variant: "outlined", size: "small" } }}
           />
           <Tooltip title="Apply Filter">
@@ -49,9 +52,9 @@ const DateRangeFilter: React.FC<DateRangeFilterProps> = ({ onFilter }) => {
               color="primary"
               onClick={handleFilter}
               sx={{ height: 36, width: 36 }}
-              aria-label="Filter"
+              aria-label="Apply filter"
             >
-              <SlidersHorizontal size={18} />
+              <Search size={18} />
             </IconButton>
           </Tooltip>
           {(from || to) && (
@@ -63,10 +66,10 @@ const DateRangeFilter: React.FC<DateRangeFilterProps> = ({ onFilter }) => {
                   setTo(null);
                   onFilter(null, null);
                 }}
-                sx={{ height: 36, width: 36 }}
-                aria-label="Clear"
+                sx={{ height: 36, width: 36, minWidth: 36, px: 0.5 }}
+                aria-label="Clear dates"
               >
-                <span style={{ fontWeight: 700, fontSize: 16 }}>×</span>
+                <X size={18} />
               </IconButton>
             </Tooltip>
           )}

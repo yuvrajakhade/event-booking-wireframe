@@ -96,13 +96,17 @@ export function InventoryOverviewScreen() {
               </Typography>
             </Box>
 
-            <Stack direction="row" spacing={1.25} sx={{ flexWrap: "wrap" }}>
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(175px, 1fr))",
+                gap: 1.25,
+              }}
+            >
               {metricCards.map((metric) => (
                 <Box
                   key={metric.label}
                   sx={{
-                    flex: 1,
-                    minWidth: 175,
                     borderRadius: 2.5,
                     background: "rgba(255,255,255,0.88)",
                     border: "1px solid rgba(39,48,66,0.08)",
@@ -131,7 +135,7 @@ export function InventoryOverviewScreen() {
                   </Typography>
                 </Box>
               ))}
-            </Stack>
+            </Box>
           </Stack>
         </CardContent>
       </Card>

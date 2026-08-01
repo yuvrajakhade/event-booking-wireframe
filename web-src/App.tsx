@@ -8,6 +8,7 @@ import { InstallPrompt } from "./components/InstallPrompt";
 import {
   LoginScreen,
   BookedEventsScreen,
+  CalendarScreen,
   EnquiryListScreen,
   CheckInScreen,
   CheckOutScreen,
@@ -41,7 +42,10 @@ export default function App() {
     return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <LoginScreen onLogin={onLogin} />
+        <Routes>
+          <Route path="/login" element={<LoginScreen onLogin={onLogin} />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
       </ThemeProvider>
     );
   }
@@ -53,8 +57,10 @@ export default function App() {
         <InstallPrompt />
         <AppLayout>
           <Routes>
+            <Route path="/login" element={<Navigate to="/events" replace />} />
             <Route path="/" element={<Navigate to="/events" replace />} />
             <Route path="/events" element={<BookedEventsScreen />} />
+            <Route path="/calendar" element={<CalendarScreen />} />
             <Route
               path="/events/new"
               element={<EventFormScreen mode="add" />}

@@ -20,6 +20,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { to: "/events", label: "Events", icon: CalendarDays },
+  { to: "/calendar", label: "Calendar", icon: CalendarDays },
   { to: "/enquiries", label: "Enquiries", icon: MessageCircle },
   { to: "/completed", label: "Completed", icon: Trophy },
   { to: "/inventory", label: "Inventory", icon: LayoutGrid },
