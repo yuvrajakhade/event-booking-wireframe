@@ -1,15 +1,101 @@
 /* Modern Material-inspired Footer Tab Bar with teal accent */
+.app-shell {
+  position: relative;
+  min-height: 100vh;
+}
+
+.side-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.38);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 1300;
+}
+
+.side-menu-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: min(82vw, 320px);
+  height: 100vh;
+  background: linear-gradient(180deg, var(--brand) 0%, var(--brand-deep) 100%);
+  box-shadow: 16px 0 44px rgba(39, 48, 66, 0.24);
+  transform: translateX(-100%);
+  transition: transform 0.24s ease;
+  z-index: 1400;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0.9rem 1.2rem;
+}
+
+.side-menu.open {
+  transform: translateX(0);
+}
+
+.side-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  margin-bottom: 1rem;
+}
+
+.side-menu-brand {
+  font-size: 1rem;
+  padding: 0.35rem 0.9rem;
+  letter-spacing: 0.08em;
+}
+
+.side-menu-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.side-menu-link {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.75rem 0.8rem;
+  border-radius: 0.95rem;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.09);
+  transition: background 0.16s ease;
+}
+
+.side-menu-link.active,
+.side-menu-link:active {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.side-menu-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .bottom-tabs {
   position: fixed;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
   bottom: 0;
-  width: 100vw;
-  max-width: 760px;
-  margin: 0 auto;
-  background: linear-gradient(90deg, #009688 0%, #26c6da 100%) !important;
-  box-shadow: 0 -4px 16px rgba(39, 48, 66, 0.13) !important;
-  border-top: 2px solid #fff !important;
+  width: min(760px, 100%);
+  background: linear-gradient(
+    90deg,
+    var(--brand) 0%,
+    var(--brand-deep) 100%
+  ) !important;
+  box-shadow: 0 -4px 20px rgba(39, 48, 66, 0.18) !important;
+  border-top: 2px solid rgba(255, 255, 255, 0.16) !important;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -36,8 +122,8 @@
 }
 .tab-link.active,
 .tab-link:active {
-  background: rgba(255, 255, 255, 0.18) !important;
-  color: #ffd600 !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: var(--text) !important;
 }
 .tab-icon {
   margin-bottom: 0.1rem;
@@ -51,7 +137,7 @@
   filter: drop-shadow(0 2px 8px rgba(39, 48, 66, 0.18));
 }
 .tab-link.active .tab-icon svg {
-  color: #ffd600 !important;
+  color: var(--brand-deep) !important;
   opacity: 1 !important;
 }
 .tab-label {
@@ -99,6 +185,29 @@
 }
 
 @media (max-width: 600px) {
+  .bottom-tabs {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    padding: 0.16rem 0.12rem 0.12rem;
+  }
+
+  .tab-link {
+    padding: 0.22rem 0.2rem 0.1rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .tab-label {
+    font-size: 0.68rem;
+    margin-top: 0.02rem;
+  }
+
+  .tab-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
   .pill-group {
     flex-direction: row;
     align-items: center;
@@ -489,12 +598,18 @@
 }
 
 .topbar {
+  width: min(760px, 100%);
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.7rem 1.2rem 0.7rem 1.2rem;
-  background: linear-gradient(90deg, #009688 0%, #26c6da 100%) !important;
-  box-shadow: 0 4px 16px rgba(39, 48, 66, 0.1);
+  padding: 0.7rem 1.2rem;
+  background: linear-gradient(
+    90deg,
+    var(--brand) 0%,
+    var(--brand-deep) 100%
+  ) !important;
+  box-shadow: 0 4px 16px rgba(39, 48, 66, 0.12);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -507,15 +622,22 @@
   font-size: 1.35rem;
   font-weight: 900;
   color: #fff;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.13);
   border-radius: 2rem;
-  padding: 0.32rem 1.5rem 0.32rem 1.1rem;
-  box-shadow: 0 2px 12px rgba(39, 48, 66, 0.1);
+  padding: 0.32rem 1.4rem 0.32rem 1rem;
+  box-shadow: 0 2px 12px rgba(39, 48, 66, 0.11);
   letter-spacing: 1px;
   transition:
     box-shadow 0.2s,
     background 0.2s;
   text-shadow: 0 2px 8px rgba(39, 48, 66, 0.1);
+}
+.brand-pill img,
+.topbar-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
 }
 .brand-pill svg {
   color: #fff;
@@ -529,9 +651,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--line-strong);
-  background: #f3f5ff;
-  color: var(--brand);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;

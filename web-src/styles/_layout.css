@@ -56,7 +56,6 @@ html {
     width: 100vw;
     min-height: 100vh;
     margin: 0;
-    padding: 0 0.5rem 80px 0.5rem; /* Add bottom padding for mobile as well */
   }
   .stack {
     gap: 0.5rem;

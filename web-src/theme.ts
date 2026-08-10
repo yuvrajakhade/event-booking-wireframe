@@ -1,54 +1,38 @@
 import { createTheme } from "@mui/material/styles";
 
+const getCssVar = (name: string, fallback: string) => {
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
+  return value || fallback;
+};
+
 // Use CSS variables from :root for palette colors
 const theme = createTheme({
   palette: {
+    mode: "light",
     primary: {
-      main:
-        getComputedStyle(document.documentElement).getPropertyValue(
-          "--brand",
-        ) || "#6366f1",
+      main: getCssVar("--brand", "#D4A03B"),
     },
     secondary: {
-      main:
-        getComputedStyle(document.documentElement).getPropertyValue("--teal") ||
-        "#14b8a6",
+      main: getCssVar("--teal", "#F0C66B"),
     },
     error: {
-      main:
-        getComputedStyle(document.documentElement).getPropertyValue(
-          "--danger",
-        ) || "#ef4444",
+      main: getCssVar("--danger", "#F15A24"),
     },
     warning: {
-      main:
-        getComputedStyle(document.documentElement).getPropertyValue(
-          "--warning",
-        ) || "#f59e0b",
+      main: getCssVar("--warning", "#F0C66B"),
     },
     success: {
-      main:
-        getComputedStyle(document.documentElement).getPropertyValue(
-          "--success",
-        ) || "#10b981",
+      main: getCssVar("--success", "#34d399"),
     },
     background: {
-      default:
-        getComputedStyle(document.documentElement).getPropertyValue("--bg") ||
-        "#eceef6",
-      paper:
-        getComputedStyle(document.documentElement).getPropertyValue(
-          "--surface",
-        ) || "#f8f9ff",
+      default: getCssVar("--bg", "#ffffff"),
+      paper: getCssVar("--surface", "#ffffff"),
     },
     text: {
-      primary:
-        getComputedStyle(document.documentElement).getPropertyValue("--text") ||
-        "#273042",
-      secondary:
-        getComputedStyle(document.documentElement).getPropertyValue(
-          "--muted",
-        ) || "#6f7686",
+      primary: getCssVar("--text", "#120808"),
+      secondary: getCssVar("--muted", "#6b5a4a"),
     },
   },
   typography: {

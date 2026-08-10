@@ -57,8 +57,11 @@ export default function App() {
         <InstallPrompt />
         <AppLayout>
           <Routes>
-            <Route path="/login" element={<Navigate to="/events" replace />} />
-            <Route path="/" element={<Navigate to="/events" replace />} />
+            <Route
+              path="/login"
+              element={<Navigate to="/calendar" replace />}
+            />
+            <Route path="/" element={<Navigate to="/calendar" replace />} />
             <Route path="/events" element={<BookedEventsScreen />} />
             <Route path="/calendar" element={<CalendarScreen />} />
             <Route

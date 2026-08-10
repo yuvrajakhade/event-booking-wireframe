@@ -74,6 +74,8 @@ export function CheckInScreen() {
     ),
   );
 
+  const hasIssuedData = Object.values(issuedCounts).some((count) => count > 0);
+
   const decrease = (id: string) => {
     setIssuedCounts((prev) => ({ ...prev, [id]: Math.max(0, prev[id] - 1) }));
   };
@@ -256,11 +258,14 @@ export function CheckInScreen() {
           justifyContent: "center",
           gap: "0.65rem",
           fontWeight: 700,
+          opacity: hasIssuedData ? 1 : 0.45,
+          cursor: hasIssuedData ? "pointer" : "not-allowed",
         }}
         onClick={completeCheckIn}
+        disabled={!hasIssuedData}
       >
         <ArrowLeft size={18} />
-        Back to Booked Events
+        Complete Check-In
       </button>
     </section>
   );

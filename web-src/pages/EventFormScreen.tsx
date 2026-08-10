@@ -36,6 +36,7 @@ import { Grid } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { enIN } from "date-fns/locale";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import { useMuhurt } from "../MuhurtContext";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -45,6 +46,8 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
   const { eventId } = useParams();
   const [searchParams] = useSearchParams();
   const enquiryId = searchParams.get("enquiryId");
+  const dateParam = searchParams.get("date") || undefined;
+  const asEditFlag = searchParams.get("asEdit");
 
   const existingEvent:
     | (RecordItem & {
@@ -76,7 +79,7 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
     eventSource:
       existingEvent?.eventSource || (enquiry ? "Booking" : "Enquiry"),
     confirmed: (sourceRecord as any)?.confirmed || false,
-    eventDate: sourceRecord?.eventDate || "",
+    eventDate: sourceRecord?.eventDate || dateParam || "",
     eventTime: sourceRecord?.eventTime || "",
   });
 
@@ -92,7 +95,7 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
       eventSource:
         existingEvent?.eventSource || (enquiry ? "Booking" : "Enquiry"),
       confirmed: (sourceRecord as any)?.confirmed || false,
-      eventDate: sourceRecord?.eventDate || "",
+      eventDate: sourceRecord?.eventDate || dateParam || "",
       eventTime: sourceRecord?.eventTime || "",
     });
   }, [sourceRecord, existingEvent, enquiry]);
@@ -154,7 +157,12 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
     }
 
     if (isConvertingEnquiry) {
-      navigate(`/enquiries?refresh=${Date.now()}`, { replace: true });
+      navigate(`/calendar`, { replace: true });
+      return;
+    }
+
+    if (isCreatingNewEvent) {
+      navigate(`/calendar`, { replace: true });
       return;
     }
 
@@ -256,7 +264,7 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
     return muhurtDates.find((d) => d.date === iso) || null;
   };
 
-  const isFromEnquiry = Boolean(enquiry && !existingEvent);
+  const isFromEnquiry = Boolean(enquiry && !existingEvent && !asEditFlag);
   const conflictingBooking = mockRecords.find(
     (record) =>
       record.eventSource === "Booking" &&
@@ -304,7 +312,7 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
   };
 
   return (
-    <Box sx={{ maxWidth: 600, mx: "auto", my: 4 }}>
+    <Box sx={{ maxWidth: 600, mx: "auto", my: 0 }}>
       <form onSubmit={handleSubmit} autoComplete="off">
         <Card
           sx={{
@@ -321,20 +329,26 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
           }}
         >
           <CardHeader
+            sx={{
+              background:
+                "linear-gradient(135deg, var(--brand), var(--brand-deep))",
+              color: "#fff",
+              px: 3,
+              py: 2.5,
+            }}
             avatar={
               <Box
                 sx={{
-                  background: isFromEnquiry
-                    ? "linear-gradient(135deg, #7266F0, #1CC8C8)"
-                    : "#7266F0",
+                  background:
+                    "linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.12))",
                   borderRadius: 2,
-                  p: 1,
+                  p: 1.25,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
-                <PersonIcon sx={{ color: "white" }} />
+                <PersonIcon sx={{ color: "#fff" }} />
               </Box>
             }
             title={
@@ -345,23 +359,34 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
                 spacing={1}
                 sx={{ flexWrap: "wrap", gap: 1 }}
               >
-                <Typography variant="h6">Basic Information</Typography>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "#fff", fontWeight: 800 }}
+                >
+                  Basic Information
+                </Typography>
                 {isFromEnquiry && (
                   <Chip
                     label="Prefilled from enquiry"
-                    color="secondary"
                     size="small"
                     sx={{
                       fontWeight: 700,
-                      background:
-                        "linear-gradient(135deg, rgba(114,102,240,0.16), rgba(28,200,200,0.22))",
-                      color: "#2c2a63",
-                      border: "1px solid rgba(114,102,240,0.45)",
+                      background: "rgba(255,255,255,0.18)",
+                      color: "#fff",
+                      border: "1px solid rgba(255,255,255,0.24)",
                     }}
                   />
                 )}
               </Stack>
             }
+            subheader={
+              isFromEnquiry
+                ? "Convert enquiry into a confirmed event"
+                : "Add event details and select rooms"
+            }
+            subheaderTypographyProps={{
+              sx: { color: "rgba(255,255,255,0.86)", fontWeight: 500 },
+            }}
           />
           <CardContent>
             <Stack spacing={2}>
@@ -374,17 +399,21 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
                 }}
               >
                 <Box sx={{ ...sectionBodySx, ...scheduleAccentSx }}>
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <LocalizationProvider
+                    dateAdapter={AdapterDateFns}
+                    adapterLocale={enIN}
+                  >
                     <Box
                       sx={{
                         display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
+                        gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
                         gap: 1.5,
                       }}
                     >
                       <Box>
                         <DatePicker
                           label="Date"
+                          format="dd/MM/yyyy"
                           value={parseLocalIsoDate(formData.eventDate)}
                           onChange={(date: Date | null) => {
                             if (date) {
@@ -504,7 +533,7 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
                                 height: 20,
                                 borderRadius: "50%",
                                 bgcolor: "error.main",
-                                color: "white",
+                                color: "#fff",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
@@ -886,17 +915,19 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
                             letterSpacing: 0.2,
                             color:
                               formData.eventSource === option
-                                ? "white"
-                                : isFromEnquiry
-                                  ? "#2c2a63"
-                                  : "primary.main",
+                                ? "#fff"
+                                : "var(--text)",
                             background:
                               formData.eventSource === option
-                                ? "linear-gradient(90deg, #7266F0 60%, #1CC8C8 100%)"
-                                : "transparent",
+                                ? "linear-gradient(90deg, var(--brand), var(--brand-deep))"
+                                : "rgba(18, 8, 8, 0.06)",
+                            border:
+                              formData.eventSource === option
+                                ? "none"
+                                : "1px solid rgba(18, 8, 8, 0.12)",
                             boxShadow:
                               formData.eventSource === option
-                                ? "0 2px 12px rgba(114,102,240,0.12)"
+                                ? "0 8px 24px rgba(212, 160, 59, 0.18)"
                                 : "none",
                           }}
                         >

@@ -133,7 +133,9 @@ export function EnquiryListScreen() {
               key={enquiry.id}
               enquiry={enquiry}
               isConvertDisabled={isConvertDisabled(enquiry.eventDate)}
-              onConvert={() => navigate(`/events/new?enquiryId=${enquiry.id}`)}
+              onConvert={() =>
+                navigate(`/events/new?enquiryId=${enquiry.id}&asEdit=1`)
+              }
             />
           ))}
         </Stack>

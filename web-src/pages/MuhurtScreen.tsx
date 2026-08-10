@@ -193,7 +193,7 @@ export function MuhurtScreen() {
                   alignItems: "center",
                   justifyContent: "center",
                   bgcolor: "primary.main",
-                  color: "white",
+                  color: "#fff",
                 }}
               >
                 <CalendarDays size={20} />
@@ -235,7 +235,7 @@ export function MuhurtScreen() {
                       alignItems: "center",
                       justifyContent: "center",
                       bgcolor: "primary.main",
-                      color: "white",
+                      color: "#fff",
                     }}
                   >
                     <CalendarDays size={20} />

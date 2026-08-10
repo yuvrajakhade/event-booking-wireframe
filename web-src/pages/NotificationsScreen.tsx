@@ -1,6 +1,9 @@
 import React from "react";
 import { mockRecords } from "../../src/data/mock";
-import { getStoredNotifications } from "../../src/data/notificationLog";
+import {
+  clearStoredNotifications,
+  getStoredNotifications,
+} from "../../src/data/notificationLog";
 import { RecordItem } from "../../src/types";
 import { useMuhurt } from "../MuhurtContext";
 import {
@@ -164,6 +167,10 @@ export function NotificationsScreen() {
       accent: reminderMeta.missing.accent,
     })),
   ];
+
+  React.useEffect(() => {
+    clearStoredNotifications();
+  }, []);
 
   const totalAlerts =
     activityNotifications.length + reminderNotifications.length;

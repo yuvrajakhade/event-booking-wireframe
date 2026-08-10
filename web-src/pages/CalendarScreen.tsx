@@ -11,7 +11,11 @@ import {
   isSameMonth,
   isSameDay,
 } from "date-fns";
-import { mockRecords, sortRecordsByDateTime } from "../../src/data/mock";
+import {
+  mockRecords,
+  sortRecordsByDateTime,
+  isRecordCompleted,
+} from "../../src/data/mock";
 import { EventCard } from "../components";
 import { useMuhurt } from "../MuhurtContext";
 import {
@@ -22,10 +26,9 @@ import {
   Typography,
   Stack,
   Chip,
-  Fab,
   IconButton,
 } from "@mui/material";
-import { Plus, ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -37,12 +40,10 @@ function getCalendarDays(month: Date) {
 
   const days: Date[] = [];
   let current = startDate;
-
   while (current <= endDate) {
     days.push(current);
     current = addDays(current, 1);
   }
-
   return days;
 }
 
@@ -58,8 +59,11 @@ export function CalendarScreen() {
   const eventsForDay = sortRecordsByDateTime(
     mockRecords.filter((record) => record.eventDate === selectedDateKey),
   );
+
   const days = getCalendarDays(currentMonth);
   const today = new Date();
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
 
   const eventCountByDate = new Map<string, number>();
   mockRecords.forEach((record) => {
@@ -72,10 +76,158 @@ export function CalendarScreen() {
   });
 
   const muhurtByDate = new Map<string, string>();
-  muhurtDates.forEach((item) => {
-    muhurtByDate.set(item.date, item.description);
-  });
+  muhurtDates.forEach((item) => muhurtByDate.set(item.date, item.description));
   const selectedMuhurtDescription = muhurtByDate.get(selectedDateKey);
+
+  const renderDayBadge = (
+    muhurtDescription: string | undefined,
+    count: number,
+    isPast: boolean,
+    dayKey: string,
+    day: Date,
+    isMuted: boolean,
+    isSelected: boolean,
+  ) => {
+    if (muhurtDescription) {
+      if (count === 0) {
+        return (
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 0.5,
+            }}
+          >
+            <Typography
+              variant="caption"
+              align="center"
+              sx={{
+                color: "error.main",
+                fontWeight: 700,
+                lineHeight: 1.1,
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: "100%",
+                wordBreak: "break-word",
+                textAlign: "center",
+              }}
+            >
+              {muhurtDescription}
+            </Typography>
+            {!isPast && (
+              <Box
+                role="button"
+                tabIndex={0}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/events/new?date=${dayKey}`);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.stopPropagation();
+                    navigate(`/events/new?date=${dayKey}`);
+                  }
+                }}
+                aria-label={`Add event for ${format(day, "MMM d, yyyy")}`}
+                sx={{
+                  width: 26,
+                  height: 26,
+                  borderRadius: "50%",
+                  display: "grid",
+                  placeItems: "center",
+                  bgcolor: "transparent",
+                  color: isMuted ? "text.disabled" : "text.primary",
+                  fontSize: "0.85rem",
+                  border: "1px solid rgba(0,0,0,0.06)",
+                  zIndex: 1200,
+                  position: "relative",
+                  pointerEvents: "auto",
+                  cursor: "pointer",
+                  "&:hover": { bgcolor: "rgba(0,0,0,0.04)" },
+                }}
+              >
+                +
+              </Box>
+            )}
+          </Box>
+        );
+      }
+
+      return (
+        <Typography
+          variant="caption"
+          align="center"
+          sx={{
+            color: "error.main",
+            fontWeight: 700,
+            lineHeight: 1.1,
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            maxWidth: "100%",
+            wordBreak: "break-word",
+            textAlign: "center",
+          }}
+        >
+          {muhurtDescription}
+        </Typography>
+      );
+    }
+
+    if (count > 0) {
+      return (
+        <Box
+          sx={{
+            width: 20,
+            height: 20,
+            borderRadius: "50%",
+            display: "grid",
+            placeItems: "center",
+            bgcolor: isSelected ? "#ffffff" : "primary.main",
+            color: isSelected ? "primary.main" : "primary.contrastText",
+            fontSize: "0.72rem",
+            fontWeight: 700,
+          }}
+        >
+          {count}
+        </Box>
+      );
+    }
+
+    if (!isPast) {
+      return (
+        <IconButton
+          size="small"
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/events/new?date=${dayKey}`);
+          }}
+          aria-label={`Add event for ${format(day, "MMM d, yyyy")}`}
+          sx={{
+            width: 26,
+            height: 26,
+            borderRadius: "50%",
+            bgcolor: "transparent",
+            color: isMuted ? "text.disabled" : "text.primary",
+            fontSize: "0.85rem",
+            border: "1px solid rgba(0,0,0,0.06)",
+            "&:hover": { bgcolor: "rgba(0,0,0,0.04)" },
+          }}
+        >
+          +
+        </IconButton>
+      );
+    }
+
+    return null;
+  };
 
   return (
     <Box sx={{ maxWidth: 520, mx: "auto", mt: 2, px: 1, position: "relative" }}>
@@ -142,7 +294,7 @@ export function CalendarScreen() {
             <IconButton
               aria-label="Previous month"
               size="small"
-              onClick={() => setCurrentMonth((month) => addMonths(month, -1))}
+              onClick={() => setCurrentMonth((m) => addMonths(m, -1))}
             >
               <ArrowLeft size={18} />
             </IconButton>
@@ -152,7 +304,7 @@ export function CalendarScreen() {
             <IconButton
               aria-label="Next month"
               size="small"
-              onClick={() => setCurrentMonth((month) => addMonths(month, 1))}
+              onClick={() => setCurrentMonth((m) => addMonths(m, 1))}
             >
               <ArrowRight size={18} />
             </IconButton>
@@ -168,6 +320,7 @@ export function CalendarScreen() {
             Today
           </Button>
         </Box>
+
         <Box
           sx={{
             display: "grid",
@@ -176,22 +329,26 @@ export function CalendarScreen() {
             p: 2,
           }}
         >
-          {weekDays.map((day) => (
+          {weekDays.map((d) => (
             <Typography
-              key={day}
+              key={d}
               variant="caption"
               color="text.secondary"
               align="center"
               sx={{ fontWeight: 700 }}
             >
-              {day}
+              {d}
             </Typography>
           ))}
+
           {days.map((day) => {
             const dayKey = format(day, "yyyy-MM-dd");
             const isMuted = !isSameMonth(day, currentMonth);
             const isSelected = isSameDay(day, selectedDate);
             const isToday = isSameDay(day, today);
+            const dayStart = new Date(day);
+            dayStart.setHours(0, 0, 0, 0);
+            const isPast = dayStart < todayStart;
             const count = eventCountByDate.get(dayKey) ?? 0;
             const muhurtDescription = muhurtByDate.get(dayKey);
 
@@ -200,14 +357,14 @@ export function CalendarScreen() {
                 key={dayKey}
                 onClick={() => {
                   setSelectedDate(day);
-                  if (!isSameMonth(day, currentMonth)) {
+                  if (!isSameMonth(day, currentMonth))
                     setCurrentMonth(startOfMonth(day));
-                  }
                 }}
                 variant="text"
                 color={isSelected ? "primary" : "inherit"}
                 sx={{
                   minHeight: 92,
+                  overflow: "visible",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
@@ -231,18 +388,6 @@ export function CalendarScreen() {
                       : isToday
                         ? "1px solid rgba(15,23,42,0.08)"
                         : "1px solid transparent",
-                  boxShadow: isSelected
-                    ? "0 0 0 1px rgba(59,130,246,0.12)"
-                    : "none",
-                  transition:
-                    "background-color 150ms ease, border-color 150ms ease",
-                  "&:hover": {
-                    backgroundColor: isSelected
-                      ? "rgba(59,130,246,0.16)"
-                      : muhurtDescription
-                        ? "rgba(244,63,94,0.12)"
-                        : "rgba(15,23,42,0.06)",
-                  },
                 }}
               >
                 <Box
@@ -265,6 +410,7 @@ export function CalendarScreen() {
                 >
                   {format(day, "d")}
                 </Box>
+
                 <Box
                   sx={{
                     display: "flex",
@@ -275,21 +421,92 @@ export function CalendarScreen() {
                   }}
                 >
                   {muhurtDescription ? (
-                    <Typography
-                      variant="caption"
-                      align="center"
-                      sx={{
-                        color: "error.main",
-                        fontWeight: 700,
-                        lineHeight: 1.1,
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        maxWidth: 72,
-                      }}
-                    >
-                      {muhurtDescription}
-                    </Typography>
+                    count === 0 ? (
+                      <Box
+                        sx={{
+                          width: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: 0.5,
+                        }}
+                      >
+                        <Typography
+                          variant="caption"
+                          align="center"
+                          sx={{
+                            color: "error.main",
+                            fontWeight: 700,
+                            lineHeight: 1.1,
+                            display: "-webkit-box",
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            maxWidth: "100%",
+                            wordBreak: "break-word",
+                            textAlign: "center",
+                          }}
+                        >
+                          {muhurtDescription}
+                        </Typography>
+                        {!isPast && (
+                          <Box
+                            role="button"
+                            tabIndex={0}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/events/new?date=${dayKey}`);
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.stopPropagation();
+                                navigate(`/events/new?date=${dayKey}`);
+                              }
+                            }}
+                            aria-label={`Add event for ${format(day, "MMM d, yyyy")}`}
+                            sx={{
+                              width: 26,
+                              height: 26,
+                              borderRadius: "50%",
+                              display: "grid",
+                              placeItems: "center",
+                              bgcolor: "transparent",
+                              color: isMuted ? "text.disabled" : "text.primary",
+                              fontSize: "0.85rem",
+                              border: "1px solid rgba(0,0,0,0.06)",
+                              zIndex: 1200,
+                              position: "relative",
+                              pointerEvents: "auto",
+                              cursor: "pointer",
+                              "&:hover": { bgcolor: "rgba(0,0,0,0.04)" },
+                            }}
+                          >
+                            +
+                          </Box>
+                        )}
+                      </Box>
+                    ) : (
+                      <Typography
+                        variant="caption"
+                        align="center"
+                        sx={{
+                          color: "error.main",
+                          fontWeight: 700,
+                          lineHeight: 1.1,
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          maxWidth: "100%",
+                          wordBreak: "break-word",
+                          textAlign: "center",
+                        }}
+                      >
+                        {muhurtDescription}
+                      </Typography>
+                    )
                   ) : count > 0 ? (
                     <Box
                       sx={{
@@ -308,16 +525,28 @@ export function CalendarScreen() {
                     >
                       {count}
                     </Box>
-                  ) : (
-                    <Box
-                      sx={{
-                        width: 6,
-                        height: 6,
-                        borderRadius: "50%",
-                        bgcolor: isToday ? "text.secondary" : "transparent",
+                  ) : !isPast ? (
+                    <IconButton
+                      size="small"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/events/new?date=${dayKey}`);
                       }}
-                    />
-                  )}
+                      aria-label={`Add event for ${format(day, "MMM d, yyyy")}`}
+                      sx={{
+                        width: 26,
+                        height: 26,
+                        borderRadius: "50%",
+                        bgcolor: "transparent",
+                        color: isMuted ? "text.disabled" : "text.primary",
+                        fontSize: "0.85rem",
+                        border: "1px solid rgba(0,0,0,0.06)",
+                        "&:hover": { bgcolor: "rgba(0,0,0,0.04)" },
+                      }}
+                    >
+                      +
+                    </IconButton>
+                  ) : null}
                 </Box>
               </Button>
             );
@@ -341,26 +570,28 @@ export function CalendarScreen() {
         </Card>
       ) : (
         <Stack spacing={2}>
-          {eventsForDay.map((event) => (
-            <EventCard
-              key={event.id}
-              event={event}
-              onEdit={() => navigate(`/events/${event.id}/edit`)}
-              onCheckIn={() => navigate(`/events/${event.id}/check-in`)}
-              onCheckOut={() => navigate(`/events/${event.id}/check-out`)}
-            />
-          ))}
+          {eventsForDay.map((event) => {
+            const completed = isRecordCompleted(event);
+            return (
+              <EventCard
+                key={event.id}
+                event={event}
+                mode={completed ? "completed" : "booked"}
+                {...(completed
+                  ? {
+                      onClick: () => navigate(`/inventory/missing/${event.id}`),
+                    }
+                  : {
+                      onEdit: () => navigate(`/events/${event.id}/edit`),
+                      onCheckIn: () => navigate(`/events/${event.id}/check-in`),
+                      onCheckOut: () =>
+                        navigate(`/events/${event.id}/check-out`),
+                    })}
+              />
+            );
+          })}
         </Stack>
       )}
-
-      <Fab
-        color="primary"
-        aria-label="add"
-        sx={{ position: "fixed", bottom: 150, right: 24, zIndex: 1000 }}
-        onClick={() => navigate("/events/new")}
-      >
-        <Plus />
-      </Fab>
     </Box>
   );
 }

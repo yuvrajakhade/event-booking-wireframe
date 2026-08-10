@@ -62,6 +62,9 @@ export const getDefaultInventory = () => [
 const fixedInventory = getDefaultInventory();
 
 export const mockRecords: RecordItem[] = [
+  // Dates are generated relative to "today" so test data stays useful over time.
+  // Use `isoDate(offsetDays)` where offsetDays is number of days from today.
+  // We'll provide a mix: some future bookings, some enquiries, and some past (completed) events.
   {
     id: "evt_1",
     title: "Amit Mehra's Birthday Party",
@@ -70,7 +73,7 @@ export const mockRecords: RecordItem[] = [
     altPhone: "+91-98765-43212",
     venue: "Phase 1",
     rooms: ["Phase 1-101", "Phase 1-102"],
-    eventDate: "2026-05-27",
+    eventDate: undefined as any, // will be set below
     eventTime: "18:00",
     eventType: "Birthday",
     eventSource: "Booking",
@@ -84,7 +87,7 @@ export const mockRecords: RecordItem[] = [
     altPhone: "+91-91234-56791",
     venue: "Phase 2",
     rooms: ["Phase 2-101", "Phase 2-102", "Others-101"],
-    eventDate: "2026-05-29",
+    eventDate: undefined as any,
     eventTime: "19:30",
     eventType: "Wedding",
     eventSource: "Booking",
@@ -98,7 +101,7 @@ export const mockRecords: RecordItem[] = [
     altPhone: "+91-98111-22339",
     venue: "Phase 1",
     rooms: ["Phase 1-101", "Phase 1-102"],
-    eventDate: "2026-06-09",
+    eventDate: undefined as any,
     eventTime: "10:00",
     eventType: "Corporate",
     eventSource: "Booking",
@@ -112,7 +115,7 @@ export const mockRecords: RecordItem[] = [
     altPhone: "+91-99222-33449",
     venue: "Phase 2",
     rooms: ["Phase 2-101", "Phase 2-102", "Others-101"],
-    eventDate: "2026-06-18",
+    eventDate: undefined as any,
     eventTime: "17:00",
     eventType: "Wedding",
     eventSource: "Enquiry",
@@ -126,7 +129,7 @@ export const mockRecords: RecordItem[] = [
     altPhone: "+91-99333-44559",
     venue: "Phase 1",
     rooms: ["Phase 1-103"],
-    eventDate: "2026-06-15",
+    eventDate: undefined as any,
     eventTime: "09:30",
     eventType: "Corporate",
     eventSource: "Enquiry",
@@ -140,7 +143,7 @@ export const mockRecords: RecordItem[] = [
     altPhone: "+91-99444-55679",
     venue: "Phase 2",
     rooms: ["Phase 2-103"],
-    eventDate: "2026-06-11",
+    eventDate: undefined as any,
     eventTime: "14:00",
     eventType: "Wedding",
     eventSource: "Enquiry",
@@ -154,7 +157,7 @@ export const mockRecords: RecordItem[] = [
     altPhone: "+91-99555-66789",
     venue: "Phase 1",
     rooms: ["Others-202", "Others-203"],
-    eventDate: "2026-04-16",
+    eventDate: undefined as any,
     eventTime: "11:00",
     eventType: "Conference",
     eventSource: "Booking",
@@ -168,7 +171,7 @@ export const mockRecords: RecordItem[] = [
     altPhone: "+91-99666-77899",
     venue: "Phase 1",
     rooms: ["Phase 1-104", "Phase 1-105"],
-    eventDate: "2026-03-10",
+    eventDate: undefined as any,
     eventTime: "08:30",
     eventType: "Corporate",
     eventSource: "Booking",
@@ -182,7 +185,7 @@ export const mockRecords: RecordItem[] = [
     altPhone: "+91-99777-88999",
     venue: "Phase 2",
     rooms: ["Phase 2-104"],
-    eventDate: "2026-04-05",
+    eventDate: undefined as any,
     eventTime: "16:00",
     eventType: "Wedding",
     eventSource: "Enquiry",
@@ -234,6 +237,30 @@ export function saveMockRecord(record: MockRecordDraft, existingId?: string) {
   mockRecords.push(savedRecord);
   return savedRecord;
 }
+
+// --- Dynamic test dates ---
+// Set eventDate for mockRecords relative to today so the seeded data
+// automatically contains past (completed) and upcoming events.
+(function assignDynamicDates() {
+  const today = new Date();
+  function isoDate(offsetDays: number) {
+    const d = new Date(today);
+    d.setDate(d.getDate() + offsetDays);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  // offsets chosen to implement: 2 past bookings, 2 past enquiries,
+  // 2 future bookings, 2 future enquiries; any remaining records are future.
+  // Mapping follows mockRecords order.
+  const offsets = [-10, -20, 3, -5, -2, 1, 7, 14, 4];
+
+  for (let i = 0; i < mockRecords.length && i < offsets.length; i++) {
+    mockRecords[i].eventDate = isoDate(offsets[i]);
+  }
+})();
 
 export function saveMockRecordUpdate(
   existingRecord: RecordItem,

@@ -11,7 +11,7 @@ import {
   InputAdornment,
   Link,
 } from "@mui/material";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.svg";
 
 type LoginScreenProps = {
   onLogin: () => void;
@@ -97,7 +97,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        bgcolor: "#f5f6fb",
+        bgcolor: "background.default",
         px: 2,
       }}
     >
@@ -106,8 +106,9 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
           width: "100%",
           maxWidth: 440,
           borderRadius: 4,
-          boxShadow: "0 20px 80px rgba(15, 23, 42, 0.12)",
+          boxShadow: "0 20px 80px rgba(0, 0, 0, 0.35)",
           overflow: "hidden",
+          bgcolor: "background.paper",
         }}
       >
         <Box
@@ -118,7 +119,8 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             flexDirection: "column",
             alignItems: "center",
             gap: 1.5,
-            background: "linear-gradient(180deg, #ffffff 0%, #f8f9ff 100%)",
+            background:
+              "linear-gradient(180deg, rgba(212,160,59,0.14) 0%, rgba(240,198,107,0.08) 100%)",
           }}
         >
           <Box
@@ -127,7 +129,12 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             alt="App logo"
             sx={{ width: 96, height: 96, mb: 0.75 }}
           />
-          <Typography variant="h5" fontWeight={800} textAlign="center">
+          <Typography
+            variant="h5"
+            fontWeight={800}
+            textAlign="center"
+            sx={{ color: "text.primary" }}
+          >
             {showSignUp ? "Create Account" : "Welcome"}
           </Typography>
         </Box>

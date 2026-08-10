@@ -75,7 +75,14 @@ export function BookedEventsScreen() {
           </Stack>
         </CardContent>
       </Card>
-
+      <Fab
+        color="primary"
+        aria-label="add"
+        sx={{ position: "fixed", bottom: 150, right: 24, zIndex: 1000 }}
+        onClick={() => navigate("/events/new")}
+      >
+        <Plus />
+      </Fab>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mb: 1.5 }}>
         <Box sx={{ width: "100%", mb: 0.5 }}>
           <DateRangeFilter
@@ -117,15 +124,6 @@ export function BookedEventsScreen() {
           ))}
         </Stack>
       )}
-
-      <Fab
-        color="primary"
-        aria-label="add"
-        sx={{ position: "fixed", bottom: 150, right: 24, zIndex: 1000 }}
-        onClick={() => navigate("/events/new")}
-      >
-        <Plus />
-      </Fab>
     </Box>
   );
 }

@@ -79,6 +79,10 @@ export function CheckOutScreen() {
     Record<string, number>
   >(() => Object.fromEntries(rows.map((item) => [item.id, 0])));
 
+  const hasReturnData = Object.values(returnedCounts).some(
+    (count) => count > 0,
+  );
+
   const decrease = (id: string) => {
     setReturnedCounts((prev) => ({ ...prev, [id]: Math.max(0, prev[id] - 1) }));
   };
@@ -274,8 +278,11 @@ export function CheckOutScreen() {
           width: "100%",
           maxWidth: 480,
           justifyContent: "center",
+          opacity: hasReturnData ? 1 : 0.45,
+          cursor: hasReturnData ? "pointer" : "not-allowed",
         }}
         onClick={completeCheckOut}
+        disabled={!hasReturnData}
       >
         <Check size={18} />
         Complete Check-Out

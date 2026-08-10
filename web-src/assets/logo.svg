@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%">
+      <stop offset="0%" stop-color="#5a2e00"/>
+      <stop offset="100%" stop-color="#0f0702"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect x="20" y="20" width="984" height="984" rx="70"
+        fill="url(#bg)" stroke="#d4a03b" stroke-width="12"/>
+
+  <g transform="translate(512,320)" filter="url(#glow)">
+    <circle r="170" fill="#120808" stroke="#d4a03b" stroke-width="8"/>
+    <circle r="210" fill="none" stroke="#d4a03b" stroke-width="8"/>
+    <path d="M0,-220
+             C55,-180 55,-120 0,-90
+             C-55,-120 -55,-180 0,-220Z"
+          fill="none" stroke="#d4a03b" stroke-width="6"/>
+    <path d="M-20,-60
+             C40,-40 40,80 -10,140
+             C25,160 35,190 15,210"
+          fill="none" stroke="#f3d27a" stroke-width="12"
+          stroke-linecap="round"/>
+    <path d="M-10,-30 C20,-60 60,-40 65,-10"
+          fill="none" stroke="#f3d27a" stroke-width="8"
+          stroke-linecap="round"/>
+    <path d="M-40,-95 C-15,-125 15,-125 40,-95"
+          fill="none" stroke="#ff6b1a" stroke-width="10"
+          stroke-linecap="round"/>
+  </g>
+
+  <text x="512" y="690" text-anchor="middle"
+        font-size="95" font-family="Times New Roman, serif"
+        fill="#f0c66b" font-weight="bold">SWOJUS</text>
+
+  <line x1="220" y1="735" x2="804" y2="735"
+        stroke="#d4a03b" stroke-width="2"/>
+
+  <text x="512" y="840" text-anchor="middle"
+        font-size="95" font-family="Times New Roman, serif"
+        fill="#f0c66b" font-weight="bold">PALACE</text>
+</svg>

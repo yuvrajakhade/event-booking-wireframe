@@ -63,3 +63,7 @@ export function addStoredNotification(
 
   writeStoredNotifications(notifications);
 }
+
+export function clearStoredNotifications() {
+  writeStoredNotifications([]);
+}

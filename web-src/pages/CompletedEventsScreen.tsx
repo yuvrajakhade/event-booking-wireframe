@@ -55,7 +55,7 @@ export function CompletedEventsScreen() {
             </Typography>
             <Chip
               icon={<CheckCircle2 size={18} />}
-              color="success"
+              color="primary"
               label={`${completedEvents.length} Done`}
               sx={{
                 fontWeight: 700,

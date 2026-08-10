@@ -202,17 +202,19 @@ export function EventCard({
           >
             <LogIn size={18} />
           </button>
-          <button
-            type="button"
-            className="btn-icon btn-complete"
-            aria-label="Check out"
-            onClick={(e) => {
-              e.stopPropagation();
-              onCheckOut?.();
-            }}
-          >
-            <LogOut size={18} />
-          </button>
+          {(event.inventory ?? []).some((item) => item.issuedQty > 0) ? (
+            <button
+              type="button"
+              className="btn-icon btn-complete"
+              aria-label="Check out"
+              onClick={(e) => {
+                e.stopPropagation();
+                onCheckOut?.();
+              }}
+            >
+              <LogOut size={18} />
+            </button>
+          ) : null}
         </div>
       )}
     </article>
