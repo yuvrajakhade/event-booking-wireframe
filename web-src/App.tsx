@@ -5,7 +5,10 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { MuhurtProvider } from "./MuhurtContext";
 import { AppLayout } from "./layouts/AppLayout";
 import { InstallPrompt } from "./components/InstallPrompt";
-import { requestBrowserNotificationPermission } from "../src/data/notificationLog";
+import {
+  requestBrowserNotificationPermission,
+  requestNativeNotificationPermission,
+} from "../src/data/notificationLog";
 import {
   LoginScreen,
   BookedEventsScreen,
@@ -41,7 +44,14 @@ export default function App() {
 
   React.useEffect(() => {
     if (typeof window !== "undefined") {
-      void requestBrowserNotificationPermission();
+      if (
+        window.location.protocol === "http:" ||
+        window.location.protocol === "https:"
+      ) {
+        void requestBrowserNotificationPermission();
+      }
+
+      void requestNativeNotificationPermission();
     }
   }, []);
 

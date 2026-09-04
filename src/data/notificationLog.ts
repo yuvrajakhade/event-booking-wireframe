@@ -1,3 +1,6 @@
+import { Capacitor } from "@capacitor/core";
+import { LocalNotifications } from "@capacitor/local-notifications";
+
 export type NotificationAction =
   | "created"
   | "updated"
@@ -46,6 +49,15 @@ const actionMeta: Record<
       `${eventName}${eventDate ? ` • ${eventDate}` : ""}`,
   },
 };
+
+export async function requestNativeNotificationPermission() {
+  if (!Capacitor.isNativePlatform()) {
+    return "unsupported";
+  }
+
+  const permission = await LocalNotifications.requestPermissions();
+  return permission.display;
+}
 
 export function requestBrowserNotificationPermission() {
   if (typeof window === "undefined" || !("Notification" in window)) {
@@ -105,8 +117,36 @@ function notifyViaBrowserApi(notification: StoredNotification) {
   }, 6000);
 }
 
-export function triggerNativeNotification(notification: StoredNotification) {
+export async function triggerNativeNotification(
+  notification: StoredNotification,
+) {
   if (typeof window === "undefined") {
+    return;
+  }
+
+  if (Capacitor.isNativePlatform()) {
+    const permission = await LocalNotifications.checkPermissions();
+
+    if (permission.display === "granted") {
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            id:
+              Number(notification.id.replace(/\D/g, "").slice(0, 8)) ||
+              Date.now(),
+            title: actionMeta[notification.action].title,
+            body: actionMeta[notification.action].body(
+              notification.eventName,
+              notification.eventDate,
+            ),
+            schedule: { at: new Date(Date.now() + 1000) },
+            sound: "default",
+            attachments: undefined,
+          },
+        ],
+      });
+    }
+
     return;
   }
 
@@ -170,7 +210,7 @@ export function addStoredNotification(
   );
 
   writeStoredNotifications(notifications);
-  triggerNativeNotification(notification);
+  void triggerNativeNotification(notification);
 }
 
 export function clearStoredNotifications() {
