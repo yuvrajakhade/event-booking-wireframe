@@ -5,6 +5,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { MuhurtProvider } from "./MuhurtContext";
 import { AppLayout } from "./layouts/AppLayout";
 import { InstallPrompt } from "./components/InstallPrompt";
+import { requestBrowserNotificationPermission } from "../src/data/notificationLog";
 import {
   LoginScreen,
   BookedEventsScreen,
@@ -36,6 +37,12 @@ export default function App() {
   const onLogout = React.useCallback(() => {
     window.localStorage.removeItem(AUTH_KEY);
     setAuthenticated(false);
+  }, []);
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      void requestBrowserNotificationPermission();
+    }
   }, []);
 
   if (!authenticated) {

@@ -154,6 +154,12 @@ export function EventFormScreen({ mode = "add" }: { mode?: "add" | "edit" }) {
         savedRecord.customerName ?? savedRecord.title,
         savedRecord.eventDate,
       );
+    } else if (existingEvent) {
+      addStoredNotification(
+        "updated",
+        savedRecord.customerName ?? savedRecord.title,
+        savedRecord.eventDate,
+      );
     }
 
     if (isConvertingEnquiry) {

@@ -32,10 +32,20 @@ const actionMeta = {
     icon: Sparkles,
     accent: "#3b82f6",
   },
+  updated: {
+    title: "Event updated",
+    icon: RefreshCw,
+    accent: "#8b5cf6",
+  },
   converted: {
     title: "Event converted",
     icon: RefreshCw,
     accent: "#10b981",
+  },
+  checkin: {
+    title: "Check-in completed",
+    icon: CheckCircle2,
+    accent: "#0ea5e9",
   },
   checkout: {
     title: "Checkout completed",

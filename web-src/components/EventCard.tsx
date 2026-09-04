@@ -5,6 +5,7 @@ import {
   Clock3,
   MapPin,
   Phone,
+  MessageCircle,
   Bookmark,
   Users,
   SquarePen,
@@ -31,7 +32,33 @@ export function EventCard({
   onCheckOut,
 }: EventCardProps) {
   const isCompleted = mode === "completed";
-  const displayDate = event.eventDate ?? "";
+  const formatDisplayDate = (value: string | null | undefined) => {
+    if (!value) return "";
+
+    const isoMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (isoMatch) {
+      const [, year, month, day] = isoMatch;
+      return `${day}/${month}/${year}`;
+    }
+
+    const parsedDate = new Date(value);
+    if (!Number.isNaN(parsedDate.getTime())) {
+      const day = String(parsedDate.getDate()).padStart(2, "0");
+      const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+      const year = parsedDate.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+
+    return value;
+  };
+  const displayDate = formatDisplayDate(event.eventDate);
+  const normalizedPhone = (event.phone ?? "")
+    .replace(/\s+/g, "")
+    .replace(/[^\d+]/g, "");
+  const phoneHref = normalizedPhone ? `tel:${normalizedPhone}` : "";
+  const whatsappHref = normalizedPhone
+    ? `https://wa.me/${normalizedPhone.replace(/^\+/, "")}`
+    : "";
   const missingCount = (event.inventory ?? []).reduce(
     (sum, item) => sum + Math.max(0, item.issuedQty - item.returnedQty),
     0,
@@ -83,9 +110,58 @@ export function EventCard({
 
       <div className="meta-list">
         {event.phone && (
-          <p>
-            <Phone size={16} />
-            {event.phone}
+          <p
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "0.5rem",
+            }}
+          >
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.4rem",
+              }}
+            >
+              <Phone size={16} />
+              <a
+                href={phoneHref}
+                style={{
+                  color: "#1d4ed8",
+                  textDecoration: "none",
+                  fontWeight: 600,
+                }}
+                aria-label={`Call ${event.phone}`}
+              >
+                {event.phone}
+              </a>
+            </span>
+            {whatsappHref && (
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "1.8rem",
+                  height: "1.8rem",
+                  borderRadius: "999px",
+                  background: "#e7f9ee",
+                  color: "#166534",
+                  textDecoration: "none",
+                  border: "1px solid rgba(22, 101, 52, 0.18)",
+                  boxShadow: "0 1px 2px rgba(22, 101, 52, 0.08)",
+                }}
+                aria-label={`WhatsApp ${event.phone}`}
+                title={`WhatsApp ${event.phone}`}
+              >
+                <MessageCircle size={14} />
+              </a>
+            )}
           </p>
         )}
         <p>

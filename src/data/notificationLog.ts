@@ -1,4 +1,9 @@
-export type NotificationAction = "created" | "converted" | "checkout";
+export type NotificationAction =
+  | "created"
+  | "updated"
+  | "converted"
+  | "checkin"
+  | "checkout";
 
 export type StoredNotification = {
   id: string;
@@ -10,6 +15,109 @@ export type StoredNotification = {
 
 const STORAGE_KEY = "eventflow/notifications";
 const MAX_NOTIFICATIONS = 30;
+
+const actionMeta: Record<
+  NotificationAction,
+  { title: string; body: (eventName: string, eventDate?: string) => string }
+> = {
+  created: {
+    title: "Event created",
+    body: (eventName, eventDate) =>
+      `${eventName}${eventDate ? ` • ${eventDate}` : ""}`,
+  },
+  updated: {
+    title: "Event updated",
+    body: (eventName, eventDate) =>
+      `${eventName}${eventDate ? ` • ${eventDate}` : ""}`,
+  },
+  converted: {
+    title: "Enquiry converted",
+    body: (eventName, eventDate) =>
+      `${eventName}${eventDate ? ` • ${eventDate}` : ""}`,
+  },
+  checkin: {
+    title: "Check-in completed",
+    body: (eventName, eventDate) =>
+      `${eventName}${eventDate ? ` • ${eventDate}` : ""}`,
+  },
+  checkout: {
+    title: "Checkout completed",
+    body: (eventName, eventDate) =>
+      `${eventName}${eventDate ? ` • ${eventDate}` : ""}`,
+  },
+};
+
+export function requestBrowserNotificationPermission() {
+  if (typeof window === "undefined" || !("Notification" in window)) {
+    return Promise.resolve("unsupported");
+  }
+
+  if (Notification.permission === "granted") {
+    return Promise.resolve("granted");
+  }
+
+  if (Notification.permission === "denied") {
+    return Promise.resolve("denied");
+  }
+
+  return Notification.requestPermission();
+}
+
+function notifyViaServiceWorker(notification: StoredNotification) {
+  if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) {
+    return false;
+  }
+
+  navigator.serviceWorker.ready
+    .then((registration) => {
+      const meta = actionMeta[notification.action];
+      registration.showNotification(meta.title, {
+        body: meta.body(notification.eventName, notification.eventDate),
+        tag: notification.id,
+        icon: "/icon-512.svg",
+      });
+    })
+    .catch(() => {
+      // Fall back to in-page browser notification if service worker is unavailable.
+    });
+
+  return true;
+}
+
+function notifyViaBrowserApi(notification: StoredNotification) {
+  if (typeof window === "undefined" || !("Notification" in window)) {
+    return;
+  }
+
+  if (Notification.permission !== "granted") {
+    return;
+  }
+
+  const meta = actionMeta[notification.action];
+  const notificationInstance = new Notification(meta.title, {
+    body: meta.body(notification.eventName, notification.eventDate),
+    icon: "/icon-512.svg",
+    tag: notification.id,
+  });
+
+  setTimeout(() => {
+    notificationInstance.close();
+  }, 6000);
+}
+
+export function triggerNativeNotification(notification: StoredNotification) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  if (Notification.permission === "granted") {
+    if (notifyViaServiceWorker(notification)) {
+      return;
+    }
+
+    notifyViaBrowserApi(notification);
+  }
+}
 
 function readStoredNotifications(): StoredNotification[] {
   if (typeof window === "undefined") {
@@ -62,6 +170,7 @@ export function addStoredNotification(
   );
 
   writeStoredNotifications(notifications);
+  triggerNativeNotification(notification);
 }
 
 export function clearStoredNotifications() {

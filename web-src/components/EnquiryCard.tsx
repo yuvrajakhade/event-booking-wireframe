@@ -4,6 +4,7 @@ import {
   CalendarDays,
   Clock3,
   Phone,
+  MessageCircle,
   MapPin,
   Bookmark,
   Users,
@@ -21,6 +22,14 @@ export function EnquiryCard({
   isConvertDisabled = false,
   onConvert,
 }: EnquiryCardProps) {
+  const normalizedPhone = (enquiry.phone ?? "")
+    .replace(/\s+/g, "")
+    .replace(/[^\d+]/g, "");
+  const phoneHref = normalizedPhone ? `tel:${normalizedPhone}` : "";
+  const whatsappHref = normalizedPhone
+    ? `https://wa.me/${normalizedPhone.replace(/^\+/, "")}`
+    : "";
+
   return (
     <article className="card enquiry-card">
       <div className="event-top">
@@ -38,9 +47,58 @@ export function EnquiryCard({
 
       <div className="meta-list">
         {enquiry.phone && (
-          <p>
-            <Phone size={16} />
-            {enquiry.phone}
+          <p
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "0.5rem",
+            }}
+          >
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.4rem",
+              }}
+            >
+              <Phone size={16} />
+              <a
+                href={phoneHref}
+                style={{
+                  color: "#1d4ed8",
+                  textDecoration: "none",
+                  fontWeight: 600,
+                }}
+                aria-label={`Call ${enquiry.phone}`}
+              >
+                {enquiry.phone}
+              </a>
+            </span>
+            {whatsappHref && (
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "1.8rem",
+                  height: "1.8rem",
+                  borderRadius: "999px",
+                  background: "#e7f9ee",
+                  color: "#166534",
+                  textDecoration: "none",
+                  border: "1px solid rgba(22, 101, 52, 0.18)",
+                  boxShadow: "0 1px 2px rgba(22, 101, 52, 0.08)",
+                }}
+                aria-label={`WhatsApp ${enquiry.phone}`}
+                title={`WhatsApp ${enquiry.phone}`}
+              >
+                <MessageCircle size={14} />
+              </a>
+            )}
           </p>
         )}
         <p>

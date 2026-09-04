@@ -22,6 +22,25 @@ import {
 export function MuhurtScreen() {
   const { muhurtDates, todayMuhurtDates, addMuhurtDate, removeMuhurtDate } =
     useMuhurt();
+  const formatDisplayDate = (value: string) => {
+    if (!value) return "";
+
+    const isoMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (isoMatch) {
+      const [, year, month, day] = isoMatch;
+      return `${day}/${month}/${year}`;
+    }
+
+    const parsedDate = new Date(value);
+    if (!Number.isNaN(parsedDate.getTime())) {
+      const day = String(parsedDate.getDate()).padStart(2, "0");
+      const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+      const year = parsedDate.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+
+    return value;
+  };
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [draftDate, setDraftDate] = React.useState("");
   const [draftDescription, setDraftDescription] = React.useState("");
@@ -242,7 +261,7 @@ export function MuhurtScreen() {
                   </Box>
                   <Box>
                     <Typography variant="subtitle1" fontWeight={800}>
-                      {item.date}
+                      {formatDisplayDate(item.date)}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       {item.description}
@@ -389,7 +408,8 @@ export function MuhurtScreen() {
             Are you sure you want to delete this Muhurt date?
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            {deleteTarget?.date} — {deleteTarget?.description}
+            {deleteTarget ? formatDisplayDate(deleteTarget.date) : ""} —{" "}
+            {deleteTarget?.description}
           </Typography>
         </DialogContent>
         <DialogActions
@@ -444,8 +464,13 @@ export function MuhurtScreen() {
         </DialogTitle>
         <DialogContent sx={{ px: 2, pt: 0.5, pb: 1.5 }}>
           <Typography variant="body1" color="text.secondary">
-            Muhurt date <strong>{blockedDeleteTarget?.date}</strong> already
-            booked.
+            Muhurt date{" "}
+            <strong>
+              {blockedDeleteTarget
+                ? formatDisplayDate(blockedDeleteTarget.date)
+                : ""}
+            </strong>{" "}
+            already booked.
           </Typography>
         </DialogContent>
         <DialogActions

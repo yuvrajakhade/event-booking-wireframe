@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { mockRecords, saveMockRecordUpdate } from "../../src/data/mock";
+import { addStoredNotification } from "../../src/data/notificationLog";
 import {
   ArrowLeft,
   BedSingle,
@@ -94,6 +95,12 @@ export function CheckInScreen() {
       inventory: updatedInventory,
       completed: false,
     });
+
+    addStoredNotification(
+      "checkin",
+      event.customerName ?? event.title,
+      event.eventDate,
+    );
 
     navigate("/events");
   };
