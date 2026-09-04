@@ -10,12 +10,12 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["icon.svg", "icon-512.svg"],
+      includeAssets: ["logo.svg"],
       manifest: {
-        name: "EventFlow - Event Management",
-        short_name: "EventFlow",
+        name: "Swojus Palace",
+        short_name: "Swojus Palace",
         description:
-          "Event management dashboard for Svojus Palace with offline support.",
+          "Event management dashboard for Swojus Palace with offline support.",
         theme_color: "#0f766e",
         background_color: "#ffffff",
         display: "standalone",
@@ -24,19 +24,19 @@ export default defineConfig({
         start_url: "/",
         icons: [
           {
-            src: "icon-512.svg",
+            src: "logo.svg",
             sizes: "192x192",
             type: "image/svg+xml",
             purpose: "any",
           },
           {
-            src: "icon-512.svg",
+            src: "logo.svg",
             sizes: "512x512",
             type: "image/svg+xml",
             purpose: "any",
           },
           {
-            src: "icon-512.svg",
+            src: "logo.svg",
             sizes: "512x512",
             type: "image/svg+xml",
             purpose: "maskable",

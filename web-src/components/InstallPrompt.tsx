@@ -81,7 +81,7 @@ export function InstallPrompt() {
         <div style={styles.icon}>📱</div>
 
         <div style={styles.text}>
-          <h3 style={styles.title}>Install EventFlow App</h3>
+          <h3 style={styles.title}>Install Swojus Palace App</h3>
 
           {isIOS && (
             <p style={styles.description}>
